@@ -12,8 +12,8 @@
 namespace Graphics
 {
 
-  void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-  void processInput(GLFWwindow* window);
+  void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+  void processInput(GLFWwindow *window);
 
 
   class GLCanvas 
@@ -21,15 +21,16 @@ namespace Graphics
     // glfw: initialize and configure
     // ------------------------------
     public:
+     GLCanvas(unsigned int width = 800, unsigned int height = 600, unsigned int version = 3);
      void initializeCanvas();
      GLFWwindow *getWindow();
    
     private:
      int ScreenWidth;
      int ScreenHeight;
-     const char* WindowName;
+     const char *WindowName;
      int VERSION;
-     GLFWwindow* Window;
+     GLFWwindow *Window;
 
   
      void startWindow(); 

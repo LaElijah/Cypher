@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "../../include/GLCanvas.h"
 // settings
 
 const char *vertexShaderSource = "#version 330 core\n"
@@ -27,7 +28,11 @@ int main()
     // ------------------------------------
     // we skipped compile log checks this time for readability (if you do encounter issues, add the compile-checks! see previous code samples)
 
+    Graphics::GLCanvas canvas;
+    
+    canvas.initializeCanvas();
 
+    GLFWwindow *window = canvas.getWindow();
 
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 

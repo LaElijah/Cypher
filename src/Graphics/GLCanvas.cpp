@@ -2,18 +2,23 @@
 #include <GLFW/glfw3.h>
 #include <stdexcept>
 #include <iostream>
-
+#include "../../include/GLCanvas.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
-
-class GLCanvas 
-{
-    // glfw: initialize and configure
-    // ------------------------------
-  public:
-    void initializeCanvas()
+namespace Graphics {
+  
+  GLCanvas::GLCanvas(
+        unsigned int width,
+        unsigned int height, 
+        unsigned int version) // TODO: Set an enum up for all available versions
+    {
+      ScreenWidth = width;
+      ScreenHeight = height;
+      VERSION = version;
+    }
+    void GLCanvas::initializeCanvas()
     {
       this->startWindow();
       glfwMakeContextCurrent(Window);
@@ -21,14 +26,13 @@ class GLCanvas
       this->loadGlad(); 
     }
 
-    GLFWwindow *getWindow() 
+    GLFWwindow *GLCanvas::getWindow() 
     {
       return Window;
     }
 
 
 
-  private:
     int ScreenWidth = 800;
     int ScreenHeight = 600;
     const char* WindowName = "Test";
