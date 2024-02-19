@@ -1,6 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "../../include/GLCanvas.h"
+#include "../../include/Graphics/GLCanvas.h"
 // settings
 
 const char *vertexShaderSource = "#version 330 core\n"
@@ -127,8 +127,8 @@ int main()
     {
         // input
         // -----
-        processInput(window);
-
+      Graphics::processInput(window);
+    
         // render
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);

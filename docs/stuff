@@ -1,0 +1,1 @@
+g++ ~/Programming/Gengine/src/*/* ~/Programming/Gengine/include/*/* -ldl -lglfw

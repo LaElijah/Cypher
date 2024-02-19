@@ -2,13 +2,28 @@
 #include <GLFW/glfw3.h>
 #include <stdexcept>
 #include <iostream>
-#include "../../include/GLCanvas.h"
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
+#include "../../include/Graphics/GLCanvas.h"
 
 namespace Graphics {
-  
+
+
+void processInput(GLFWwindow *window)
+{
+  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    glfwSetWindowShouldClose(window, true);
+}
+
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+  glViewport(0, 0, width, height);
+}
+
+
+}
+
+namespace Graphics {
+
     GLCanvas::GLCanvas(
         unsigned int width,
         unsigned int height, 
@@ -22,10 +37,10 @@ namespace Graphics {
 
     void GLCanvas::initializeCanvas()
     {
-      this->startWindow();
+      GLCanvas::startWindow();
       glfwMakeContextCurrent(Window);
       glfwSetFramebufferSizeCallback(Window, framebuffer_size_callback); 
-      this->loadGlad(); 
+      GLCanvas::loadGlad(); 
     }
 
     GLFWwindow *GLCanvas::getWindow() 
@@ -41,7 +56,7 @@ namespace Graphics {
     GLFWwindow* Window;
 
     
-    void startWindow() 
+    void GLCanvas::startWindow() 
     {
       glfwInit();
       glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, VERSION);
@@ -65,7 +80,7 @@ namespace Graphics {
 
 
 
-    void loadGlad() 
+    void GLCanvas::loadGlad() 
     {
     // glad: load all OpenGL function pointers
     // ---------------------------------------
@@ -76,19 +91,5 @@ namespace Graphics {
       }
     }
 };
-
-
-
-void processInput(GLFWwindow *window)
-{
-  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(window, true);
-}
-
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-  glViewport(0, 0, width, height);
-}
 
 
