@@ -4,6 +4,10 @@
 #include <iostream>
 
 
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow* window);
+
+
 class GLCanvas 
 {
     // glfw: initialize and configure
@@ -15,6 +19,11 @@ class GLCanvas
       glfwMakeContextCurrent(Window);
       glfwSetFramebufferSizeCallback(Window, framebuffer_size_callback); 
       this->loadGlad(); 
+    }
+
+    GLFWwindow *getWindow() 
+    {
+      return Window;
     }
 
 
@@ -63,18 +72,20 @@ class GLCanvas
         throw std::runtime_error("GLAD ERROR");
       }
     }
-
-    void processInput(GLFWwindow *window)
-    {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-    }
-
-
-    static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-    {
-      glViewport(0, 0, width, height);
-    }
-
 };
+
+
+
+void processInput(GLFWwindow *window)
+{
+  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    glfwSetWindowShouldClose(window, true);
+}
+
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+  glViewport(0, 0, width, height);
+}
+
 

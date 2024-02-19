@@ -1,14 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
-#include <iostream>
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow *window);
-
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
 
 const char *vertexShaderSource = "#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
@@ -34,15 +26,31 @@ int main()
 {    // build and compile our shader program
     // ------------------------------------
     // we skipped compile log checks this time for readability (if you do encounter issues, add the compile-checks! see previous code samples)
+
+
+
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
+
     unsigned int fragmentShaderOrange = glCreateShader(GL_FRAGMENT_SHADER); // the first fragment shader that outputs the color orange
     unsigned int fragmentShaderYellow = glCreateShader(GL_FRAGMENT_SHADER); // the second fragment shader that outputs the color yellow
+    
+
     unsigned int shaderProgramOrange = glCreateProgram();
     unsigned int shaderProgramYellow = glCreateProgram(); // the second shader program
+
+
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
     glCompileShader(vertexShader);
+
+
+
+
+
     glShaderSource(fragmentShaderOrange, 1, &fragmentShader1Source, NULL);
     glCompileShader(fragmentShaderOrange);
+    
+
     glShaderSource(fragmentShaderYellow, 1, &fragmentShader2Source, NULL);
     glCompileShader(fragmentShaderYellow);
     // link the first program object
@@ -54,6 +62,16 @@ int main()
     glAttachShader(shaderProgramYellow, vertexShader);
     glAttachShader(shaderProgramYellow, fragmentShaderYellow);
     glLinkProgram(shaderProgramYellow);
+
+
+
+
+
+
+
+
+
+
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -67,6 +85,13 @@ int main()
         0.9f, -0.5f, 0.0f,  // right
         0.45f, 0.5f, 0.0f   // top 
     };
+  
+
+
+
+
+
+
     unsigned int VBOs[2], VAOs[2];
     glGenVertexArrays(2, VAOs); // we can also generate multiple VAOs or buffers at the same time
     glGenBuffers(2, VBOs);
