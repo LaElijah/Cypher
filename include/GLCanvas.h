@@ -12,12 +12,8 @@
 namespace Graphics
 {
 
-  void framebuffer_size_callback(GLFWwindow *window, int width, int height);
-  void processInput(GLFWwindow *window);
-
-
   class GLCanvas 
-{
+  {
     // glfw: initialize and configure
     // ------------------------------
     public:

@@ -9,7 +9,7 @@ void processInput(GLFWwindow* window);
 
 namespace Graphics {
   
-  GLCanvas::GLCanvas(
+    GLCanvas::GLCanvas(
         unsigned int width,
         unsigned int height, 
         unsigned int version) // TODO: Set an enum up for all available versions
@@ -18,6 +18,8 @@ namespace Graphics {
       ScreenHeight = height;
       VERSION = version;
     }
+
+
     void GLCanvas::initializeCanvas()
     {
       this->startWindow();
@@ -32,14 +34,11 @@ namespace Graphics {
     }
 
 
-
     int ScreenWidth = 800;
     int ScreenHeight = 600;
     const char* WindowName = "Test";
     int VERSION = 3;
     GLFWwindow* Window;
-
-
 
     
     void startWindow() 
