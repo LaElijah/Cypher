@@ -1,0 +1,2 @@
+src - contains private files as in cpp such as direct source fules and header files along with their desribing source files 
+include - contains header files of declarations
