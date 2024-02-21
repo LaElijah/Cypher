@@ -51,7 +51,7 @@ namespace Graphics {
 
     int ScreenWidth = 800;
     int ScreenHeight = 600;
-    const char* WindowName = "Test";
+    const char *WindowName = "Test";
     int VERSION = 3;
     GLFWwindow* Window;
 
@@ -69,7 +69,7 @@ namespace Graphics {
 
     // glfw window creation
     // --------------------
-      Window = glfwCreateWindow(ScreenWidth, ScreenHeight, WindowName , NULL, NULL);
+      Window = glfwCreateWindow(ScreenWidth, ScreenHeight, "Test", NULL, NULL);
       if (Window == NULL)
       {
         std::cout << "Failed to create GLFW window" << std::endl;

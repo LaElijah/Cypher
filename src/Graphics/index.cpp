@@ -1,27 +1,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "../../include/Graphics/GLCanvas.h"
+#include "../../include/Graphics/Shader.h"
 // settings
-
-const char *vertexShaderSource = "#version 330 core\n"
-    "layout (location = 0) in vec3 aPos;\n"
-    "void main()\n"
-    "{\n"
-    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-    "}\0";
-const char *fragmentShader1Source = "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "void main()\n"
-    "{\n"
-    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-    "}\n\0";
-const char *fragmentShader2Source = "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "void main()\n"
-    "{\n"
-    "   FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
-    "}\n\0";
-
 
 int main()
 {    // build and compile our shader program
@@ -33,44 +14,6 @@ int main()
     canvas.initializeCanvas();
 
     GLFWwindow *window = canvas.getWindow();
-
-    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-
-    unsigned int fragmentShaderOrange = glCreateShader(GL_FRAGMENT_SHADER); // the first fragment shader that outputs the color orange
-    unsigned int fragmentShaderYellow = glCreateShader(GL_FRAGMENT_SHADER); // the second fragment shader that outputs the color yellow
-    
-
-    unsigned int shaderProgramOrange = glCreateProgram();
-    unsigned int shaderProgramYellow = glCreateProgram(); // the second shader program
-
-
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-
-
-
-
-
-    glShaderSource(fragmentShaderOrange, 1, &fragmentShader1Source, NULL);
-    glCompileShader(fragmentShaderOrange);
-    
-
-    glShaderSource(fragmentShaderYellow, 1, &fragmentShader2Source, NULL);
-    glCompileShader(fragmentShaderYellow);
-    // link the first program object
-    glAttachShader(shaderProgramOrange, vertexShader);
-    glAttachShader(shaderProgramOrange, fragmentShaderOrange);
-    glLinkProgram(shaderProgramOrange);
-    // then link the second program object using a different fragment shader (but same vertex shader)
-    // this is perfectly allowed since the inputs and outputs of both the vertex and fragment shaders are equally matched.
-    glAttachShader(shaderProgramYellow, vertexShader);
-    glAttachShader(shaderProgramYellow, fragmentShaderYellow);
-    glLinkProgram(shaderProgramYellow);
-
-
-
-
 
 
 
@@ -92,7 +35,8 @@ int main()
     };
   
 
-
+    
+    Graphics::Shader shaderProgram("/home/ubuntu/Programming/Gengine/extras/SimpleVertexShader.glsl", "/home/ubuntu/Programming/Gengine/extras/SimpleFragmentShader.glsl");
 
 
 
@@ -135,16 +79,13 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         // now when we draw the triangle we first use the vertex and orange fragment shader from the first program
-        glUseProgram(shaderProgramOrange);
+        shaderProgram.use();
+        shaderProgram.setFloat("colorValue", 1.0f, 0.2f);
         // draw the first triangle using the data from our first VAO
         glBindVertexArray(VAOs[0]);
         glDrawArrays(GL_TRIANGLES, 0, 3);	// this call should output an orange triangle
         // then we draw the second triangle using the data from the second VAO
         // when we draw the second triangle we want to use a different shader program so we switch to the shader program with our yellow fragment shader.
-        glUseProgram(shaderProgramYellow);
-        glBindVertexArray(VAOs[1]);
-        glDrawArrays(GL_TRIANGLES, 0, 3);	// this call should output a yellow triangle
-
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -155,9 +96,6 @@ int main()
     // ------------------------------------------------------------------------
     glDeleteVertexArrays(2, VAOs);
     glDeleteBuffers(2, VBOs);
-    glDeleteProgram(shaderProgramOrange);
-    glDeleteProgram(shaderProgramYellow);
-
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();
