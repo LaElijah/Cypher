@@ -1,3 +1,3 @@
 #! /bin/bash
 
-g++ -o ~/Programming/Gengine/bin/test.exe ~/Programming/Gengine/src/*/*.cpp ~/Programming/Gengine/include/*/*.h ~/Programming/Gengine/libs/*/*.c -ldl -lglfw
+g++ -o ~/Programming/Gengine/bin/GRAPHICS_ENGINE.exe ~/Programming/Gengine/src/*/*.cpp ~/Programming/Gengine/include/*/*.h ~/Programming/Gengine/libs/*/*.c -ldl -lglfw

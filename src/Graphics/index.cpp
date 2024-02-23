@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include "../../include/Graphics/GLCanvas.h"
 #include "../../include/Graphics/Shader.h"
+#include <math.h>
 // settings
 
 int main()
@@ -23,17 +24,13 @@ int main()
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
-    float firstTriangle[] = {
-        -0.9f, -0.5f, 0.0f,  // left 
-        -0.0f, -0.5f, 0.0f,  // right
-        -0.45f, 0.5f, 0.0f,  // top 
+    float Triangle[] = {
+        // Position         Color
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f, // left 
+        0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f, // right
+        0.0f, 0.5f, 0.0f, 0.0f, 0.5f, 0.0f, // top 
     };
-    float secondTriangle[] = {
-        0.0f, -0.5f, 0.0f,  // left
-        0.9f, -0.5f, 0.0f,  // right
-        0.45f, 0.5f, 0.0f   // top 
-    };
-  
+ 
 
     
     Graphics::Shader shaderProgram("/home/ubuntu/Programming/Gengine/extras/SimpleVertexShader.glsl", "/home/ubuntu/Programming/Gengine/extras/SimpleFragmentShader.glsl");
@@ -48,20 +45,16 @@ int main()
     // --------------------
     glBindVertexArray(VAOs[0]);
     glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(firstTriangle), firstTriangle, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);	// Vertex attributes stay the same
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Triangle), Triangle, GL_STATIC_DRAW);
+  
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);	// Vertex attributes stay the same
     glEnableVertexAttribArray(0);
-    // glBindVertexArray(0); // no need to unbind at all as we directly bind a different VAO the next few lines
-    // second triangle setup
-    // ---------------------
-    glBindVertexArray(VAOs[1]);	// note that we bind to a different VAO now
-    glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);	// and a different VBO
-    glBufferData(GL_ARRAY_BUFFER, sizeof(secondTriangle), secondTriangle, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0); // because the vertex data is tightly packed we can also specify 0 as the vertex attribute's stride to let OpenGL figure it out
-    glEnableVertexAttribArray(0);
-    // glBindVertexArray(0); // not really necessary as well, but beware of calls that could affect VAOs while this one is bound (like binding element buffer objects, or enabling/disabling vertex attributes)
-
-
+   
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));	// Vertex attributes stay the same
+    glEnableVertexAttribArray(1);
+   
+    glBindVertexArray(0); 
+    
     // uncomment this call to draw in wireframe polygons.
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -71,21 +64,23 @@ int main()
     {
         // input
         // -----
-      Graphics::processInput(window);
+        Graphics::processInput(window);
     
         // render
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // now when we draw the triangle we first use the vertex and orange fragment shader from the first program
+
+        float timeValue = glfwGetTime();
+        float sinWave = (sin(timeValue) / 2.0f) + 0.5f;
+
         shaderProgram.use();
-        shaderProgram.setFloat("colorValue", 1.0f, 0.2f);
-        // draw the first triangle using the data from our first VAO
+        shaderProgram.setFloat("offset", sinWave, 0.0f);
+        // shaderProgram.setFloat("colorValue", 1.0f, 0.2f);
+       // draw the first triangle using the data from our first VAO
         glBindVertexArray(VAOs[0]);
-        glDrawArrays(GL_TRIANGLES, 0, 3);	// this call should output an orange triangle
-        // then we draw the second triangle using the data from the second VAO
-        // when we draw the second triangle we want to use a different shader program so we switch to the shader program with our yellow fragment shader.
+        glDrawArrays(GL_TRIANGLES, 0, 3);	
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
