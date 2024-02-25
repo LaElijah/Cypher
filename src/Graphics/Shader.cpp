@@ -7,7 +7,8 @@
 #include <iostream>
 
 
-
+void print(const char *string);
+void println(const char *string);
 
 namespace Graphics
 {
@@ -23,26 +24,30 @@ namespace Graphics
       fragmentShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
 
       try {
-
+        println("opening");
         vertexShaderFile.open(vertexShaderPath);
         fragmentShaderFile.open(fragmentShaderPath);
         
+        println("open");
         std::stringstream vertexShaderStream, fragmentShaderStream;
 
         vertexShaderStream << vertexShaderFile.rdbuf();
-        fragmentShaderStream << fragmentShaderFile.rdbuf();
-    
+        fragmentShaderStream << fragmentShaderFile.rdbuf(); 
+        println("streaming buffer into stream variable"); 
+
         vertexShaderFile.close();
         fragmentShaderFile.close();
 
 
         vertexCode = vertexShaderStream.str();
         fragmentCode = fragmentShaderStream.str();
+        println("conversion");  
       }
+
 
       catch (std::ifstream::failure e)
       {
-        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ" << std::endl;
+        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ\n" << e.what() << "\n" << std::endl;
       }
 
       const char *vertexShaderCode = vertexCode.c_str();
@@ -149,4 +154,13 @@ namespace Graphics
 
 }
   
+void print(const char *string) 
+{
+  std::cout << string;
+}
 
+ 
+void println(const char *string) 
+{
+  std::cout << string << std::endl;
+}
