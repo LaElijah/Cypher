@@ -18,8 +18,8 @@ namespace Graphics {
       void use();
 
       void setBool(const std::string &name, bool value) const;
-      void seInt(const std::string &name, int value) const;
-      void setFloat(const std::string &name, float value, float value2) const;
+      void setInt(const std::string &name, int value) const;
+      void setFloat(const std::string &name, float value) const;
 
 
 

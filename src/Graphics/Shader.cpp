@@ -24,16 +24,13 @@ namespace Graphics
       fragmentShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
 
       try {
-        println("opening");
         vertexShaderFile.open(vertexShaderPath);
         fragmentShaderFile.open(fragmentShaderPath);
         
-        println("open");
         std::stringstream vertexShaderStream, fragmentShaderStream;
 
         vertexShaderStream << vertexShaderFile.rdbuf();
         fragmentShaderStream << fragmentShaderFile.rdbuf(); 
-        println("streaming buffer into stream variable"); 
 
         vertexShaderFile.close();
         fragmentShaderFile.close();
@@ -41,7 +38,6 @@ namespace Graphics
 
         vertexCode = vertexShaderStream.str();
         fragmentCode = fragmentShaderStream.str();
-        println("conversion");  
       }
 
 
@@ -70,17 +66,15 @@ namespace Graphics
   }
 
 
-  void Shader::seInt(const std::string &name, int value) const
+  void Shader::setInt(const std::string &name, int value) const
   {
     glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
   }
 
 
-  void Shader::setFloat(const std::string &name, float value, float value2) const
+  void Shader::setFloat(const std::string &name, float value) const
   {
-    
-
-    glUniform2f(glGetUniformLocation(ID, name.c_str()), value, value2);
+    glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
   }
 
 

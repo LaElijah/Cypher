@@ -7,10 +7,19 @@
 namespace Graphics {
 
 
-void processInput(GLFWwindow *window)
+void processInput(GLFWwindow *window, float &visibility)
 {
-  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(window, true);
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+  
+    if ((glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) && visibility < 1.0f)
+      visibility = visibility + 0.01f;
+
+    if ((glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) && visibility > 0.0f)
+      visibility = visibility - 0.01f;
+
+
+        
 }
 
 
