@@ -12,6 +12,9 @@ void println(const char *string);
 
 namespace Graphics
 {
+
+
+
   Shader::Shader(const char *vertexShaderPath, const char *fragmentShaderPath)
   {
       std::string vertexCode;
