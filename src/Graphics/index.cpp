@@ -11,7 +11,9 @@ void loadImageData(const char *path);
 
 
 int main()
-{    // build and compile our shader program
+{
+
+  // build and compile our shader program
     // ------------------------------------
     // we skipped compile log checks this time for readability (if you do encounter issues, add the compile-checks! see previous code samples)
 
@@ -38,12 +40,7 @@ int main()
         1, 2, 3  // second triangle
     };
 
-    Graphics::Shader shaderProgram(
-        "/home/ubuntu/Programming/Gengine/extras/vertex.vs",
-        "/home/ubuntu/Programming/Gengine/extras/fragment.fs"
-    );
-
-    unsigned int VBOs[1], VAOs[1], EBO, textures[2];
+     unsigned int VBOs[1], VAOs[1], EBO, textures[2];
     glGenVertexArrays(1, &VAOs[0]); // we can also generate multiple VAOs or buffers at the same time
     glGenBuffers(1, &VBOs[0]);
     glGenBuffers(1, &EBO);
@@ -60,7 +57,11 @@ int main()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 
-   
+  
+
+
+
+    // VERTEX ATTRUBUTE SETUP
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)0);	// Vertex attributes stay the same
     glEnableVertexAttribArray(0);
    
@@ -75,7 +76,22 @@ int main()
     glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(8 * sizeof(float)));	// Vertex attributes stay the same
     glEnableVertexAttribArray(3);
     glGenTextures(2, textures); 
-  
+ 
+
+
+
+
+
+
+
+
+
+
+
+    // TEXTURE APPLICATIONS
+    //
+    //
+    // FIRST TEXTURE
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, textures[0]);
  
@@ -90,9 +106,11 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);   
 
-    loadImageData("/home/ubuntu/Programming/Gengine/extras/gate.jpg");
+    loadImageData("/home/laelijah/Programming/Gengine/extras/gate.jpg");
     
 
+
+    // SECONF TEXTURE
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, textures[1]);
 
@@ -101,15 +119,33 @@ int main()
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);    
-    loadImageData("/home/ubuntu/Programming/Gengine/extras/logo.jpeg");
+    loadImageData("/home/laelijah/Programming/Gengine/extras/logo.jpeg");
 
     // uncomment this call to draw in wireframe polygons.
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     // render loop
     // -----------
-   
+ 
+
       float visibility = 0.5f;
 
+
+
+
+
+
+
+
+
+   Graphics::Shader shaderProgram(
+        "/home/laelijah/Programming/Gengine/extras/vertex.vs",
+        "/home/laelijah/Programming/Gengine/extras/fragment.fs"
+    );
+
+
+
+
+      // Rendering in window 
       while (!glfwWindowShouldClose(window)) 
       {
         // input
@@ -149,6 +185,17 @@ int main()
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+
+
+
+
+
+
+
+
+
+
 
     // optional: de-allocate all resources once they've outlived their purpose:
     // ------------------------------------------------------------------------
