@@ -1,14 +1,23 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/ext/matrix_float4x4.hpp>
+#include <glm/ext/quaternion_geometric.hpp>
 #include <stdexcept>
 #include <iostream>
 #include "../../include/Graphics/GLCanvas.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include <glm/ext/matrix_transform.hpp>
 
 namespace Graphics {
 
 
-void processInput(GLFWwindow *window, float &visibility)
+void processInput(GLFWwindow *window, float &visibility, glm::vec3 &cameraPos, glm::vec3 &cameraFront, glm::vec3 &cameraUp)
 {
+
+  const float cameraSpeed = 0.05f;
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
   
@@ -17,6 +26,18 @@ void processInput(GLFWwindow *window, float &visibility)
 
     if ((glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) && visibility > 0.0f)
       visibility = visibility - 0.01f;
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+      cameraPos += cameraSpeed + cameraFront;
+
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+      cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) + cameraSpeed;
+
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+      cameraPos -= cameraSpeed + cameraFront;
+
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+      cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) + cameraSpeed;
 
 
         

@@ -8,11 +8,11 @@
 #include <GLFW/glfw3.h>
 #include <stdexcept>
 #include <iostream>
-
+#include <glm/glm.hpp>
 namespace Graphics {
 
   void framebuffer_size_callback(GLFWwindow *window, int width, int height);
-  void processInput(GLFWwindow *window, float &visibility);
+  void processInput(GLFWwindow *window, float &visibility, glm::vec3 &a, glm::vec3 &b, glm::vec3 &c);
 
 }
 
