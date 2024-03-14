@@ -7,6 +7,7 @@
 #include "../../include/Graphics/Mesh.h"
 #include "../../include/Graphics/Renderer.h"
 
+
 // settings
 
 void loadImageData(const char *path);
