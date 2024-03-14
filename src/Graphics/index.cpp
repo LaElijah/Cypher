@@ -252,7 +252,6 @@ glm::vec3(-1.3f, 1.0f, -1.5f)
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
       
-   // model = glm::rotate(model, ((float) visibility) * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 
      
     unsigned int modelLocation = glGetUniformLocation(shaderProgram.ID, "model");
@@ -278,11 +277,19 @@ for(unsigned int i = 0; i < 10; i++)
 {
   glm::mat4 model = glm::mat4(1.0f);
 
+  
     model = glm::translate(model, cubePositions[i]);
 
+
+    if (i != 2 && i != 5 && i != 8)
+    {
     float angle = 20.0f * i;
-    model = glm::rotate(model, glm::radians(angle),
-    glm::vec3(1.0f, 0.3f, 0.5f));
+    model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+    }
+    else 
+    {
+      model = glm::rotate(model, ((float) glfwGetTime()) * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+    }
 
     glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model)); 
 
