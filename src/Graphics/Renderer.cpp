@@ -13,10 +13,6 @@ void Graphics::Renderer::draw(Graphics::Shader shaderProgram, float &visibility,
         glClear(GL_COLOR_BUFFER_BIT);
 
 
-        float timeValue = glfwGetTime();
-        float sinWave = (sin(timeValue) / 2.0f) + 0.5f;
-
-
     shaderProgram.use();
     shaderProgram.setInt("texture1", 0);
     shaderProgram.setInt("texture2", 1);

@@ -2,11 +2,14 @@
 #include <GLFW/glfw3.h>
 #include "../../include/Graphics/GLCanvas.h"
 #include "../../include/Graphics/Shader.h"
+#include <glm/ext/matrix_transform.hpp>
 #include <math.h>
 #include "../../include/Graphics/stb_image.h"
 #include "../../include/Graphics/Mesh.h"
 #include "../../include/Graphics/Renderer.h"
-
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 // settings
 
@@ -32,14 +35,47 @@ int main()
         1, 2, 3  // second triangle
     };
 
+
+    float vertices[] = {
+-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+-0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
+-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+-0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+-0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+-0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
+0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+-0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
+-0.5f, 0.5f, -0.5f, 0.0f, 1.0f
+};
+
     float visibility = 0.5f;
-
-
-
-
-
-
-
 
 
 
@@ -86,12 +122,12 @@ int main()
 
     glGenBuffers(1, &VBOs[0]);
     glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Triangle), Triangle, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 
-    glGenBuffers(1, &EBO); 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    //glGenBuffers(1, &EBO); 
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 
 
@@ -142,19 +178,19 @@ int main()
 
 
     // VERTEX ATTRUBUTE SETUP
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)0);	// Vertex attributes stay the same
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);	// Vertex attributes stay the same
     glEnableVertexAttribArray(0);
    
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(3 * sizeof(float)));	// Vertex attributes stay the same
-    glEnableVertexAttribArray(1);
+    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(3 * sizeof(float)));	// Vertex attributes stay the same
+    //glEnableVertexAttribArray(1);
 
     
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(6 * sizeof(float)));	// Vertex attributes stay the same
-    glEnableVertexAttribArray(2);
+    //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(6 * sizeof(float)));	// Vertex attributes stay the same
+    //glEnableVertexAttribArray(2);
 
   
-    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(8 * sizeof(float)));	// Vertex attributes stay the same
-    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));	// Vertex attributes stay the same
+    glEnableVertexAttribArray(1);
 
 
 
@@ -171,20 +207,74 @@ int main()
 
 // ENDDDDDD
 
+
+    glm::mat4 model = glm::mat4(1.0f);
+
+
+    glm::mat4 view = glm::mat4(1.0f);
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
+
+    float fov = 45.0f;
+
+    glm::mat4 projection = glm::mat4(1.0f);
+    projection = glm::perspective(glm::radians(fov), 800.f / 600.0f, 0.1f, 100.0f);
+
+
+
     Graphics::Shader shaderProgram(
         "/home/laelijah/Programming/Gengine/extras/vertex.vs",
         "/home/laelijah/Programming/Gengine/extras/fragment.fs"
     );
 
+
     Graphics::Renderer renderer;
+    glEnable(GL_DEPTH_TEST);
 
 
       // Rendering in window 
     while (!glfwWindowShouldClose(window)) 
     {
       Graphics::processInput(window, visibility);
+
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
       
-      renderer.draw(shaderProgram, visibility, VAOs[0], window);
+    model = glm::rotate(model, ((float) visibility) * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+
+     
+    unsigned int modelLocation = glGetUniformLocation(shaderProgram.ID, "model");
+   
+    unsigned int viewLocation = glGetUniformLocation(shaderProgram.ID, "view");
+    unsigned int projectionLocation = glGetUniformLocation(shaderProgram.ID, "projection");
+    
+
+    glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model)); 
+    glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
+   
+
+    shaderProgram.use();
+     shaderProgram.setInt("texture1", 0);
+    shaderProgram.setInt("texture2", 1);
+    shaderProgram.setFloat("visibility", visibility);
+ 
+
+
+    glBindVertexArray(VAOs[0]);
+
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+
+
+   
+
+
+// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+// -------------------------------------------------------------------------------
+glfwSwapBuffers(window);
+glfwPollEvents();
     }
 
 

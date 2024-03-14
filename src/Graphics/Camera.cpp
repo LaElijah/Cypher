@@ -1,0 +1,23 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+namespace Graphics {
+
+
+  class Camera
+  {
+
+  };
+}
