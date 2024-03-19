@@ -253,8 +253,17 @@ glm::vec3(-1.3f, 1.0f, -1.5f)
       // Rendering in window 
     while (!glfwWindowShouldClose(window)) 
     {
+
+
+  float deltaTime = 0.0f;
+  float lastFrame = 0.0f;
+
+  float currentFrame = glfwGetTime();
+  deltaTime = currentFrame = lastFrame;
+  lastFrame = currentFrame;
+      
       Graphics::processInput(window, 
-          visibility, cameraPos, cameraFront, cameraUp);
+          visibility, cameraPos, cameraFront, cameraUp, deltaTime);
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -13,11 +13,11 @@
 
 namespace Graphics {
 
-
-void processInput(GLFWwindow *window, float &visibility, glm::vec3 &cameraPos, glm::vec3 &cameraFront, glm::vec3 &cameraUp)
+void processInput(GLFWwindow *window, float &visibility, glm::vec3 &cameraPos, glm::vec3 &cameraFront, glm::vec3 &cameraUp, float deltaTime)
 {
 
-  const float cameraSpeed = 0.05f;
+   
+  const float cameraSpeed = 2.5f * deltaTime;
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
   
@@ -54,6 +54,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 namespace Graphics {
 
+    
     GLCanvas::GLCanvas(
         unsigned int width,
         unsigned int height, 
@@ -62,6 +63,8 @@ namespace Graphics {
       ScreenWidth = width;
       ScreenHeight = height;
       VERSION = version;
+      lastX = width / 2;
+      lastY = height / 2;
     }
 
 
@@ -78,20 +81,16 @@ namespace Graphics {
       return Window;
     }
 
-
-    int ScreenWidth = 800;
-    int ScreenHeight = 600;
-    const char *WindowName = "Test";
-    int VERSION = 3;
-    GLFWwindow* Window;
-
-    
     void GLCanvas::startWindow() 
     {
       glfwInit();
       glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, VERSION);
       glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, VERSION);
       glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+      glfwWindowHint(GLFW_DECORATED, false);      
+      glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+      glfwSetCursorPosCallback(Window, mouse_callback);
+
 
     #ifdef __APPLE__
       glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -108,7 +107,43 @@ namespace Graphics {
       }
     }
 
+    void GLCanvas::mouse_callback(GLFWwindow *wndow, double xpos, double ypos)
+    {
+      if (firstMouse)
+      {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false; 
+      }
 
+      float xoffset = xpos - lastX;
+      float yoffset = lastY - ypos;
+      lastX = xpos;
+      lastY = ypos;
+
+      float sensitivity = 0.1f;
+      xoffset *= sensitivity;
+      yoffset *= sensitivity;
+
+      yaw += xoffset;
+      pitch += yoffset;
+
+      if (pitch > 89.0f)
+      {
+        pitch = 89.0f;
+      }
+      else if (pitch < -89.0f)
+      {
+        pitch = -89.0f;
+      }
+
+      glm::vec3 direction;
+      direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+      direction.y = cos(glm::radians(pitch));
+      direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+     
+      cameraFront = glm::normalize(direction);
+    }
 
     void GLCanvas::loadGlad() 
     {

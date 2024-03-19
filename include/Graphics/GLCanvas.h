@@ -9,10 +9,12 @@
 #include <stdexcept>
 #include <iostream>
 #include <glm/glm.hpp>
+
+
 namespace Graphics {
 
   void framebuffer_size_callback(GLFWwindow *window, int width, int height);
-  void processInput(GLFWwindow *window, float &visibility, glm::vec3 &a, glm::vec3 &b, glm::vec3 &c);
+  void processInput(GLFWwindow *window, float &visibility, glm::vec3 &a, glm::vec3 &b, glm::vec3 &c, float d);
 
 }
 
@@ -35,11 +37,21 @@ namespace Graphics
      const char *WindowName;
      int VERSION;
      GLFWwindow *Window;
+ 
+     float pitch;
+     float yaw;
 
+     int lastX;
+     int lastY;
+
+     bool firstMouse;
+
+     glm::vec3 cameraFront;
   
      void startWindow(); 
      void loadGlad();
     
+     void mouse_callback(GLFWwindow *wndow, double xpos, double ypos);
   };
 
 
