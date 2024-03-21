@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/ext/matrix_float4x4.hpp>
 #include <glm/ext/quaternion_geometric.hpp>
+#include <glm/ext/vector_float3.hpp>
 #include <stdexcept>
 #include <iostream>
 #include "../../include/Graphics/GLCanvas.h"
@@ -27,17 +28,21 @@ void processInput(GLFWwindow *window, float &visibility, glm::vec3 &cameraPos, g
     if ((glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) && visibility > 0.0f)
       visibility = visibility - 0.01f;
 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-      cameraPos += cameraSpeed + cameraFront;
-
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) 
+      cameraPos += glm::vec3(cameraSpeed + cameraFront.x, 0, cameraSpeed + cameraFront.z); 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
       cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) + cameraSpeed;
 
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-      cameraPos -= cameraSpeed + cameraFront;
-
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)  
+      cameraPos += glm::vec3(cameraSpeed - cameraFront.x, 0, cameraSpeed - cameraFront.z);  
+    
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
       cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) + cameraSpeed;
+
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+      cameraPos += glm::vec3(0, cameraUp.y + cameraSpeed, 0);
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 
+      cameraPos += glm::vec3(0, cameraSpeed - cameraUp.y, 0);
 
 
         

@@ -84,17 +84,12 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 
     bool isFirstMouse()
     {
-      if (firstMouse == false) 
-      {
-       firstMouse = true; 
-      }
-
-      return !firstMouse;
+      return firstMouse;
     }
 
     void startMouse()
     {
-      firstMouse = true;
+      firstMouse = false;
     }
 
 
@@ -124,7 +119,7 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos);
      int lastX;
      int lastY;
 
-     bool firstMouse;
+     bool firstMouse = true;
 
      glm::vec3 Direction;
      glm::vec3 CameraFront;
