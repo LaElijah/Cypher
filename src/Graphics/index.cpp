@@ -10,10 +10,22 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "./Camera.cpp"
 
 // settings
 
+int SCREEN_WIDTH = 800;
+int SCREEN_HEIGHT = 600;
+
+
 void loadImageData(const char *path);
+
+
+
+     void mouse_callback(GLFWwindow *window, double xpos, double ypos);
+    
+
+    Graphics::Camera camera(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 
 int main()
@@ -21,6 +33,10 @@ int main()
     Graphics::GLCanvas canvas;    
     canvas.initializeCanvas();
     GLFWwindow *window = canvas.getWindow();
+ 
+    
+      glfwSetCursorPosCallback(window,  mouse_callback);
+
 
    float Triangle[] = {
         // positions          // colors           // texture coords
@@ -234,7 +250,6 @@ glm::vec3(-1.3f, 1.0f, -1.5f)
 
     glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 
-    glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
     glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 
@@ -261,7 +276,10 @@ glm::vec3(-1.3f, 1.0f, -1.5f)
   float currentFrame = glfwGetTime();
   deltaTime = currentFrame = lastFrame;
   lastFrame = currentFrame;
-      
+    
+
+
+    glm::vec3 cameraFront = camera.getDirection();
       Graphics::processInput(window, 
           visibility, cameraPos, cameraFront, cameraUp, deltaTime);
 
@@ -360,3 +378,24 @@ void loadImageData(const char* path)
     stbi_image_free(data);
     
 }
+
+
+void mouse_callback(GLFWwindow *window, double xpos, double ypos)
+    {
+
+      std::cout << "XPOS::" << xpos << "::  YPOS::" << ypos << std::endl;
+
+      if (camera.isFirstMouse())
+      {
+        std::cout << "FIRSTMOUSE" << std::endl;
+        camera.setLastX(xpos);
+        camera.setLastY(ypos);
+        camera.startMouse(); 
+      }
+
+      camera.processMousePosition(xpos, ypos); 
+      camera.updateDirection();     
+    }
+
+
+

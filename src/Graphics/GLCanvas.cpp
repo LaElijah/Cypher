@@ -53,7 +53,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 namespace Graphics {
-
+  
     
     GLCanvas::GLCanvas(
         unsigned int width,
@@ -65,6 +65,7 @@ namespace Graphics {
       VERSION = version;
       lastX = width / 2;
       lastY = height / 2;
+      initializeCanvas();
     }
 
 
@@ -83,13 +84,12 @@ namespace Graphics {
 
     void GLCanvas::startWindow() 
     {
+      
       glfwInit();
       glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, VERSION);
       glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, VERSION);
       glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
       glfwWindowHint(GLFW_DECORATED, false);      
-      glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-      glfwSetCursorPosCallback(Window, mouse_callback);
 
 
     #ifdef __APPLE__
@@ -105,46 +105,10 @@ namespace Graphics {
         glfwTerminate();
         throw std::runtime_error("Window creation error");
       }
+
+
+      glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
-
-    void GLCanvas::mouse_callback(GLFWwindow *wndow, double xpos, double ypos)
-    {
-      if (firstMouse)
-      {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false; 
-      }
-
-      float xoffset = xpos - lastX;
-      float yoffset = lastY - ypos;
-      lastX = xpos;
-      lastY = ypos;
-
-      float sensitivity = 0.1f;
-      xoffset *= sensitivity;
-      yoffset *= sensitivity;
-
-      yaw += xoffset;
-      pitch += yoffset;
-
-      if (pitch > 89.0f)
-      {
-        pitch = 89.0f;
-      }
-      else if (pitch < -89.0f)
-      {
-        pitch = -89.0f;
-      }
-
-      glm::vec3 direction;
-      direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-      direction.y = cos(glm::radians(pitch));
-      direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-     
-      cameraFront = glm::normalize(direction);
-    }
-
     void GLCanvas::loadGlad() 
     {
     // glad: load all OpenGL function pointers

@@ -29,8 +29,10 @@ namespace Graphics
     public:
      GLCanvas(unsigned int width = 800, unsigned int height = 600, unsigned int version = 3);
      void initializeCanvas();
-     GLFWwindow *getWindow();
+     GLFWwindow *getWindow(); 
+     void mouse_callback(GLFWwindow *window, double xpos, double ypos);
    
+
     private:
      int ScreenWidth;
      int ScreenHeight;
@@ -51,7 +53,6 @@ namespace Graphics
      void startWindow(); 
      void loadGlad();
     
-     void mouse_callback(GLFWwindow *wndow, double xpos, double ypos);
   };
 
 
