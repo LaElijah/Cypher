@@ -101,7 +101,7 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos);
     void updateDirection()
     {
       Direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-      Direction.y = cos(glm::radians(pitch));
+      Direction.y = sin(glm::radians(pitch));
       Direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch)); 
       CameraFront = glm::normalize(Direction);
     }
