@@ -17,13 +17,15 @@
 int SCREEN_WIDTH = 800;
 int SCREEN_HEIGHT = 600;
 
+    float fov = 45.0f;
+
 
 void loadImageData(const char *path);
 
 
 
      void mouse_callback(GLFWwindow *window, double xpos, double ypos);
-    
+    void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);    
 
     Graphics::Camera camera(SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -36,6 +38,7 @@ int main()
  
     
       glfwSetCursorPosCallback(window,  mouse_callback);
+      glfwSetScrollCallback(window, scroll_callback);
 
 
    float Triangle[] = {
@@ -243,10 +246,8 @@ glm::vec3(-1.3f, 1.0f, -1.5f)
     //view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
 
-    float fov = 45.0f;
 
     glm::mat4 projection = glm::mat4(1.0f);
-    projection = glm::perspective(glm::radians(fov), 800.f / 600.0f, 0.1f, 100.0f);
 
     glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 
@@ -269,6 +270,7 @@ glm::vec3(-1.3f, 1.0f, -1.5f)
     while (!glfwWindowShouldClose(window)) 
     {
 
+    projection = glm::perspective(glm::radians(fov), 800.f / 600.0f, 0.1f, 100.0f);
 
   float deltaTime = 0.0f;
   float lastFrame = 0.0f;
@@ -396,6 +398,14 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos)
       camera.processMousePosition(xpos, ypos); 
       camera.updateDirection();     
     }
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
+{
+  fov -= (float) yoffset;
+  if (fov < 1.0f)
+    fov = 1.0f;
+  if (fov > 45.0f)
+    fov = 45.0f;
 
+}
 
 
