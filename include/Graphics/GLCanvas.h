@@ -14,7 +14,6 @@
 namespace Graphics {
 
   void framebuffer_size_callback(GLFWwindow *window, int width, int height);
-  void processInput(GLFWwindow *window, float &visibility, glm::vec3 &a, glm::vec3 &b, glm::vec3 &c, float d);
 
 }
 

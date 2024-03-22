@@ -1,10 +1,18 @@
-#include "../../include/Graphics/Shader.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
+
+#include "../../include/Graphics/Shader.h"
+#include <string>
+#include <glm/ext/matrix_transform.hpp>
+#include <math.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 
 
 void print(const char *string);
@@ -79,6 +87,17 @@ namespace Graphics
   {
     glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
   }
+
+  void Shader::setVec3(const std::string &name, float value1, float value2, float value3) const
+  {
+    glUniform3f(glGetUniformLocation(ID, name.c_str()), value1, value2, value3);
+  }
+
+  void Shader::setMat4(const std::string &name, glm::mat4 matrix) const
+  {
+    glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix));
+  }
+
 
 
   void Shader::linkShaders(unsigned int vertex, unsigned int fragment)

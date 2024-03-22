@@ -14,41 +14,6 @@
 
 namespace Graphics {
 
-void processInput(GLFWwindow *window, float &visibility, glm::vec3 &cameraPos, glm::vec3 &cameraFront, glm::vec3 &cameraUp, float deltaTime)
-{
-
-   
-  const float cameraSpeed = 2.5f * deltaTime;
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-  
-    if ((glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) && visibility < 1.0f)
-      visibility = visibility + 0.01f;
-
-    if ((glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) && visibility > 0.0f)
-      visibility = visibility - 0.01f;
-
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) 
-      cameraPos += glm::vec3(cameraSpeed + cameraFront.x, 0, cameraSpeed + cameraFront.z); 
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-      cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) + cameraSpeed;
-
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)  
-      cameraPos += glm::vec3(cameraSpeed - cameraFront.x, 0, cameraSpeed - cameraFront.z);  
-    
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-      cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) + cameraSpeed;
-
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-      cameraPos += glm::vec3(0, cameraUp.y + cameraSpeed, 0);
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 
-      cameraPos += glm::vec3(0, cameraSpeed - cameraUp.y, 0);
-
-
-        
-}
-
-
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
   glViewport(0, 0, width, height);

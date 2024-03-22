@@ -1,7 +1,6 @@
 
 
 
-
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <glm/gtc/type_ptr.hpp>
@@ -18,18 +17,20 @@
 
 
 namespace Graphics {
+  enum Movement 
+  {
+    LEFT,
+    RIGHT,
+    FORWARDS,
+    BACKWARDS,
+    UP,
+    DOWN
+  };
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 
   class Camera
   {
-    //glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-    //glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-    //glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
-    
-    //glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-    //glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
-    //glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
     public: 
 
     Camera(int width, int height)
@@ -106,12 +107,62 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos);
     return CameraFront;
   }
 
+    glm::mat4 getViewMatrix()
+    {
+      return glm::lookAt(CameraPos, CameraPos + CameraFront, CameraUp);
+    }
+
+
+
+
+
+ 
+  void processMovement(int keyPressed, float deltaTime)
+  { 
+    const float cameraSpeed = 2.5f * deltaTime;
+
+  
+    switch (keyPressed)
+    {
+
+      case -1:
+      CameraPos += glm::vec3(cameraSpeed + CameraFront.x, 0, cameraSpeed + CameraFront.z); 
+      break;
+
+       
+      case LEFT:   
+      CameraPos -= glm::normalize(glm::cross(CameraFront, CameraUp) + cameraSpeed);
+      break;
+
+      case BACKWARDS: 
+      CameraPos += glm::vec3(cameraSpeed - CameraFront.x, 0, cameraSpeed - CameraFront.z);  
+      break;
+
+      case RIGHT:
+      CameraPos += glm::normalize(glm::cross(CameraFront, CameraUp) + cameraSpeed);
+      break;
+
+      case UP:      
+      CameraPos += glm::vec3(0, CameraUp.y + cameraSpeed, 0);
+      break;
+
+      case DOWN:
+      CameraPos += glm::vec3(0, cameraSpeed - CameraUp.y, 0);
+      break;
+
+  }
+}
+
+
+
+
+
+
+
 
     private:
      int ScreenWidth;
      int ScreenHeight;
-     const char *WindowName;
-     int VERSION;
  
      float pitch;
      float yaw;
@@ -123,6 +174,18 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 
      glm::vec3 Direction;
      glm::vec3 CameraFront;
+
+     GLFWwindow *window;
+ 
+    glm::vec3 CameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+    glm::vec3 CameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 CameraDirection = glm::normalize(CameraPos - CameraTarget); 
+    glm::mat4 Projection = glm::mat4(1.0f);
+    glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 CameraRight = glm::normalize(glm::cross(Up, CameraDirection));
+    glm::vec3 CameraUp = glm::cross(CameraDirection, CameraRight);
+
+
      void setCameraFront(glm::vec3 direction)
     {
       CameraFront = direction;
