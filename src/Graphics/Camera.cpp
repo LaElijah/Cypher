@@ -1,31 +1,17 @@
+#ifndef CAMERA_H
+#define CAMERA_H
 
-
-
+#include <glm/ext/quaternion_geometric.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
 #include <glm/gtc/type_ptr.hpp>
 #include <GLFW/glfw3.h>
 
-
-
-
-  
-
-
-
+#include <iostream>
+#include "./Globals.cpp"
 
 
 
 namespace Graphics {
-  enum Movement 
-  {
-    LEFT,
-    RIGHT,
-    FORWARDS,
-    BACKWARDS,
-    UP,
-    DOWN
-  };
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 
@@ -39,37 +25,37 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos);
       ScreenHeight = height;
       lastX = width / 2;
       lastY = height / 2;
+
+
+
      
     }
 
 
 
-    void processMousePosition(double xpos, double ypos)
+    void processMousePosition(double xoffset, double yoffset, bool constrainPitch = true)
     {
-
-      float xoffset = xpos - lastX;
-      float yoffset = lastY - ypos;
-      lastX = xpos;
-      lastY = ypos;
-
-      float sensitivity = 0.1f;
-      xoffset *= sensitivity;
-      yoffset *= sensitivity;
+      xoffset *= MouseSensitivity;
+      yoffset *= MouseSensitivity;
 
       yaw += xoffset;
       pitch += yoffset;
 
-      if (pitch > 89.0f)
+
+      if (constrainPitch)
       {
-        pitch = 89.0f;
+        if (pitch > 89.0f)
+        {
+          pitch = 89.0f;
+        }
+        else if (pitch < -89.0f)
+        {
+          pitch = -89.0f;
+        }
       }
-      else if (pitch < -89.0f)
-      {
-        pitch = -89.0f;
-      }
 
-
-
+      
+updateDirection();
     }
 
 
@@ -82,6 +68,19 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos);
     {
       lastY = Y;
     }
+
+
+
+    float getLastX()
+    {
+      return lastX;
+    }
+
+    float getLastY()
+    {
+      return lastY;
+    }
+
 
     bool isFirstMouse()
     {
@@ -96,10 +95,15 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 
     void updateDirection()
     {
+      
       Direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
       Direction.y = sin(glm::radians(pitch));
       Direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch)); 
       CameraFront = glm::normalize(Direction);
+
+      CameraRight = glm::normalize(glm::cross(CameraFront, WorldUp));
+      CameraUp = glm::normalize(glm::cross(CameraRight, CameraFront));
+
     }
 
     glm::vec3 getDirection()
@@ -109,48 +113,72 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 
     glm::mat4 getViewMatrix()
     {
-      return glm::lookAt(CameraPos, CameraPos + CameraFront, CameraUp);
+      return glm::lookAt(Position, Position + CameraFront, CameraUp);
     }
 
 
 
 
+    void setCameraPos(glm::vec3 position)
+    {
+      Position = position;
+    }
 
  
-  void processMovement(int keyPressed, float deltaTime)
+  void processKeyboard(Direction keyPressed, float deltaTime)
   { 
-    const float cameraSpeed = 2.5f * deltaTime;
-
-  
+  Velocity = MovementSpeed * deltaTime;
+    
+   float currentHeight; 
     switch (keyPressed)
     {
-
-      case -1:
-      CameraPos += glm::vec3(cameraSpeed + CameraFront.x, 0, cameraSpeed + CameraFront.z); 
-      break;
-
-       
+      //FORWARDS
+      case FORWARDS:
+        currentHeight = Position.y; 
+        Position += Velocity * CameraFront;
+        Position.y = currentHeight;
+        break;
+ 
+      // LEFT
       case LEFT:   
-      CameraPos -= glm::normalize(glm::cross(CameraFront, CameraUp) + cameraSpeed);
-      break;
+        Position -= Velocity * CameraRight; 
+        break;
 
-      case BACKWARDS: 
-      CameraPos += glm::vec3(cameraSpeed - CameraFront.x, 0, cameraSpeed - CameraFront.z);  
-      break;
+      // BACKWARDS
+      case BACKWARDS:
+        currentHeight = Position.y;
+        Position -= Velocity * CameraFront;
+        Position.y = currentHeight;
+        break;
 
-      case RIGHT:
-      CameraPos += glm::normalize(glm::cross(CameraFront, CameraUp) + cameraSpeed);
-      break;
+      // RIGHT
+      case RIGHT: 
+        Position += Velocity * CameraRight; 
+        break;
 
-      case UP:      
-      CameraPos += glm::vec3(0, CameraUp.y + cameraSpeed, 0);
-      break;
+      // UP
+      case UP:       
+        Position += glm::vec3(0, CameraUp.y * Velocity, 0); 
+        break;
 
-      case DOWN:
-      CameraPos += glm::vec3(0, cameraSpeed - CameraUp.y, 0);
-      break;
-
+      // DOWN
+      case DOWN: 
+        Position -= glm::vec3(0, CameraUp.y * Velocity, 0); 
+        break;
+        
   }
+
+
+}
+
+
+void processMouseScroll(float yoffset)
+{
+  Zoom -= (float) yoffset;
+  if (Zoom < 1.0f)
+    Zoom = 1.0f;
+  if (Zoom > 45.0f)
+    Zoom = 45.0f;
 }
 
 
@@ -158,32 +186,39 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 
 
 
-
-
     private:
-     int ScreenWidth;
-     int ScreenHeight;
+
  
-     float pitch;
-     float yaw;
 
-     int lastX;
-     int lastY;
+    float MouseSensitivity = 0.1f; 
+    float MovementSpeed = 2.5f;
+    float Velocity;
+    float Zoom;
+    int ScreenWidth; 
+    int ScreenHeight;
 
-     bool firstMouse = true;
+   
+    float pitch; 
+    float yaw;
 
-     glm::vec3 Direction;
-     glm::vec3 CameraFront;
-
-     GLFWwindow *window;
+   
+    int lastX; 
+    int lastY;
  
-    glm::vec3 CameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+    bool firstMouse = true;
+ 
+    glm::vec3 Direction; 
+    glm::vec3 CameraFront;
+
+    GLFWwindow *window;
+
+    glm::vec3 Position = glm::vec3(0.0f, 0.0f, 3.0f);
     glm::vec3 CameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 CameraDirection = glm::normalize(CameraPos - CameraTarget); 
+    glm::vec3 CameraDirection = glm::normalize(Position - CameraTarget); 
     glm::mat4 Projection = glm::mat4(1.0f);
-    glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 CameraRight = glm::normalize(glm::cross(Up, CameraDirection));
-    glm::vec3 CameraUp = glm::cross(CameraDirection, CameraRight);
+    glm::vec3 WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 CameraRight = glm::normalize(glm::cross(WorldUp, CameraDirection));
+    glm::vec3 CameraUp = glm::cross(CameraRight, CameraFront);
 
 
      void setCameraFront(glm::vec3 direction)
@@ -197,5 +232,6 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 }
 
 
+#endif // !CAMERA_H
 
 

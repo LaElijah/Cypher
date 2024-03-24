@@ -11,12 +11,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "./Camera.cpp"
-
+#include "Globals.cpp"
 
 
 
 // settings
-float deltaTime = 0.0f;
+float deltaTime;
 float lastFrame = 0.0f;
 
 
@@ -319,7 +319,7 @@ int main()
     {  
  
       currentFrame = glfwGetTime();
-      deltaTime = currentFrame = lastFrame; 
+      deltaTime = currentFrame - lastFrame; 
       lastFrame = currentFrame;
     
 
@@ -336,7 +336,7 @@ int main()
       
 
       projection = glm::perspective(glm::radians(fov), SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 100.0f); 
-      view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+      view = camera.getViewMatrix();
 
       
       boxShader.use();
@@ -457,41 +457,28 @@ void loadImageData(const char* path)
 
 void processInput(GLFWwindow *window)
 {
-  enum Movement 
-  {
-    LEFT,
-    RIGHT,
-    FORWARDS,
-    BACKWARDS,
-    UP,
-    DOWN
-  };
 
 
-
-  
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
       glfwSetWindowShouldClose(window, true);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) 
-      camera.processMovement(-1, deltaTime);
+      camera.processKeyboard(Graphics::Direction::FORWARDS, deltaTime);
    
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-      camera.processMovement(LEFT, deltaTime);
+      camera.processKeyboard(Graphics::Direction::LEFT, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)   
-      camera.processMovement(BACKWARDS, deltaTime);
+      camera.processKeyboard(Graphics::Direction::BACKWARDS, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-      camera.processMovement(RIGHT, deltaTime);
+      camera.processKeyboard(Graphics::Direction::RIGHT, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-      camera.processMovement(UP, deltaTime);
+      camera.processKeyboard(Graphics::Direction::UP, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 
-      camera.processMovement(DOWN, deltaTime);
-
-        
+      camera.processKeyboard(Graphics::Direction::DOWN, deltaTime);    
 }
 
 
@@ -499,9 +486,6 @@ void processInput(GLFWwindow *window)
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos)
     {
-
-      std::cout << "XPOS::" << xpos << "::  YPOS::" << ypos << std::endl;
-
       if (camera.isFirstMouse())
       {
         std::cout << "FIRSTMOUSE" << std::endl;
@@ -510,19 +494,16 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos)
         camera.startMouse(); 
       }
 
-      camera.processMousePosition(xpos, ypos); 
-      camera.updateDirection();     
+      camera.processMousePosition(xpos - camera.getLastX(), camera.getLastY() - ypos); 
+
+      camera.setLastX(xpos);
+      camera.setLastY(ypos);
     }
 
 
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 {
-  fov -= (float) yoffset;
-  if (fov < 1.0f)
-    fov = 1.0f;
-  if (fov > 45.0f)
-    fov = 45.0f;
-
+  camera.processMouseScroll(yoffset);
 }
 
 
