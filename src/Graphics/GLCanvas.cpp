@@ -5,7 +5,7 @@
 #include <glm/ext/vector_float3.hpp>
 #include <stdexcept>
 #include <iostream>
-#include "../../include/Graphics/GLCanvas.h"
+#include "GLCanvas.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>

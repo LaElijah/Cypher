@@ -1,11 +1,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "../../include/Graphics/GLCanvas.h"
-#include "../../include/Graphics/Shader.h"
+#include "GLCanvas.h"
+#include "Shader.h"
 #include <glm/ext/matrix_transform.hpp>
 #include <math.h>
-#include "../../include/Graphics/stb_image.h"
-#include "../../include/Graphics/Mesh.h"
+#include "../../external/STB_IMAGE/stb_image.h"
 //#include "../../include/Graphics/Renderer.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -18,6 +17,7 @@
 // settings
 float deltaTime;
 float lastFrame = 0.0f;
+
 
 
 float visibility = 0.5f;
@@ -176,14 +176,14 @@ int main()
 
 
     Graphics::Shader boxShader(
-        "/home/laelijah/Programming/Gengine/extras/boxVertex.vs",
-        "/home/laelijah/Programming/Gengine/extras/boxFragment.fs"
+        "/home/laelijah/Programming/Gengine/data/Shaders/boxVertex.vs",
+        "/home/laelijah/Programming/Gengine/data/Shaders/boxFragment.fs"
     );
 
     
      Graphics::Shader lightBoxShader(
-        "/home/laelijah/Programming/Gengine/extras/lightBoxVertex.vs",
-        "/home/laelijah/Programming/Gengine/extras/lightBoxFragment.fs"
+        "/home/laelijah/Programming/Gengine/data/Shaders/lightBoxVertex.vs",
+        "/home/laelijah/Programming/Gengine/data/Shaders/lightBoxFragment.fs"
     );
     
 
@@ -231,7 +231,7 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);   
 
-    loadImageData("/home/laelijah/Programming/Gengine/extras/gate.jpg");
+    loadImageData("/home/laelijah/Programming/Gengine/data/Images/gate.jpg");
     
 
 
@@ -244,7 +244,7 @@ int main()
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);    
-    loadImageData("/home/laelijah/Programming/Gengine/extras/logo.jpeg");
+    loadImageData("/home/laelijah/Programming/Gengine/data/Images/logo.jpeg");
 
 
     

@@ -5,7 +5,7 @@
 #include <sstream>
 #include <iostream>
 
-#include "../../include/Graphics/Shader.h"
+#include "Shader.h"
 #include <string>
 #include <glm/ext/matrix_transform.hpp>
 #include <math.h>
