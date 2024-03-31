@@ -19,6 +19,8 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos);
   {
     public: 
 
+    float Zoom = 45.0f;
+
     Camera(int width, int height)
     {
       ScreenWidth = width;
@@ -193,7 +195,6 @@ void processMouseScroll(float yoffset)
     float MouseSensitivity = 0.1f; 
     float MovementSpeed = 2.5f;
     float Velocity;
-    float Zoom;
     int ScreenWidth; 
     int ScreenHeight;
 

@@ -13,6 +13,8 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/laelijah/Programming/Gengine/src/Graphics/Camera.cpp" "CMakeFiles/Gengine.dir/src/Graphics/Camera.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/Camera.cpp.o.d"
   "/home/laelijah/Programming/Gengine/src/Graphics/GLCanvas.cpp" "CMakeFiles/Gengine.dir/src/Graphics/GLCanvas.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/GLCanvas.cpp.o.d"
   "/home/laelijah/Programming/Gengine/src/Graphics/Globals.cpp" "CMakeFiles/Gengine.dir/src/Graphics/Globals.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/Globals.cpp.o.d"
+  "/home/laelijah/Programming/Gengine/src/Graphics/Mesh.cpp" "CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o.d"
+  "/home/laelijah/Programming/Gengine/src/Graphics/Model.cpp" "CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o.d"
   "/home/laelijah/Programming/Gengine/src/Graphics/Shader.cpp" "CMakeFiles/Gengine.dir/src/Graphics/Shader.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/Shader.cpp.o.d"
   "/home/laelijah/Programming/Gengine/src/Graphics/index.cpp" "CMakeFiles/Gengine.dir/src/Graphics/index.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/index.cpp.o.d"
   )

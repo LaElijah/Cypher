@@ -249,6 +249,54 @@ src/Graphics/Globals.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/Globals.cpp.s
 .PHONY : src/Graphics/Globals.cpp.s
 
+src/Graphics/Mesh.o: src/Graphics/Mesh.cpp.o
+.PHONY : src/Graphics/Mesh.o
+
+# target to build an object file
+src/Graphics/Mesh.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o
+.PHONY : src/Graphics/Mesh.cpp.o
+
+src/Graphics/Mesh.i: src/Graphics/Mesh.cpp.i
+.PHONY : src/Graphics/Mesh.i
+
+# target to preprocess a source file
+src/Graphics/Mesh.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.i
+.PHONY : src/Graphics/Mesh.cpp.i
+
+src/Graphics/Mesh.s: src/Graphics/Mesh.cpp.s
+.PHONY : src/Graphics/Mesh.s
+
+# target to generate assembly for a file
+src/Graphics/Mesh.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.s
+.PHONY : src/Graphics/Mesh.cpp.s
+
+src/Graphics/Model.o: src/Graphics/Model.cpp.o
+.PHONY : src/Graphics/Model.o
+
+# target to build an object file
+src/Graphics/Model.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o
+.PHONY : src/Graphics/Model.cpp.o
+
+src/Graphics/Model.i: src/Graphics/Model.cpp.i
+.PHONY : src/Graphics/Model.i
+
+# target to preprocess a source file
+src/Graphics/Model.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.i
+.PHONY : src/Graphics/Model.cpp.i
+
+src/Graphics/Model.s: src/Graphics/Model.cpp.s
+.PHONY : src/Graphics/Model.s
+
+# target to generate assembly for a file
+src/Graphics/Model.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.s
+.PHONY : src/Graphics/Model.cpp.s
+
 src/Graphics/Shader.o: src/Graphics/Shader.cpp.o
 .PHONY : src/Graphics/Shader.o
 
@@ -321,6 +369,12 @@ help:
 	@echo "... src/Graphics/Globals.o"
 	@echo "... src/Graphics/Globals.i"
 	@echo "... src/Graphics/Globals.s"
+	@echo "... src/Graphics/Mesh.o"
+	@echo "... src/Graphics/Mesh.i"
+	@echo "... src/Graphics/Mesh.s"
+	@echo "... src/Graphics/Model.o"
+	@echo "... src/Graphics/Model.i"
+	@echo "... src/Graphics/Model.s"
 	@echo "... src/Graphics/Shader.o"
 	@echo "... src/Graphics/Shader.i"
 	@echo "... src/Graphics/Shader.s"

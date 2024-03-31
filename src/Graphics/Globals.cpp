@@ -8,6 +8,9 @@
 
 
 
+#include <glm/glm.hpp>
+#include <string>
+
 
 namespace Graphics {
   
@@ -22,6 +25,22 @@ namespace Graphics {
     DOWN
   };
 
+  struct Texture
+  {
+    std::string type;
+    std::string path;
+    unsigned int id;
+
+  };
+
+  struct Vertex
+  {
+    glm::vec3 Position;
+    glm::vec3 Normal;
+    glm::vec2 TexCoords;
+  };
+
+  
 
 }
 
