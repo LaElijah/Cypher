@@ -45,6 +45,8 @@ int main()
 {
     GLFWwindow *window = canvas.getWindow();
 
+    stbi_set_flip_vertically_on_load(true);
+
     glfwSetCursorPosCallback(window,  mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
 
@@ -69,10 +71,13 @@ int main()
      
       model = glm::mat4(1.0f);
       simpleShader.use();
-      simpleShader.setMat4("model", model);
       simpleShader.setMat4("view", view);
       simpleShader.setMat4("projection", projection);
 
+      model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+      model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+
+      simpleShader.setMat4("model", model);
       
       simpleModel.Draw(simpleShader);
   

@@ -84,7 +84,7 @@ Graphics::Mesh Graphics::Model::processMesh(aiMesh *mesh, const aiScene *scene)
     {
       glm::vec2 vec;
       vec.x = mesh->mTextureCoords[0][i].x;
-      vec.y = mesh->mTextureCoords[0][i].y;
+      vec.y = -(mesh->mTextureCoords[0][i].y);
       vertex.TexCoords = vec; 
     }
     else 
@@ -112,25 +112,23 @@ Graphics::Mesh Graphics::Model::processMesh(aiMesh *mesh, const aiScene *scene)
     
 
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-    std::vector<Texture> specularMaps = loadMaterialTextures(material,
-        aiTextureType_SPECULAR, "texture_specular");
+
+    std::vector<Texture> specularMaps = loadMaterialTextures(
+        material,
+        aiTextureType_SPECULAR, 
+        "texture_specular");
 
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     
-
-
   return Mesh(vertices, indices, textures);
-
 }
 
 std::vector<Graphics::Texture> Graphics::Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
 {
   std::vector<Graphics::Texture> textures;
-
-  
+ 
   for(unsigned int i = 0; i < mat->GetTextureCount(type); i++)
-  {
-    
+  {    
     aiString str; 
     mat->GetTexture(type, i, &str);
     bool skip = false;
