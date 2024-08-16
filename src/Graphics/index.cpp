@@ -27,13 +27,17 @@
 float deltaTime;
 float lastFrame = 0.0f;
 
+bool cameraDisabled = true;
+    bool drawGui = true; 
 float SCREEN_WIDTH = 800;
 float SCREEN_HEIGHT = 600;
 float currentFrame;
 
 void loadImageData(const char *path);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
-void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);    
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);  
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void processInput(GLFWwindow *window);
 
 Graphics::Camera camera(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -137,6 +141,7 @@ int main()
 
    
     glfwSetCursorPosCallback(window,  mouse_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwSetScrollCallback(window, scroll_callback);
  
     IMGUI_CHECKVERSION();
@@ -146,7 +151,6 @@ int main()
    
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(); 
-   
    
     while (!glfwWindowShouldClose(window)) 
     {  
@@ -158,8 +162,12 @@ int main()
       lastFrame = currentFrame;
 
       glm::vec3 cameraFront = camera.getDirection();
-	  
-      processInput(window);
+	 
+      if (!io.WantCaptureKeyboard)
+      {
+          processInput(window);
+      }
+
 
       glClearColor(0, 0, 0, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -201,15 +209,17 @@ int main()
            // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
       // -------------------------------------------------------------------------------
       glfwPollEvents();
-      
-      ImGui_ImplOpenGL3_NewFrame();
-      ImGui_ImplGlfw_NewFrame();
-      ImGui::NewFrame();
-      ImGui::ShowDemoWindow();
 
-      ImGui::Render();
-      ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-   
+      if (drawGui)
+      { 
+          ImGui_ImplOpenGL3_NewFrame();
+          ImGui_ImplGlfw_NewFrame();
+          ImGui::NewFrame();
+          ImGui::ShowDemoWindow();
+
+          ImGui::Render();
+          ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+      } 
       glfwSwapBuffers(window);
     }
  
@@ -259,14 +269,30 @@ void loadImageData(const char* path)
 }
 
 
-bool cameraFocused = true;
+
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+
+    ImGuiIO& io = ImGui::GetIO();
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && !io.WantCaptureMouse)
+    {
+        canvas.captureMouse(); 
+	drawGui = false;
+	cameraDisabled = false;
+    }
+}
+
 
 void processInput(GLFWwindow *window)
 {
 
-
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-      glfwSetWindowShouldClose(window, true);
+    {
+        canvas.releaseMouse(); 
+	drawGui = true;
+	cameraDisabled = true;
+    } 
 
     /*
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
@@ -282,7 +308,10 @@ void processInput(GLFWwindow *window)
 	}	
     }
     */
-     
+ 
+    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) 
+      glfwSetWindowShouldClose(window, true);
+    
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) 
       camera.processKeyboard(Graphics::Direction::FORWARDS, deltaTime);
    
@@ -307,24 +336,36 @@ void processInput(GLFWwindow *window)
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos)
     {
-          if (camera.isFirstMouse())
+      
+    ImGuiIO& io = ImGui::GetIO();
+    
+    if (!io.WantCaptureMouse)
+    {
+	  if (camera.isFirstMouse())
           {
             camera.setLastX(xpos);
             camera.setLastY(ypos);
             camera.startMouse(); 
           }
+          
+	  if (!cameraDisabled)
+	  {
+              camera.processMousePosition(xpos - camera.getLastX(), camera.getLastY() - ypos); 
 
-          camera.processMousePosition(xpos - camera.getLastX(), camera.getLastY() - ypos); 
+              camera.setLastX(xpos);
+              camera.setLastY(ypos);
+	  }    
 
-          camera.setLastX(xpos);
-          camera.setLastY(ypos);
-    
+    }
 
     }
 
 
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 {
-    camera.processMouseScroll(yoffset);
+
+    ImGuiIO& io = ImGui::GetIO();
+    if (!io.WantCaptureMouse)
+        camera.processMouseScroll(yoffset);
 }
 
