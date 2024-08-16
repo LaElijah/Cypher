@@ -20,9 +20,29 @@ set(SOURCES
   ${SRC_DIR}/Graphics/Globals.cpp
   ${SRC_DIR}/Graphics/Model.cpp
   ${SRC_DIR}/Graphics/Mesh.cpp
+  ${SRC_DIR}/Graphics/ResourceManager.cpp
+  ${SRC_DIR}/Graphics/FileReader.cpp
   ${EXTERNAL_DIR}/GLAD/glad.c
-  ${EXTERNAL_DIR}/STB_IMAGE/stb_image.h
   ${EXTERNAL_DIR}/STB_IMAGE/stb_image.cpp
+  ${EXTERNAL_DIR}/imgui/imconfig.h
+  ${EXTERNAL_DIR}/imgui/imgui.cpp
+  ${EXTERNAL_DIR}/imgui/imgui_demo.cpp
+  ${EXTERNAL_DIR}/imgui/imgui_draw.cpp
+  ${EXTERNAL_DIR}/imgui/imgui.h 
+  ${EXTERNAL_DIR}/imgui/imgui_internal.h
+  ${EXTERNAL_DIR}/imgui/imgui_tables.cpp
+  ${EXTERNAL_DIR}/imgui/imgui_widgets.cpp
+  ${EXTERNAL_DIR}/imgui/imstb_rectpack.h
+  ${EXTERNAL_DIR}/imgui/imstb_textedit.h
+  ${EXTERNAL_DIR}/imgui/imstb_truetype.h
+  ${EXTERNAL_DIR}/imgui/imgui_impl_glfw.cpp
+  ${EXTERNAL_DIR}/imgui/imgui_impl_glfw.h
+  ${EXTERNAL_DIR}/imgui/imgui_impl_opengl3.cpp
+  ${EXTERNAL_DIR}/imgui/imgui_impl_opengl3.h
+  ${EXTERNAL_DIR}/imgui/imgui_impl_opengl3_loader.h 
+  ${EXTERNAL_DIR}/imgui/imgui_stdlib.cpp
+  ${EXTERNAL_DIR}/imgui/imgui_stdlib.h
+
   )
 
 

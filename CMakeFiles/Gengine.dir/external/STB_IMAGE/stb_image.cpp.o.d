@@ -1,7 +1,7 @@
 CMakeFiles/Gengine.dir/external/STB_IMAGE/stb_image.cpp.o: \
- /home/laelijah/Programming/Gengine/external/STB_IMAGE/stb_image.cpp \
+ /home/laelijah/Gengine/external/STB_IMAGE/stb_image.cpp \
  /usr/include/stdc-predef.h \
- /home/laelijah/Programming/Gengine/external/STB_IMAGE/stb_image.h \
+ /home/laelijah/Gengine/external/STB_IMAGE/stb_image.h \
  /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \

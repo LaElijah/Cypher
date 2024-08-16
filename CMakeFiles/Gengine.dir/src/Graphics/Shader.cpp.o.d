@@ -1,5 +1,5 @@
 CMakeFiles/Gengine.dir/src/Graphics/Shader.cpp.o: \
- /home/laelijah/Programming/Gengine/src/Graphics/Shader.cpp \
+ /home/laelijah/Gengine/src/Graphics/Shader.cpp \
  /usr/include/stdc-predef.h /usr/include/glad/glad.h \
  /usr/include/KHR/khrplatform.h \
  /usr/lib/gcc/x86_64-linux-gnu/12/include/stdint.h /usr/include/stdint.h \
@@ -156,7 +156,7 @@ CMakeFiles/Gengine.dir/src/Graphics/Shader.cpp.o: \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++io.h \
  /usr/include/c++/12/bits/fstream.tcc /usr/include/c++/12/sstream \
  /usr/include/c++/12/bits/sstream.tcc /usr/include/c++/12/iostream \
- /home/laelijah/Programming/Gengine/src/Graphics/Shader.h \
+ /home/laelijah/Gengine/src/Graphics/Shader.h \
  /usr/include/glm/ext/matrix_transform.hpp \
  /usr/include/glm/gtc/constants.hpp \
  /usr/include/glm/ext/scalar_constants.hpp \

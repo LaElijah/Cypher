@@ -7,6 +7,8 @@
 #include <glm/glm.hpp>
 #include <string>
 #include "Shader.h"
+#include "ResourceManager.h"
+
 
 namespace Graphics{
 
@@ -20,9 +22,11 @@ class Mesh {
 
     Mesh(std::vector<Vertex> verticies, 
         std::vector<unsigned int> indices, 
-        std::vector<Texture> textures);
+        std::vector<Texture> textures,
+	Graphics::ResourceManager& resourceManager
+	);
 
-    void Draw(Shader &shader);
+    void Draw(Shader& shader, Graphics::ResourceManager& resourceManager);
 
 
   private:
@@ -30,7 +34,7 @@ class Mesh {
 
     // In the future, use polymorphism and dependencuy injection
     // passing in a resource manager, it must have the get VAO, VBO, AND EBO 
-    void setupMesh(); 
+    void setupMesh(Graphics::ResourceManager& resourceManager); 
 };
 
 }

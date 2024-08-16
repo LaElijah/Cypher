@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/laelijah/Programming/Gengine
+CMAKE_SOURCE_DIR = /home/laelijah/Gengine
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/laelijah/Programming/Gengine
+CMAKE_BINARY_DIR = /home/laelijah/Gengine
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/laelijah/Programming/Gengine/CMakeFiles /home/laelijah/Programming/Gengine//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/laelijah/Gengine/CMakeFiles /home/laelijah/Gengine//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/laelijah/Programming/Gengine/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/laelijah/Gengine/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -177,6 +177,198 @@ external/STB_IMAGE/stb_image.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/STB_IMAGE/stb_image.cpp.s
 .PHONY : external/STB_IMAGE/stb_image.cpp.s
 
+external/imgui/imgui.o: external/imgui/imgui.cpp.o
+.PHONY : external/imgui/imgui.o
+
+# target to build an object file
+external/imgui/imgui.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui.cpp.o
+.PHONY : external/imgui/imgui.cpp.o
+
+external/imgui/imgui.i: external/imgui/imgui.cpp.i
+.PHONY : external/imgui/imgui.i
+
+# target to preprocess a source file
+external/imgui/imgui.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui.cpp.i
+.PHONY : external/imgui/imgui.cpp.i
+
+external/imgui/imgui.s: external/imgui/imgui.cpp.s
+.PHONY : external/imgui/imgui.s
+
+# target to generate assembly for a file
+external/imgui/imgui.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui.cpp.s
+.PHONY : external/imgui/imgui.cpp.s
+
+external/imgui/imgui_demo.o: external/imgui/imgui_demo.cpp.o
+.PHONY : external/imgui/imgui_demo.o
+
+# target to build an object file
+external/imgui/imgui_demo.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_demo.cpp.o
+.PHONY : external/imgui/imgui_demo.cpp.o
+
+external/imgui/imgui_demo.i: external/imgui/imgui_demo.cpp.i
+.PHONY : external/imgui/imgui_demo.i
+
+# target to preprocess a source file
+external/imgui/imgui_demo.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_demo.cpp.i
+.PHONY : external/imgui/imgui_demo.cpp.i
+
+external/imgui/imgui_demo.s: external/imgui/imgui_demo.cpp.s
+.PHONY : external/imgui/imgui_demo.s
+
+# target to generate assembly for a file
+external/imgui/imgui_demo.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_demo.cpp.s
+.PHONY : external/imgui/imgui_demo.cpp.s
+
+external/imgui/imgui_draw.o: external/imgui/imgui_draw.cpp.o
+.PHONY : external/imgui/imgui_draw.o
+
+# target to build an object file
+external/imgui/imgui_draw.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_draw.cpp.o
+.PHONY : external/imgui/imgui_draw.cpp.o
+
+external/imgui/imgui_draw.i: external/imgui/imgui_draw.cpp.i
+.PHONY : external/imgui/imgui_draw.i
+
+# target to preprocess a source file
+external/imgui/imgui_draw.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_draw.cpp.i
+.PHONY : external/imgui/imgui_draw.cpp.i
+
+external/imgui/imgui_draw.s: external/imgui/imgui_draw.cpp.s
+.PHONY : external/imgui/imgui_draw.s
+
+# target to generate assembly for a file
+external/imgui/imgui_draw.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_draw.cpp.s
+.PHONY : external/imgui/imgui_draw.cpp.s
+
+external/imgui/imgui_impl_glfw.o: external/imgui/imgui_impl_glfw.cpp.o
+.PHONY : external/imgui/imgui_impl_glfw.o
+
+# target to build an object file
+external/imgui/imgui_impl_glfw.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_impl_glfw.cpp.o
+.PHONY : external/imgui/imgui_impl_glfw.cpp.o
+
+external/imgui/imgui_impl_glfw.i: external/imgui/imgui_impl_glfw.cpp.i
+.PHONY : external/imgui/imgui_impl_glfw.i
+
+# target to preprocess a source file
+external/imgui/imgui_impl_glfw.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_impl_glfw.cpp.i
+.PHONY : external/imgui/imgui_impl_glfw.cpp.i
+
+external/imgui/imgui_impl_glfw.s: external/imgui/imgui_impl_glfw.cpp.s
+.PHONY : external/imgui/imgui_impl_glfw.s
+
+# target to generate assembly for a file
+external/imgui/imgui_impl_glfw.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_impl_glfw.cpp.s
+.PHONY : external/imgui/imgui_impl_glfw.cpp.s
+
+external/imgui/imgui_impl_opengl3.o: external/imgui/imgui_impl_opengl3.cpp.o
+.PHONY : external/imgui/imgui_impl_opengl3.o
+
+# target to build an object file
+external/imgui/imgui_impl_opengl3.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_impl_opengl3.cpp.o
+.PHONY : external/imgui/imgui_impl_opengl3.cpp.o
+
+external/imgui/imgui_impl_opengl3.i: external/imgui/imgui_impl_opengl3.cpp.i
+.PHONY : external/imgui/imgui_impl_opengl3.i
+
+# target to preprocess a source file
+external/imgui/imgui_impl_opengl3.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_impl_opengl3.cpp.i
+.PHONY : external/imgui/imgui_impl_opengl3.cpp.i
+
+external/imgui/imgui_impl_opengl3.s: external/imgui/imgui_impl_opengl3.cpp.s
+.PHONY : external/imgui/imgui_impl_opengl3.s
+
+# target to generate assembly for a file
+external/imgui/imgui_impl_opengl3.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_impl_opengl3.cpp.s
+.PHONY : external/imgui/imgui_impl_opengl3.cpp.s
+
+external/imgui/imgui_stdlib.o: external/imgui/imgui_stdlib.cpp.o
+.PHONY : external/imgui/imgui_stdlib.o
+
+# target to build an object file
+external/imgui/imgui_stdlib.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_stdlib.cpp.o
+.PHONY : external/imgui/imgui_stdlib.cpp.o
+
+external/imgui/imgui_stdlib.i: external/imgui/imgui_stdlib.cpp.i
+.PHONY : external/imgui/imgui_stdlib.i
+
+# target to preprocess a source file
+external/imgui/imgui_stdlib.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_stdlib.cpp.i
+.PHONY : external/imgui/imgui_stdlib.cpp.i
+
+external/imgui/imgui_stdlib.s: external/imgui/imgui_stdlib.cpp.s
+.PHONY : external/imgui/imgui_stdlib.s
+
+# target to generate assembly for a file
+external/imgui/imgui_stdlib.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_stdlib.cpp.s
+.PHONY : external/imgui/imgui_stdlib.cpp.s
+
+external/imgui/imgui_tables.o: external/imgui/imgui_tables.cpp.o
+.PHONY : external/imgui/imgui_tables.o
+
+# target to build an object file
+external/imgui/imgui_tables.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_tables.cpp.o
+.PHONY : external/imgui/imgui_tables.cpp.o
+
+external/imgui/imgui_tables.i: external/imgui/imgui_tables.cpp.i
+.PHONY : external/imgui/imgui_tables.i
+
+# target to preprocess a source file
+external/imgui/imgui_tables.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_tables.cpp.i
+.PHONY : external/imgui/imgui_tables.cpp.i
+
+external/imgui/imgui_tables.s: external/imgui/imgui_tables.cpp.s
+.PHONY : external/imgui/imgui_tables.s
+
+# target to generate assembly for a file
+external/imgui/imgui_tables.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_tables.cpp.s
+.PHONY : external/imgui/imgui_tables.cpp.s
+
+external/imgui/imgui_widgets.o: external/imgui/imgui_widgets.cpp.o
+.PHONY : external/imgui/imgui_widgets.o
+
+# target to build an object file
+external/imgui/imgui_widgets.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_widgets.cpp.o
+.PHONY : external/imgui/imgui_widgets.cpp.o
+
+external/imgui/imgui_widgets.i: external/imgui/imgui_widgets.cpp.i
+.PHONY : external/imgui/imgui_widgets.i
+
+# target to preprocess a source file
+external/imgui/imgui_widgets.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_widgets.cpp.i
+.PHONY : external/imgui/imgui_widgets.cpp.i
+
+external/imgui/imgui_widgets.s: external/imgui/imgui_widgets.cpp.s
+.PHONY : external/imgui/imgui_widgets.s
+
+# target to generate assembly for a file
+external/imgui/imgui_widgets.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/external/imgui/imgui_widgets.cpp.s
+.PHONY : external/imgui/imgui_widgets.cpp.s
+
 src/Graphics/Camera.o: src/Graphics/Camera.cpp.o
 .PHONY : src/Graphics/Camera.o
 
@@ -200,6 +392,30 @@ src/Graphics/Camera.s: src/Graphics/Camera.cpp.s
 src/Graphics/Camera.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/Camera.cpp.s
 .PHONY : src/Graphics/Camera.cpp.s
+
+src/Graphics/FileReader.o: src/Graphics/FileReader.cpp.o
+.PHONY : src/Graphics/FileReader.o
+
+# target to build an object file
+src/Graphics/FileReader.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o
+.PHONY : src/Graphics/FileReader.cpp.o
+
+src/Graphics/FileReader.i: src/Graphics/FileReader.cpp.i
+.PHONY : src/Graphics/FileReader.i
+
+# target to preprocess a source file
+src/Graphics/FileReader.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.i
+.PHONY : src/Graphics/FileReader.cpp.i
+
+src/Graphics/FileReader.s: src/Graphics/FileReader.cpp.s
+.PHONY : src/Graphics/FileReader.s
+
+# target to generate assembly for a file
+src/Graphics/FileReader.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.s
+.PHONY : src/Graphics/FileReader.cpp.s
 
 src/Graphics/GLCanvas.o: src/Graphics/GLCanvas.cpp.o
 .PHONY : src/Graphics/GLCanvas.o
@@ -297,6 +513,30 @@ src/Graphics/Model.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.s
 .PHONY : src/Graphics/Model.cpp.s
 
+src/Graphics/ResourceManager.o: src/Graphics/ResourceManager.cpp.o
+.PHONY : src/Graphics/ResourceManager.o
+
+# target to build an object file
+src/Graphics/ResourceManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o
+.PHONY : src/Graphics/ResourceManager.cpp.o
+
+src/Graphics/ResourceManager.i: src/Graphics/ResourceManager.cpp.i
+.PHONY : src/Graphics/ResourceManager.i
+
+# target to preprocess a source file
+src/Graphics/ResourceManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.i
+.PHONY : src/Graphics/ResourceManager.cpp.i
+
+src/Graphics/ResourceManager.s: src/Graphics/ResourceManager.cpp.s
+.PHONY : src/Graphics/ResourceManager.s
+
+# target to generate assembly for a file
+src/Graphics/ResourceManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.s
+.PHONY : src/Graphics/ResourceManager.cpp.s
+
 src/Graphics/Shader.o: src/Graphics/Shader.cpp.o
 .PHONY : src/Graphics/Shader.o
 
@@ -360,9 +600,36 @@ help:
 	@echo "... external/STB_IMAGE/stb_image.o"
 	@echo "... external/STB_IMAGE/stb_image.i"
 	@echo "... external/STB_IMAGE/stb_image.s"
+	@echo "... external/imgui/imgui.o"
+	@echo "... external/imgui/imgui.i"
+	@echo "... external/imgui/imgui.s"
+	@echo "... external/imgui/imgui_demo.o"
+	@echo "... external/imgui/imgui_demo.i"
+	@echo "... external/imgui/imgui_demo.s"
+	@echo "... external/imgui/imgui_draw.o"
+	@echo "... external/imgui/imgui_draw.i"
+	@echo "... external/imgui/imgui_draw.s"
+	@echo "... external/imgui/imgui_impl_glfw.o"
+	@echo "... external/imgui/imgui_impl_glfw.i"
+	@echo "... external/imgui/imgui_impl_glfw.s"
+	@echo "... external/imgui/imgui_impl_opengl3.o"
+	@echo "... external/imgui/imgui_impl_opengl3.i"
+	@echo "... external/imgui/imgui_impl_opengl3.s"
+	@echo "... external/imgui/imgui_stdlib.o"
+	@echo "... external/imgui/imgui_stdlib.i"
+	@echo "... external/imgui/imgui_stdlib.s"
+	@echo "... external/imgui/imgui_tables.o"
+	@echo "... external/imgui/imgui_tables.i"
+	@echo "... external/imgui/imgui_tables.s"
+	@echo "... external/imgui/imgui_widgets.o"
+	@echo "... external/imgui/imgui_widgets.i"
+	@echo "... external/imgui/imgui_widgets.s"
 	@echo "... src/Graphics/Camera.o"
 	@echo "... src/Graphics/Camera.i"
 	@echo "... src/Graphics/Camera.s"
+	@echo "... src/Graphics/FileReader.o"
+	@echo "... src/Graphics/FileReader.i"
+	@echo "... src/Graphics/FileReader.s"
 	@echo "... src/Graphics/GLCanvas.o"
 	@echo "... src/Graphics/GLCanvas.i"
 	@echo "... src/Graphics/GLCanvas.s"
@@ -375,6 +642,9 @@ help:
 	@echo "... src/Graphics/Model.o"
 	@echo "... src/Graphics/Model.i"
 	@echo "... src/Graphics/Model.s"
+	@echo "... src/Graphics/ResourceManager.o"
+	@echo "... src/Graphics/ResourceManager.i"
+	@echo "... src/Graphics/ResourceManager.s"
 	@echo "... src/Graphics/Shader.o"
 	@echo "... src/Graphics/Shader.i"
 	@echo "... src/Graphics/Shader.s"

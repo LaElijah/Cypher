@@ -1,5 +1,5 @@
 CMakeFiles/Gengine.dir/src/Graphics/Camera.cpp.o: \
- /home/laelijah/Programming/Gengine/src/Graphics/Camera.cpp \
+ /home/laelijah/Gengine/src/Graphics/Camera.cpp \
  /usr/include/stdc-predef.h /usr/include/glm/ext/quaternion_geometric.hpp \
  /usr/include/glm/geometric.hpp /usr/include/glm/detail/type_vec3.hpp \
  /usr/include/glm/detail/qualifier.hpp /usr/include/glm/detail/setup.hpp \
@@ -326,8 +326,8 @@ CMakeFiles/Gengine.dir/src/Graphics/Camera.cpp.o: \
  /usr/include/c++/12/bits/basic_ios.tcc \
  /usr/include/c++/12/bits/ostream.tcc /usr/include/c++/12/istream \
  /usr/include/c++/12/bits/istream.tcc \
- /home/laelijah/Programming/Gengine/src/Graphics/Globals.cpp \
- /usr/include/glm/glm.hpp /usr/include/c++/12/climits \
+ /home/laelijah/Gengine/src/Graphics/Globals.cpp /usr/include/glm/glm.hpp \
+ /usr/include/c++/12/climits \
  /usr/lib/gcc/x86_64-linux-gnu/12/include/limits.h \
  /usr/lib/gcc/x86_64-linux-gnu/12/include/syslimits.h \
  /usr/include/limits.h /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \

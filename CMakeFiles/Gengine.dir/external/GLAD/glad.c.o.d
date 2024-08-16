@@ -1,6 +1,6 @@
 CMakeFiles/Gengine.dir/external/GLAD/glad.c.o: \
- /home/laelijah/Programming/Gengine/external/GLAD/glad.c \
- /usr/include/stdc-predef.h /usr/include/stdio.h \
+ /home/laelijah/Gengine/external/GLAD/glad.c /usr/include/stdc-predef.h \
+ /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \

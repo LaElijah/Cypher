@@ -52,6 +52,20 @@ namespace Graphics {
       return Window;
     }
 
+    void GLCanvas::releaseMouse()
+    {
+	GLFWwindow* window = getWindow();
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+   
+    void GLCanvas::captureMouse()
+    {	
+	GLFWwindow* window = getWindow();
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }	
+
+    
+
     void GLCanvas::startWindow() 
     {
       
@@ -59,7 +73,7 @@ namespace Graphics {
       glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, VERSION);
       glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, VERSION);
       glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-      glfwWindowHint(GLFW_DECORATED, false);      
+      glfwWindowHint(GLFW_DECORATED, !fullscreen);      
 
 
     #ifdef __APPLE__
@@ -77,7 +91,7 @@ namespace Graphics {
       }
 
 
-      glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+      glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
     void GLCanvas::loadGlad() 
     {

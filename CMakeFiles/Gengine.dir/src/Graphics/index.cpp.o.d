@@ -1,7 +1,6 @@
 CMakeFiles/Gengine.dir/src/Graphics/index.cpp.o: \
- /home/laelijah/Programming/Gengine/src/Graphics/index.cpp \
- /usr/include/stdc-predef.h /usr/include/glad/glad.h \
- /usr/include/KHR/khrplatform.h \
+ /home/laelijah/Gengine/src/Graphics/index.cpp /usr/include/stdc-predef.h \
+ /usr/include/glad/glad.h /usr/include/KHR/khrplatform.h \
  /usr/lib/gcc/x86_64-linux-gnu/12/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -19,7 +18,7 @@ CMakeFiles/Gengine.dir/src/Graphics/index.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
  /usr/include/GLFW/glfw3.h \
  /usr/lib/gcc/x86_64-linux-gnu/12/include/stddef.h \
- /home/laelijah/Programming/Gengine/src/Graphics/GLCanvas.h \
+ /home/laelijah/Gengine/src/Graphics/GLCanvas.h \
  /usr/include/c++/12/stdexcept /usr/include/c++/12/exception \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/os_defines.h \
@@ -298,7 +297,7 @@ CMakeFiles/Gengine.dir/src/Graphics/index.cpp.o: \
  /usr/include/glm/detail/type_half.hpp \
  /usr/include/glm/detail/type_half.inl /usr/include/glm/integer.hpp \
  /usr/include/glm/detail/func_integer.inl \
- /home/laelijah/Programming/Gengine/src/Graphics/Shader.h \
+ /home/laelijah/Gengine/src/Graphics/Shader.h \
  /usr/include/glm/ext/matrix_transform.hpp \
  /usr/include/glm/gtc/constants.hpp \
  /usr/include/glm/ext/scalar_constants.hpp \
@@ -345,42 +344,44 @@ CMakeFiles/Gengine.dir/src/Graphics/index.cpp.o: \
  /usr/include/glm/ext/vector_uint1_sized.hpp /usr/include/c++/12/cstring \
  /usr/include/string.h /usr/include/strings.h \
  /usr/include/glm/gtc/type_ptr.inl \
- /home/laelijah/Programming/Gengine/src/Graphics/../../external/STB_IMAGE/stb_image.h \
+ /home/laelijah/Gengine/src/Graphics/../../external/imgui/imgui.h \
+ /home/laelijah/Gengine/src/Graphics/../../external/imgui/imconfig.h \
+ /home/laelijah/Gengine/src/Graphics/../../external/imgui/imgui_impl_opengl3.h \
+ /home/laelijah/Gengine/src/Graphics/../../external/imgui/imgui_impl_glfw.h \
+ /home/laelijah/Gengine/src/Graphics/../../external/STB_IMAGE/stb_image.h \
  /usr/include/c++/12/stdlib.h \
- /home/laelijah/Programming/Gengine/src/Graphics/./Camera.cpp \
- /home/laelijah/Programming/Gengine/src/Graphics/./Globals.cpp \
- /home/laelijah/Programming/Gengine/src/Graphics/Globals.cpp \
- /home/laelijah/Programming/Gengine/src/Graphics/Model.h \
- /home/laelijah/Programming/Gengine/src/Graphics/Mesh.h \
- /usr/include/c++/12/vector /usr/include/c++/12/bits/stl_uninitialized.h \
+ /home/laelijah/Gengine/src/Graphics/./Camera.cpp \
+ /home/laelijah/Gengine/src/Graphics/./Globals.cpp \
+ /home/laelijah/Gengine/src/Graphics/Globals.cpp \
+ /home/laelijah/Gengine/src/Graphics/Model.h \
+ /home/laelijah/Gengine/src/Graphics/Mesh.h /usr/include/c++/12/vector \
+ /usr/include/c++/12/bits/stl_uninitialized.h \
  /usr/include/c++/12/bits/stl_vector.h \
  /usr/include/c++/12/bits/stl_bvector.h \
  /usr/include/c++/12/bits/vector.tcc \
- /usr/local/include/assimp/Importer.hpp /usr/local/include/assimp/types.h \
- /usr/local/include/assimp/defs.h /usr/local/include/assimp/config.h \
- /usr/local/include/assimp/vector2.h /usr/local/include/assimp/vector3.h \
- /usr/local/include/assimp/color4.h /usr/local/include/assimp/matrix3x3.h \
- /usr/local/include/assimp/matrix4x4.h \
- /usr/local/include/assimp/quaternion.h \
- /usr/local/include/assimp/vector2.inl \
- /usr/local/include/assimp/vector3.inl \
- /usr/local/include/assimp/color4.inl \
- /usr/local/include/assimp/matrix3x3.inl /usr/include/c++/12/algorithm \
- /usr/include/c++/12/bits/stl_algo.h \
+ /home/laelijah/Gengine/src/Graphics/ResourceManager.h \
+ /usr/include/assimp/Importer.hpp /usr/include/assimp/types.h \
+ /usr/include/assimp/defs.h /usr/include/assimp/config.h \
+ /usr/include/assimp/vector2.h /usr/include/assimp/vector3.h \
+ /usr/include/assimp/color4.h /usr/include/assimp/matrix3x3.h \
+ /usr/include/assimp/matrix4x4.h /usr/include/assimp/quaternion.h \
+ /usr/include/assimp/vector2.inl /usr/include/assimp/vector3.inl \
+ /usr/include/assimp/color4.inl /usr/include/assimp/matrix3x3.inl \
+ /usr/include/c++/12/algorithm /usr/include/c++/12/bits/stl_algo.h \
  /usr/include/c++/12/bits/algorithmfwd.h \
  /usr/include/c++/12/bits/stl_heap.h \
  /usr/include/c++/12/bits/stl_tempbuf.h \
  /usr/include/c++/12/bits/uniform_int_dist.h \
  /usr/include/c++/12/pstl/glue_algorithm_defs.h \
  /usr/include/c++/12/pstl/execution_defs.h \
- /usr/local/include/assimp/matrix4x4.inl \
- /usr/local/include/assimp/MathFunctions.h \
- /usr/local/include/assimp/quaternion.inl \
- /usr/local/include/assimp/scene.h /usr/local/include/assimp/texture.h \
- /usr/local/include/assimp/Compiler/pushpack1.h \
- /usr/local/include/assimp/Compiler/poppack1.h \
- /usr/local/include/assimp/mesh.h /usr/local/include/assimp/aabb.h \
- /usr/local/include/assimp/light.h /usr/local/include/assimp/camera.h \
- /usr/local/include/assimp/material.h \
- /usr/local/include/assimp/material.inl /usr/local/include/assimp/anim.h \
- /usr/local/include/assimp/metadata.h
+ /usr/include/assimp/matrix4x4.inl /usr/include/assimp/MathFunctions.h \
+ /usr/include/assimp/quaternion.inl /usr/include/assimp/scene.h \
+ /usr/include/assimp/texture.h /usr/include/assimp/Compiler/pushpack1.h \
+ /usr/include/assimp/Compiler/poppack1.h /usr/include/assimp/mesh.h \
+ /usr/include/assimp/aabb.h /usr/include/assimp/light.h \
+ /usr/include/assimp/camera.h /usr/include/assimp/material.h \
+ /usr/include/assimp/material.inl /usr/include/assimp/anim.h \
+ /usr/include/assimp/metadata.h \
+ /home/laelijah/Gengine/src/Graphics/FileReader.h /usr/include/dirent.h \
+ /usr/include/x86_64-linux-gnu/bits/dirent.h \
+ /usr/include/x86_64-linux-gnu/bits/dirent_ext.h

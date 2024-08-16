@@ -1,4 +1,4 @@
-# Install script for directory: /home/laelijah/Programming/Gengine
+# Install script for directory: /home/laelijah/Gengine
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/laelijah/Programming/Gengine/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/laelijah/Gengine/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

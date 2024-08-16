@@ -1,5 +1,5 @@
 CMakeFiles/Gengine.dir/src/Graphics/Globals.cpp.o: \
- /home/laelijah/Programming/Gengine/src/Graphics/Globals.cpp \
+ /home/laelijah/Gengine/src/Graphics/Globals.cpp \
  /usr/include/stdc-predef.h /usr/include/glm/glm.hpp \
  /usr/include/glm/detail/_fixes.hpp /usr/include/c++/12/cmath \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++config.h \

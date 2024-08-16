@@ -1,0 +1,46 @@
+
+
+
+a batch contains
+
+
+a vector of all collected  vertices 
+a vector of vectors of indices 
+
+
+So heres how it goes
+
+
+Using mult draw elements will condense many draw calls of different meshes into one
+
+It will use a vao with one vbo binded to it and that VBO must be filled with the vertices of each mesh to be rendered, the limiting factor of each batch is the amount of textures, for now (there may be some expansion with texture arrays, there is a max of 16/32 texture units, so i should have a btach object that looks like this
+
+
+vao,
+vbo,
+shader (reference to a shader, given through batch creation call),
+counts (vertex counts per mesh),
+indicies (array of arrays of indices)
+Textures
+
+
+vao, vbo is self explanatory and can be handled through initialization
+
+counts will be push_back on to fill it with the full counts of vertecies push_back directly after full mesh has loaded. indices will be pushed into their own array and then pushed into the main indices array in the resource manager.
+
+textures will 
+
+
+
+there should be a texture index on each render entity 
+
+
+
+i should set the shader name to something that semantically includes the VAO type, i could have 
+
+
+
+The plan now is to set up the redner entity, the entity should only be a collection of references to objectes being held into it s own memory area within the resource manager (through a vector or a map).
+
+Then, if its a single draw call,
+within the mesh, use the resource manager to binf the VAO usign the reference in the render entity, binf the vbo  

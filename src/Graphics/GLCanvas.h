@@ -28,16 +28,18 @@ namespace Graphics
     public:
      GLCanvas(unsigned int width = 800, unsigned int height = 600, unsigned int version = 3);
      void initializeCanvas();
-     GLFWwindow *getWindow(); 
+     GLFWwindow* getWindow(); 
      void mouse_callback(GLFWwindow *window, double xpos, double ypos);
-   
+     void captureMouse();
+     void releaseMouse(); 
 
     private:
      int ScreenWidth;
      int ScreenHeight;
-     const char *WindowName;
+     const char* WindowName;
      int VERSION;
-     GLFWwindow *Window;
+     GLFWwindow* Window;
+     bool fullscreen = false;
  
      float pitch;
      float yaw;

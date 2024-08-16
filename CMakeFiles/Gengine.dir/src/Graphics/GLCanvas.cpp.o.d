@@ -1,5 +1,5 @@
 CMakeFiles/Gengine.dir/src/Graphics/GLCanvas.cpp.o: \
- /home/laelijah/Programming/Gengine/src/Graphics/GLCanvas.cpp \
+ /home/laelijah/Gengine/src/Graphics/GLCanvas.cpp \
  /usr/include/stdc-predef.h /usr/include/glad/glad.h \
  /usr/include/KHR/khrplatform.h \
  /usr/lib/gcc/x86_64-linux-gnu/12/include/stdint.h /usr/include/stdint.h \
@@ -286,8 +286,8 @@ CMakeFiles/Gengine.dir/src/Graphics/GLCanvas.cpp.o: \
  /usr/include/c++/12/bits/basic_ios.tcc \
  /usr/include/c++/12/bits/ostream.tcc /usr/include/c++/12/istream \
  /usr/include/c++/12/bits/istream.tcc \
- /home/laelijah/Programming/Gengine/src/Graphics/GLCanvas.h \
- /usr/include/glm/glm.hpp /usr/include/c++/12/climits \
+ /home/laelijah/Gengine/src/Graphics/GLCanvas.h /usr/include/glm/glm.hpp \
+ /usr/include/c++/12/climits \
  /usr/lib/gcc/x86_64-linux-gnu/12/include/limits.h \
  /usr/lib/gcc/x86_64-linux-gnu/12/include/syslimits.h \
  /usr/include/limits.h /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
