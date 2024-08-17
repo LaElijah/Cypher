@@ -1,101 +1,90 @@
-#ifndef CAMERA_H
-#define CAMERA_H
 
 #include <glm/ext/quaternion_geometric.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include <iostream>
 #include "Globals.cpp"
+#include "Camera.h"
 
 
 
-namespace Graphics {
 
-void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 
-  class Camera
-  {
-    public: 
-
-    float Zoom = 45.0f;
-
-    Camera(int width, int height)
+    Graphics::Camera::Camera(int width, int height)
     {
-      ScreenWidth = width;
-      ScreenHeight = height;
-      lastX = width / 2;
-      lastY = height / 2;
-
-
-
-     
+        ScreenWidth = width;
+        ScreenHeight = height;
+        lastX = width / 2;
+        lastY = height / 2; 
     }
 
 
 
-    void processMousePosition(double xoffset, double yoffset, bool constrainPitch = true)
+    void Graphics::Camera::processMousePosition(double xoffset, double yoffset, bool constrainPitch)
     {
-      xoffset *= MouseSensitivity;
-      yoffset *= MouseSensitivity;
+        xoffset *= MouseSensitivity;
+        yoffset *= MouseSensitivity;
 
-      yaw += xoffset;
-      pitch += yoffset;
+        yaw += xoffset;
+        pitch += yoffset;
 
 
-      if (constrainPitch)
-      {
-        if (pitch > 89.0f)
+        if (constrainPitch)
         {
-          pitch = 89.0f;
+            if (pitch > 89.0f)
+            {
+                pitch = 89.0f;
+            }
+        
+	    else if (pitch < -89.0f)
+            {
+                pitch = -89.0f;
+            }
         }
-        else if (pitch < -89.0f)
-        {
-          pitch = -89.0f;
-        }
-      }
 
       
-updateDirection();
+        updateDirection();
     }
 
 
-    void setLastX(double X)
+    void Graphics::Camera::setLastX(double X)
     {
       lastX = X;
     }
 
-    void setLastY(double Y)
+    void Graphics::Camera::setLastY(double Y)
     {
       lastY = Y;
     }
 
 
 
-    float getLastX()
+    float Graphics::Camera::getLastX()
     {
       return lastX;
     }
 
-    float getLastY()
+    float Graphics::Camera::getLastY()
     {
       return lastY;
     }
 
 
-    bool isFirstMouse()
+    bool Graphics::Camera::isFirstMouse()
     {
       return firstMouse;
     }
 
-    void startMouse()
+    void Graphics::Camera::startMouse()
     {
       firstMouse = false;
     }
 
 
-    void updateDirection()
+    void Graphics::Camera::updateDirection()
     {
       
       Direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
@@ -108,12 +97,12 @@ updateDirection();
 
     }
 
-    glm::vec3 getDirection()
+    glm::vec3 Graphics::Camera::getDirection()
   {
     return CameraFront;
   }
 
-    glm::mat4 getViewMatrix()
+    glm::mat4 Graphics::Camera::getViewMatrix()
     {
       return glm::lookAt(Position, Position + CameraFront, CameraUp);
     }
@@ -121,13 +110,13 @@ updateDirection();
 
 
 
-    void setCameraPos(glm::vec3 position)
+    void Graphics::Camera::setCameraPos(glm::vec3 position)
     {
       Position = position;
     }
 
  
-  void processKeyboard(Direction keyPressed, float deltaTime)
+  void Graphics::Camera::processKeyboard(Graphics::Direction keyPressed, float deltaTime)
   { 
   Velocity = MovementSpeed * deltaTime;
     
@@ -174,7 +163,7 @@ updateDirection();
 }
 
 
-void processMouseScroll(float yoffset)
+void Graphics::Camera::processMouseScroll(float yoffset)
 {
   Zoom -= (float) yoffset;
   if (Zoom < 1.0f)
@@ -188,51 +177,33 @@ void processMouseScroll(float yoffset)
 
 
 
-    private:
 
  
-
-    float MouseSensitivity = 0.1f; 
-    float MovementSpeed = 2.5f;
-    float Velocity;
-    int ScreenWidth; 
-    int ScreenHeight;
-
-   
-    float pitch; 
-    float yaw;
-
-   
-    int lastX; 
-    int lastY;
- 
-    bool firstMouse = true;
- 
-    glm::vec3 Direction; 
-    glm::vec3 CameraFront;
-
-    GLFWwindow *window;
-
-    glm::vec3 Position = glm::vec3(0.0f, 0.0f, 3.0f);
-    glm::vec3 CameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 CameraDirection = glm::normalize(Position - CameraTarget); 
-    glm::mat4 Projection = glm::mat4(1.0f);
-    glm::vec3 WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 CameraRight = glm::normalize(glm::cross(WorldUp, CameraDirection));
-    glm::vec3 CameraUp = glm::cross(CameraRight, CameraFront);
-
-
-     void setCameraFront(glm::vec3 direction)
+     void Graphics::Camera::setCameraFront(glm::vec3 direction)
     {
       CameraFront = direction;
     }
 
 
-};
+void Graphics::Camera::enableCamera()
+{
+    CAMERA_ENABLED = true;
+}
 
+void Graphics::Camera::disableCamera()
+{
+    CAMERA_ENABLED = false;
 }
 
 
-#endif // !CAMERA_H
+
+bool Graphics::Camera::getCameraStatus()
+{
+    return CAMERA_ENABLED;
+}
 
 
+void Graphics::Camera::resetPosition()
+{
+    Position = glm::vec3(0.0f, 0.0f, 3.0f);
+}

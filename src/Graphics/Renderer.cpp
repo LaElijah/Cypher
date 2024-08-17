@@ -21,6 +21,8 @@ IMGUI_CHECKVERSION();
 
 Graphics::Renderer::Renderer()
 {}
+
+
 void Graphics::Renderer::drawGUI()
 {
     
@@ -35,4 +37,16 @@ void Graphics::Renderer::drawGUI()
           ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
       } 
 
+}
+
+
+void Graphics::Renderer::enableGUI()
+{
+    GUI_ENABLED = true;
+}
+
+
+void Graphics::Renderer::disableGUI()
+{
+    GUI_ENABLED = false;
 }

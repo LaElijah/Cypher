@@ -1788,10 +1788,9 @@ CMakeFiles/Gengine.dir/src/Graphics/Camera.cpp.o
  /usr/include/string.h
  /usr/include/strings.h
  /usr/include/glm/gtc/type_ptr.inl
- /usr/include/GLFW/glfw3.h
- /usr/include/GL/gl.h
- /usr/include/GL/glext.h
+ /usr/include/glad/glad.h
  /usr/include/KHR/khrplatform.h
+ /usr/include/GLFW/glfw3.h
  /usr/include/c++/12/iostream
  /usr/include/c++/12/ostream
  /usr/include/c++/12/ios
@@ -1921,6 +1920,7 @@ CMakeFiles/Gengine.dir/src/Graphics/Camera.cpp.o
  /usr/include/glm/detail/type_half.inl
  /usr/include/glm/integer.hpp
  /usr/include/glm/detail/func_integer.inl
+ /home/laelijah/Gengine/src/Graphics/Camera.h
 
 CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o
  /home/laelijah/Gengine/src/Graphics/FileReader.cpp
@@ -5344,8 +5344,7 @@ CMakeFiles/Gengine.dir/src/Graphics/index.cpp.o
  /home/laelijah/Gengine/external/imgui/imgui_impl_glfw.h
  /home/laelijah/Gengine/external/STB_IMAGE/stb_image.h
  /usr/include/c++/12/stdlib.h
- /home/laelijah/Gengine/src/Graphics/Camera.cpp
- /home/laelijah/Gengine/src/Graphics/Globals.cpp
+ /home/laelijah/Gengine/src/Graphics/Camera.h
  /home/laelijah/Gengine/src/Graphics/Globals.cpp
  /home/laelijah/Gengine/src/Graphics/Model.h
  /home/laelijah/Gengine/src/Graphics/Mesh.h
@@ -5397,5 +5396,4 @@ CMakeFiles/Gengine.dir/src/Graphics/index.cpp.o
  /usr/include/x86_64-linux-gnu/bits/dirent.h
  /usr/include/x86_64-linux-gnu/bits/dirent_ext.h
  /home/laelijah/Gengine/src/Graphics/Renderer.h
- /home/laelijah/Gengine/src/Graphics/Camera.h
 

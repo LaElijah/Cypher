@@ -13,7 +13,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "./Camera.cpp"
+#include "Camera.h"
 #include "Globals.cpp"
 #include "Model.h"
 #include "ResourceManager.h"
@@ -33,7 +33,6 @@ float SCREEN_WIDTH = 1920;
 float SCREEN_HEIGHT = 1080;
 float currentFrame;
 
-void loadImageData(const char *path);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);  
 
@@ -105,16 +104,6 @@ int main()
 
      
     glEnable(GL_DEPTH_TEST);
-
-    
-
-
-
-
-    // resourceManager.generateShader("DEFAULT");
-
-
-   
     glfwSetCursorPosCallback(window,  mouse_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwSetScrollCallback(window, scroll_callback);
@@ -190,46 +179,6 @@ int main()
 }
 
 
-
-void loadImageData(const char* path)
-{
-    stbi_set_flip_vertically_on_load(true);
-    int width, height, nrChannels;
-    unsigned char *data = stbi_load(path, &width, &height, &nrChannels, 0);
-
-
-    unsigned int channelType;
-    switch (nrChannels)
-    {
-      case 1:
-        channelType = GL_RED;
-        break;
-      case 3:
-        channelType = GL_RGB;
-        break;
-      case 4: 
-        channelType = GL_RGBA;
-        break;
-    }
-
-    if (data)
-    {
-      glTexImage2D(GL_TEXTURE_2D, 0, channelType, width, height, 0, channelType, GL_UNSIGNED_BYTE, data); 
-      glGenerateMipmap(GL_TEXTURE_2D);
-    }
-
-    else 
-    {
-      std::cout << "Failed to load texture" << std::endl;
-    }
-
-    stbi_image_free(data);
-    
-}
-
-
-
-
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
 
@@ -237,8 +186,8 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && !io.WantCaptureMouse)
     {
         canvas.captureMouse(); 
-	drawGui = false;
-	cameraDisabled = false;
+        renderer.disableGUI();	
+        camera.enableCamera(); 
     }
 }
 
@@ -249,25 +198,13 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         canvas.releaseMouse(); 
-	drawGui = true;
-	cameraDisabled = true;
+	renderer.enableGUI();
+        camera.disableCamera(); 
     } 
 
-    /*
-    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
-    {
-        if (cameraFocused)
-	{
-            canvas.releaseMouse();	
-	}
-        
-        else 
-	{
-            canvas.captureMouse();	
-	}	
-    }
-    */
- 
+    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) 
+        camera.resetPosition(); 
+
     if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) 
       glfwSetWindowShouldClose(window, true);
     
@@ -307,7 +244,7 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos)
             camera.startMouse(); 
           }
           
-	  if (!cameraDisabled)
+	  if (camera.getCameraStatus())
 	  {
               camera.processMousePosition(xpos - camera.getLastX(), camera.getLastY() - ypos); 
 

@@ -350,8 +350,7 @@ CMakeFiles/Gengine.dir/src/Graphics/index.cpp.o: \
  /home/laelijah/Gengine/src/Graphics/../../external/imgui/imgui_impl_glfw.h \
  /home/laelijah/Gengine/src/Graphics/../../external/STB_IMAGE/stb_image.h \
  /usr/include/c++/12/stdlib.h \
- /home/laelijah/Gengine/src/Graphics/./Camera.cpp \
- /home/laelijah/Gengine/src/Graphics/./Globals.cpp \
+ /home/laelijah/Gengine/src/Graphics/Camera.h \
  /home/laelijah/Gengine/src/Graphics/Globals.cpp \
  /home/laelijah/Gengine/src/Graphics/Model.h \
  /home/laelijah/Gengine/src/Graphics/Mesh.h /usr/include/c++/12/vector \
@@ -385,5 +384,4 @@ CMakeFiles/Gengine.dir/src/Graphics/index.cpp.o: \
  /home/laelijah/Gengine/src/Graphics/FileReader.h /usr/include/dirent.h \
  /usr/include/x86_64-linux-gnu/bits/dirent.h \
  /usr/include/x86_64-linux-gnu/bits/dirent_ext.h \
- /home/laelijah/Gengine/src/Graphics/Renderer.h \
- /home/laelijah/Gengine/src/Graphics/Camera.h
+ /home/laelijah/Gengine/src/Graphics/Renderer.h

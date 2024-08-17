@@ -36,6 +36,7 @@ namespace Graphics {
 	    bool getCameraStatus();
 	    void disableCamera();
 	    void enableCamera();
+	    void resetPosition();
 
         private:
 	    bool CAMERA_ENABLED = false;

@@ -1777,10 +1777,9 @@ CMakeFiles/Gengine.dir/src/Graphics/Camera.cpp.o: src/Graphics/Camera.cpp \
   /usr/include/string.h \
   /usr/include/strings.h \
   /usr/include/glm/gtc/type_ptr.inl \
-  /usr/include/GLFW/glfw3.h \
-  /usr/include/GL/gl.h \
-  /usr/include/GL/glext.h \
+  /usr/include/glad/glad.h \
   /usr/include/KHR/khrplatform.h \
+  /usr/include/GLFW/glfw3.h \
   /usr/include/c++/12/iostream \
   /usr/include/c++/12/ostream \
   /usr/include/c++/12/ios \
@@ -1909,7 +1908,8 @@ CMakeFiles/Gengine.dir/src/Graphics/Camera.cpp.o: src/Graphics/Camera.cpp \
   /usr/include/glm/detail/type_half.hpp \
   /usr/include/glm/detail/type_half.inl \
   /usr/include/glm/integer.hpp \
-  /usr/include/glm/detail/func_integer.inl
+  /usr/include/glm/detail/func_integer.inl \
+  src/Graphics/Camera.h
 
 CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o: src/Graphics/FileReader.cpp \
   /usr/include/stdc-predef.h \
@@ -5324,8 +5324,7 @@ CMakeFiles/Gengine.dir/src/Graphics/index.cpp.o: src/Graphics/index.cpp \
   external/imgui/imgui_impl_glfw.h \
   external/STB_IMAGE/stb_image.h \
   /usr/include/c++/12/stdlib.h \
-  src/Graphics/Camera.cpp \
-  src/Graphics/Globals.cpp \
+  src/Graphics/Camera.h \
   src/Graphics/Globals.cpp \
   src/Graphics/Model.h \
   src/Graphics/Mesh.h \
@@ -5376,8 +5375,7 @@ CMakeFiles/Gengine.dir/src/Graphics/index.cpp.o: src/Graphics/index.cpp \
   /usr/include/dirent.h \
   /usr/include/x86_64-linux-gnu/bits/dirent.h \
   /usr/include/x86_64-linux-gnu/bits/dirent_ext.h \
-  src/Graphics/Renderer.h \
-  src/Graphics/Camera.h
+  src/Graphics/Renderer.h
 
 
 src/Graphics/index.cpp:
@@ -5387,8 +5385,6 @@ src/Graphics/index.cpp:
 /usr/include/c++/12/bits/fstream.tcc:
 
 /usr/include/x86_64-linux-gnu/c++/12/bits/c++io.h:
-
-src/Graphics/Camera.h:
 
 src/Graphics/Renderer.h:
 
@@ -5457,6 +5453,8 @@ src/Graphics/GLCanvas.h:
 /usr/include/x86_64-linux-gnu/bits/dirent.h:
 
 src/Graphics/FileReader.cpp:
+
+src/Graphics/Camera.h:
 
 /usr/include/glm/detail/func_integer.inl:
 

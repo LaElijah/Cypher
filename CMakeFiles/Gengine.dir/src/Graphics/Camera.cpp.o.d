@@ -240,11 +240,11 @@ CMakeFiles/Gengine.dir/src/Graphics/Camera.cpp.o: \
  /usr/include/glm/ext/vector_uint1.hpp \
  /usr/include/glm/ext/vector_uint1_sized.hpp /usr/include/c++/12/cstring \
  /usr/include/string.h /usr/include/strings.h \
- /usr/include/glm/gtc/type_ptr.inl /usr/include/GLFW/glfw3.h \
- /usr/include/GL/gl.h /usr/include/GL/glext.h \
- /usr/include/KHR/khrplatform.h /usr/include/c++/12/iostream \
- /usr/include/c++/12/ostream /usr/include/c++/12/ios \
- /usr/include/c++/12/iosfwd /usr/include/c++/12/bits/stringfwd.h \
+ /usr/include/glm/gtc/type_ptr.inl /usr/include/glad/glad.h \
+ /usr/include/KHR/khrplatform.h /usr/include/GLFW/glfw3.h \
+ /usr/include/c++/12/iostream /usr/include/c++/12/ostream \
+ /usr/include/c++/12/ios /usr/include/c++/12/iosfwd \
+ /usr/include/c++/12/bits/stringfwd.h \
  /usr/include/c++/12/bits/memoryfwd.h /usr/include/c++/12/bits/postypes.h \
  /usr/include/c++/12/cwchar /usr/include/wchar.h \
  /usr/lib/gcc/x86_64-linux-gnu/12/include/stdarg.h \
@@ -341,4 +341,5 @@ CMakeFiles/Gengine.dir/src/Graphics/Camera.cpp.o: \
  /usr/include/glm/detail/func_packing.inl \
  /usr/include/glm/detail/type_half.hpp \
  /usr/include/glm/detail/type_half.inl /usr/include/glm/integer.hpp \
- /usr/include/glm/detail/func_integer.inl
+ /usr/include/glm/detail/func_integer.inl \
+ /home/laelijah/Gengine/src/Graphics/Camera.h
