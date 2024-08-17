@@ -13,7 +13,7 @@ namespace Graphics {
     {
 	public:
 
-            Renderer();
+            Renderer(Graphics::GLCanvas* canvas, Graphics::Camera* camera);
             Renderer(Graphics::ResourceManager* resourceManager, Graphics::GLCanvas* canvas, Graphics::Camera* camera);
             //void start(GLFWwindow* window, Graphics::ResourceManager& resourceManager, Graphics::Camera& camera);
 	    void end();
@@ -26,7 +26,7 @@ namespace Graphics {
 	    void initializeGUI(GLFWwindow* window);
             void disableGUI();
             void enableGUI();
-	    float updateDeltaTime();
+	    void updateDeltaTime();
 	    float getDeltaTime();
 
 	    float currentFrame;

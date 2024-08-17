@@ -19,8 +19,11 @@ IMGUI_CHECKVERSION();
 }
 
 
-Graphics::Renderer::Renderer()
-{}
+Graphics::Renderer::Renderer(Graphics::GLCanvas* canvas, Graphics::Camera* camera)
+{
+    Canvas = canvas;
+    Camera = camera;
+}
 
 
 void Graphics::Renderer::drawGUI()
@@ -56,4 +59,55 @@ void Graphics::Renderer::enableGUI()
 void Graphics::Renderer::disableGUI()
 {
     GUI_ENABLED = false;
+}
+
+void Graphics::Renderer::processInput(GLFWwindow* window)
+{
+  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
+        Canvas->releaseMouse(); 
+	enableGUI();
+        Camera->disableCamera(); 
+    } 
+
+    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) 
+        Camera->resetPosition(); 
+
+    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) 
+      glfwSetWindowShouldClose(window, true);
+    
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) 
+      Camera->processKeyboard(Graphics::Direction::FORWARDS, getDeltaTime());
+   
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+      Camera->processKeyboard(Graphics::Direction::LEFT, getDeltaTime());
+
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)   
+      Camera->processKeyboard(Graphics::Direction::BACKWARDS, getDeltaTime());
+
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+      Camera->processKeyboard(Graphics::Direction::RIGHT, getDeltaTime());
+
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+      Camera->processKeyboard(Graphics::Direction::UP, getDeltaTime());
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 
+      Camera->processKeyboard(Graphics::Direction::DOWN, getDeltaTime());    
+}
+
+
+
+void Graphics::Renderer::updateDeltaTime()
+{
+   
+      currentFrame = glfwGetTime();
+      deltaTime = currentFrame - lastFrame; 
+      lastFrame = currentFrame;
+
+
+}
+
+float Graphics::Renderer::getDeltaTime()
+{
+    return deltaTime;
 }

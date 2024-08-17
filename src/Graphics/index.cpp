@@ -21,30 +21,21 @@
 #include "FileReader.h"
 #include "Renderer.h"
 
-//Graphics::FileReader fileReader(".");
 
-// settings
-float deltaTime;
-float lastFrame = 0.0f;
 
-bool cameraDisabled = true;
-    bool drawGui = true; 
 float SCREEN_WIDTH = 1920;
 float SCREEN_HEIGHT = 1080;
-float currentFrame;
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);  
-
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-void processInput(GLFWwindow *window);
 
-Graphics::Camera camera(SCREEN_WIDTH, SCREEN_HEIGHT);
-Graphics::GLCanvas canvas(SCREEN_WIDTH, SCREEN_HEIGHT);;    
+Graphics::GLCanvas* canvas = new Graphics::GLCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);    
+Graphics::Camera* camera = new Graphics::Camera(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 Graphics::ResourceManager resourceManager;
 
-Graphics::Renderer renderer;
+Graphics::Renderer renderer(canvas, camera);
 
 Graphics::Shader simpleShader(
         "/home/laelijah/Gengine/data/Shaders/simpleModel.vs",
@@ -79,7 +70,7 @@ int main()
     //Graphics::Model simpleModel4("/home/laelijah/Gengine/data/Models/swat/scene.gltf", resourceManager);
     Graphics::Model simpleModel2("/home/laelijah/Gengine/data/Models/wolverine/scene.gltf", resourceManager);
     Graphics::Model simpleModel("/home/laelijah/Gengine/data/Models/mic/scene.gltf", resourceManager);
-    GLFWwindow *window = canvas.getWindow();
+    GLFWwindow *window = canvas->getWindow();
 
      
     glEnable(GL_DEPTH_TEST);
@@ -92,25 +83,21 @@ int main()
     while (!glfwWindowShouldClose(window)) 
     {  
       
-	    
-     
-      currentFrame = glfwGetTime();
-      deltaTime = currentFrame - lastFrame; 
-      lastFrame = currentFrame;
-
-      glm::vec3 cameraFront = camera.getDirection();
+renderer.updateDeltaTime();	    
+  
+      	    glm::vec3 cameraFront = camera->getDirection();
 	 
       if (!io.WantCaptureKeyboard)
       {
-          processInput(window);
+          renderer.processInput(window);
       }
 
 
       glClearColor(0, 0, 0, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-      projection = glm::perspective(glm::radians(camera.Zoom), SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 100.0f); 
-      view = camera.getViewMatrix();
+      projection = glm::perspective(glm::radians(camera->Zoom), SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 100.0f); 
+      view = camera->getViewMatrix();
 
      
       model = glm::mat4(1.0f);
@@ -155,54 +142,34 @@ int main()
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
 
     ImGuiIO& io = ImGui::GetIO();
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && !io.WantCaptureMouse)
     {
-        canvas.captureMouse(); 
+        canvas->captureMouse(); 
         renderer.disableGUI();	
-        camera.enableCamera(); 
+        camera->enableCamera(); 
     }
 }
-
-
-void processInput(GLFWwindow *window)
-{
-
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    {
-        canvas.releaseMouse(); 
-	renderer.enableGUI();
-        camera.disableCamera(); 
-    } 
-
-    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) 
-        camera.resetPosition(); 
-
-    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) 
-      glfwSetWindowShouldClose(window, true);
-    
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) 
-      camera.processKeyboard(Graphics::Direction::FORWARDS, deltaTime);
-   
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-      camera.processKeyboard(Graphics::Direction::LEFT, deltaTime);
-
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)   
-      camera.processKeyboard(Graphics::Direction::BACKWARDS, deltaTime);
-
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-      camera.processKeyboard(Graphics::Direction::RIGHT, deltaTime);
-
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-      camera.processKeyboard(Graphics::Direction::UP, deltaTime);
-
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 
-      camera.processKeyboard(Graphics::Direction::DOWN, deltaTime);    
-}
-
 
 
 
@@ -213,19 +180,19 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos)
     
     if (!io.WantCaptureMouse)
     {
-	  if (camera.isFirstMouse())
+	  if (camera->isFirstMouse())
           {
-            camera.setLastX(xpos);
-            camera.setLastY(ypos);
-            camera.startMouse(); 
+            camera->setLastX(xpos);
+            camera->setLastY(ypos);
+            camera->startMouse(); 
           }
           
-	  if (camera.getCameraStatus())
+	  if (camera->getCameraStatus())
 	  {
-              camera.processMousePosition(xpos - camera.getLastX(), camera.getLastY() - ypos); 
+              camera->processMousePosition(xpos - camera->getLastX(), camera->getLastY() - ypos); 
 
-              camera.setLastX(xpos);
-              camera.setLastY(ypos);
+              camera->setLastX(xpos);
+              camera->setLastY(ypos);
 	  }    
 
     }
@@ -238,6 +205,6 @@ void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 
     ImGuiIO& io = ImGui::GetIO();
     if (!io.WantCaptureMouse)
-        camera.processMouseScroll(yoffset);
+        camera->processMouseScroll(yoffset);
 }
 
