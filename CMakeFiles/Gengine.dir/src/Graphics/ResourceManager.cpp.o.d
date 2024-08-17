@@ -310,4 +310,7 @@ CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o: \
  /usr/include/glm/packing.hpp /usr/include/glm/detail/func_packing.inl \
  /usr/include/glm/detail/type_half.hpp \
  /usr/include/glm/detail/type_half.inl /usr/include/glm/integer.hpp \
- /usr/include/glm/detail/func_integer.inl
+ /usr/include/glm/detail/func_integer.inl \
+ /home/laelijah/Gengine/src/Graphics/FileReader.h /usr/include/dirent.h \
+ /usr/include/x86_64-linux-gnu/bits/dirent.h \
+ /usr/include/x86_64-linux-gnu/bits/dirent_ext.h

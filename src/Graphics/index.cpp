@@ -73,29 +73,8 @@ Graphics::Shader simpleShader2(
 
 int main()
 {
-    std::string modelDirectory = "./data/Models";
-    Graphics::FileReader fileReader(modelDirectory);
-    std::vector<std::string> models = fileReader.getFiles();
-    std::string workingModel;
-
-   
-   
-    for (std::string model : models)
-    {
-	workingModel = modelDirectory + "/" + model;
-        std::cout << "PRINTING MODEL: " << workingModel << std::endl; 
-        
-	fileReader.setDirname(workingModel);
-	std::vector<std::string> modelFiles = fileReader.getFiles("gltf");
-
-	for (std::string modelFile : modelFiles)
-	{
-            //resourceManager.addModelFile(workingModel + "/" + modelFile);	
-	}
-    }
-
-
-//fileReader.getFolders();
+	resourceManager.loadModelPaths();
+ //fileReader.getFolders();
     //Graphics::Model simpleModel3("/home/laelijah/Gengine/data/Models/adamHead/adamHead.gltf", resourceManager);
     //Graphics::Model simpleModel4("/home/laelijah/Gengine/data/Models/swat/scene.gltf", resourceManager);
     Graphics::Model simpleModel2("/home/laelijah/Gengine/data/Models/wolverine/scene.gltf", resourceManager);
@@ -170,11 +149,8 @@ int main()
       renderer.drawGUI();
       glfwSwapBuffers(window);
     }
- 
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-    glfwTerminate();
+    renderer.end(); 
+   glfwTerminate();
     return 0;
 }
 

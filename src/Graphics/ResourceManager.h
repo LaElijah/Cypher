@@ -41,7 +41,7 @@ struct Resource {
 class ResourceManager {
 	public:
 	// unsigned int getVAO(unsigned int (*func)());
-
+                void loadModelPaths(std::string modelDirectory = "./data/Models");
 		Graphics::RenderEntity& getRenderEntity(VAO_TYPE type);
 		Graphics::RenderEntity& generateRenderEntity(VAO_TYPE type);
                 //void addModelFile(std::string filePath);

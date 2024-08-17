@@ -39,6 +39,13 @@ void Graphics::Renderer::drawGUI()
 
 }
 
+void Graphics::Renderer::end()
+{
+   ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+  
+}
 
 void Graphics::Renderer::enableGUI()
 {

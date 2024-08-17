@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <iostream>
 #include "Globals.cpp"
+#include "FileReader.h"
 // TODO: Change this into the globals being in the resource manager function 
 
 
@@ -18,7 +19,31 @@ Graphics::ResourceManager Graphics::ResourceManager::ResourceManager()
 }
 */
 
+void Graphics::ResourceManager::loadModelPaths(std::string modelDirectory)
+{
+    Graphics::FileReader fileReader(modelDirectory);
+    std::vector<std::string> models = fileReader.getFiles();
+    std::string workingModel;
 
+   
+   
+    for (std::string model : models)
+    {
+	workingModel = modelDirectory + "/" + model;
+        std::cout << "PRINTING MODEL: " << workingModel << std::endl; 
+        
+	fileReader.setDirname(workingModel);
+	std::vector<std::string> modelFiles = fileReader.getFiles("gltf");
+
+	for (std::string modelFile : modelFiles)
+	{
+            //resourceManager.addModelFile(workingModel + "/" + modelFile);	
+	}
+    }
+
+
+
+}
 
 Graphics::RenderEntity& Graphics::ResourceManager::generateRenderEntity(VAO_TYPE type)
 {
