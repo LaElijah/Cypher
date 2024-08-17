@@ -31,6 +31,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o.d"
   "CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o"
   "CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o.d"
+  "CMakeFiles/Gengine.dir/src/Graphics/Renderer.cpp.o"
+  "CMakeFiles/Gengine.dir/src/Graphics/Renderer.cpp.o.d"
   "CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o"
   "CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o.d"
   "CMakeFiles/Gengine.dir/src/Graphics/Shader.cpp.o"

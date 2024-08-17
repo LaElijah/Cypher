@@ -73,7 +73,7 @@ namespace Graphics {
       glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, VERSION);
       glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, VERSION);
       glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-      glfwWindowHint(GLFW_DECORATED, !fullscreen);      
+      glfwWindowHint(GLFW_DECORATED, fullscreen);      
 
 
     #ifdef __APPLE__
@@ -82,7 +82,7 @@ namespace Graphics {
 
     // glfw window creation
     // --------------------
-      Window = glfwCreateWindow(ScreenWidth, ScreenHeight, "Test", NULL, NULL);
+      Window = glfwCreateWindow(ScreenWidth, ScreenHeight, "Tester", NULL, NULL);
       if (Window == NULL)
       {
         std::cout << "Failed to create GLFW window" << std::endl;

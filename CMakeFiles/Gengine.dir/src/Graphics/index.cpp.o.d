@@ -384,4 +384,6 @@ CMakeFiles/Gengine.dir/src/Graphics/index.cpp.o: \
  /usr/include/assimp/metadata.h \
  /home/laelijah/Gengine/src/Graphics/FileReader.h /usr/include/dirent.h \
  /usr/include/x86_64-linux-gnu/bits/dirent.h \
- /usr/include/x86_64-linux-gnu/bits/dirent_ext.h
+ /usr/include/x86_64-linux-gnu/bits/dirent_ext.h \
+ /home/laelijah/Gengine/src/Graphics/Renderer.h \
+ /home/laelijah/Gengine/src/Graphics/Camera.h

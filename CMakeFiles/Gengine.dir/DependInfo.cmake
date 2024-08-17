@@ -24,6 +24,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/laelijah/Gengine/src/Graphics/Globals.cpp" "CMakeFiles/Gengine.dir/src/Graphics/Globals.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/Globals.cpp.o.d"
   "/home/laelijah/Gengine/src/Graphics/Mesh.cpp" "CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o.d"
   "/home/laelijah/Gengine/src/Graphics/Model.cpp" "CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o.d"
+  "/home/laelijah/Gengine/src/Graphics/Renderer.cpp" "CMakeFiles/Gengine.dir/src/Graphics/Renderer.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/Renderer.cpp.o.d"
   "/home/laelijah/Gengine/src/Graphics/ResourceManager.cpp" "CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o.d"
   "/home/laelijah/Gengine/src/Graphics/Shader.cpp" "CMakeFiles/Gengine.dir/src/Graphics/Shader.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/Shader.cpp.o.d"
   "/home/laelijah/Gengine/src/Graphics/index.cpp" "CMakeFiles/Gengine.dir/src/Graphics/index.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/index.cpp.o.d"

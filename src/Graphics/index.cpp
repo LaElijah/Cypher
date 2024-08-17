@@ -19,7 +19,7 @@
 #include "ResourceManager.h"
 #include <iostream>
 #include "FileReader.h"
-
+#include "Renderer.h"
 
 //Graphics::FileReader fileReader(".");
 
@@ -29,8 +29,8 @@ float lastFrame = 0.0f;
 
 bool cameraDisabled = true;
     bool drawGui = true; 
-float SCREEN_WIDTH = 800;
-float SCREEN_HEIGHT = 600;
+float SCREEN_WIDTH = 1920;
+float SCREEN_HEIGHT = 1080;
 float currentFrame;
 
 void loadImageData(const char *path);
@@ -41,10 +41,11 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 void processInput(GLFWwindow *window);
 
 Graphics::Camera camera(SCREEN_WIDTH, SCREEN_HEIGHT);
-Graphics::GLCanvas canvas;    
+Graphics::GLCanvas canvas(SCREEN_WIDTH, SCREEN_HEIGHT);;    
 
 Graphics::ResourceManager resourceManager;
 
+Graphics::Renderer renderer;
 
 Graphics::Shader simpleShader(
         "/home/laelijah/Gengine/data/Shaders/simpleModel.vs",
@@ -67,32 +68,6 @@ Graphics::Shader simpleShader2(
     glm::mat4 projection = glm::mat4(1.0f);
 
     glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-
-
-
-
-
-/*
-class Renderer {
-	
-    public:
-	std::vector<&Model> loadedModels;
-
-	void Render()
-	{
-            for (Model& model: loadedModels)
-	    {
-	       Graphics::RenderEntity& renderEntity = resourceManager.getRenderEntity(model.shaderName);
-	       Shader& shader = resourceManager.getShader(.shaderName);
-               model.Draw(shader, resourceManager);
-                	
-	    }
-	}
-
-};
-*/
-
-
 
 
 
@@ -144,14 +119,8 @@ int main()
     glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwSetScrollCallback(window, scroll_callback);
  
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
+    renderer.initializeGUI(window); 
     ImGuiIO& io = ImGui::GetIO();
-
-   
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init(); 
-   
     while (!glfwWindowShouldClose(window)) 
     {  
       
@@ -209,17 +178,7 @@ int main()
            // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
       // -------------------------------------------------------------------------------
       glfwPollEvents();
-
-      if (drawGui)
-      { 
-          ImGui_ImplOpenGL3_NewFrame();
-          ImGui_ImplGlfw_NewFrame();
-          ImGui::NewFrame();
-          ImGui::ShowDemoWindow();
-
-          ImGui::Render();
-          ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-      } 
+      renderer.drawGUI();
       glfwSwapBuffers(window);
     }
  

@@ -26,7 +26,7 @@ namespace Graphics
     // glfw: initialize and configure
     // ------------------------------
     public:
-     GLCanvas(unsigned int width = 800, unsigned int height = 600, unsigned int version = 3);
+     GLCanvas(unsigned int width, unsigned int height, unsigned int version = 3);
      void initializeCanvas();
      GLFWwindow* getWindow(); 
      void mouse_callback(GLFWwindow *window, double xpos, double ypos);
