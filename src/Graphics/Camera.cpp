@@ -1,194 +1,202 @@
-
-#include <glm/ext/quaternion_geometric.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
+#include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
-#include "Globals.cpp"
 #include "Camera.h"
 
 
 
 
+Graphics::Camera::Camera(int width, int height)
+{
+    ScreenWidth = width;
+    ScreenHeight = height;
+    lastX = width / 2;
+    lastY = height / 2; 
+}
 
-    Graphics::Camera::Camera(int width, int height)
+
+
+
+void Graphics::Camera::processMousePosition(double xoffset, double yoffset, bool constrainPitch)
+{
+    xoffset *= MouseSensitivity;
+    yoffset *= MouseSensitivity;
+
+    yaw += xoffset;
+    pitch += yoffset;
+
+    if (constrainPitch)
     {
-        ScreenWidth = width;
-        ScreenHeight = height;
-        lastX = width / 2;
-        lastY = height / 2; 
-    }
-
-
-
-    void Graphics::Camera::processMousePosition(double xoffset, double yoffset, bool constrainPitch)
-    {
-        xoffset *= MouseSensitivity;
-        yoffset *= MouseSensitivity;
-
-        yaw += xoffset;
-        pitch += yoffset;
-
-
-        if (constrainPitch)
+        if (pitch > 89.0f)
         {
-            if (pitch > 89.0f)
-            {
-                pitch = 89.0f;
-            }
-        
-	    else if (pitch < -89.0f)
-            {
-                pitch = -89.0f;
-            }
+            pitch = 89.0f;
         }
-
-      
-        updateDirection();
-    }
-
-
-    void Graphics::Camera::setLastX(double X)
-    {
-      lastX = X;
-    }
-
-    void Graphics::Camera::setLastY(double Y)
-    {
-      lastY = Y;
-    }
-
-
-
-    float Graphics::Camera::getLastX()
-    {
-      return lastX;
-    }
-
-    float Graphics::Camera::getLastY()
-    {
-      return lastY;
-    }
-
-
-    bool Graphics::Camera::isFirstMouse()
-    {
-      return firstMouse;
-    }
-
-    void Graphics::Camera::startMouse()
-    {
-      firstMouse = false;
-    }
-
-
-    void Graphics::Camera::updateDirection()
-    {
-      
-      Direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-      Direction.y = sin(glm::radians(pitch));
-      Direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch)); 
-      CameraFront = glm::normalize(Direction);
-
-      CameraRight = glm::normalize(glm::cross(CameraFront, WorldUp));
-      CameraUp = glm::normalize(glm::cross(CameraRight, CameraFront));
-
-    }
-
-    glm::vec3 Graphics::Camera::getDirection()
-  {
-    return CameraFront;
-  }
-
-    glm::mat4 Graphics::Camera::getViewMatrix()
-    {
-      return glm::lookAt(Position, Position + CameraFront, CameraUp);
-    }
-
-
-
-
-    void Graphics::Camera::setCameraPos(glm::vec3 position)
-    {
-      Position = position;
-    }
-
- 
-  void Graphics::Camera::processKeyboard(Graphics::Direction keyPressed, float deltaTime)
-  { 
-  Velocity = MovementSpeed * deltaTime;
     
-   float currentHeight; 
+        else if (pitch < -89.0f)
+        {
+            pitch = -89.0f;
+        }
+    }    
+
+    updateDirection();
+}
+
+
+
+
+float Graphics::Camera::getLastX()
+{
+    return lastX;
+}
+
+
+
+
+float Graphics::Camera::getLastY()
+{
+    return lastY;
+}
+
+
+
+void Graphics::Camera::setLastX(double X)
+{
+    lastX = X;
+}
+
+
+
+
+void Graphics::Camera::setLastY(double Y)
+{
+    lastY = Y;
+}
+
+
+
+
+bool Graphics::Camera::isFirstMouse()
+{
+    return firstMouse;
+}
+
+
+
+
+void Graphics::Camera::startMouse()
+{
+    firstMouse = false;
+}
+
+
+
+
+void Graphics::Camera::updateDirection()
+{  
+    Direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    Direction.y = sin(glm::radians(pitch));
+    Direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch)); 
+    CameraFront = glm::normalize(Direction);
+
+    CameraRight = glm::normalize(glm::cross(CameraFront, WorldUp));
+    CameraUp = glm::normalize(glm::cross(CameraRight, CameraFront));
+}
+
+
+
+
+glm::vec3 Graphics::Camera::getDirection()
+{
+    return CameraFront;
+}
+
+
+
+
+glm::mat4 Graphics::Camera::getViewMatrix()
+{
+    return glm::lookAt(Position, Position + CameraFront, CameraUp);
+}
+
+
+
+
+void Graphics::Camera::setCameraPos(glm::vec3 position)
+{
+    Position = position;
+}
+
+
+
+
+void Graphics::Camera::processKeyboard(Graphics::Direction keyPressed, float deltaTime)
+{ 
+    Velocity = MovementSpeed * deltaTime; 
+    float currentHeight; 
+    
     switch (keyPressed)
     {
       //FORWARDS
-      case FORWARDS:
-        currentHeight = Position.y; 
-        Position += Velocity * CameraFront;
-        Position.y = currentHeight;
-        break;
+        case FORWARDS:
+            currentHeight = Position.y; 
+            Position += Velocity * CameraFront;
+            Position.y = currentHeight;
+            break;
  
       // LEFT
-      case LEFT:   
-        Position -= Velocity * CameraRight; 
-        break;
+        case LEFT:   
+            Position -= Velocity * CameraRight; 
+            break;
 
       // BACKWARDS
-      case BACKWARDS:
-        currentHeight = Position.y;
-        Position -= Velocity * CameraFront;
-        Position.y = currentHeight;
-        break;
+        case BACKWARDS:
+            currentHeight = Position.y;
+            Position -= Velocity * CameraFront;
+            Position.y = currentHeight;
+            break;
 
       // RIGHT
-      case RIGHT: 
-        Position += Velocity * CameraRight; 
-        break;
+        case RIGHT: 
+            Position += Velocity * CameraRight; 
+            break;
 
       // UP
-      case UP:       
-        Position += glm::vec3(0, CameraUp.y * Velocity, 0); 
-        break;
+        case UP:       
+            Position += glm::vec3(0, CameraUp.y * Velocity, 0); 
+            break;
 
       // DOWN
-      case DOWN: 
-        Position -= glm::vec3(0, CameraUp.y * Velocity, 0); 
-        break;
-        
-  }
-
-
+        case DOWN: 
+            Position -= glm::vec3(0, CameraUp.y * Velocity, 0); 
+            break; 
+    }
 }
+
+
 
 
 void Graphics::Camera::processMouseScroll(float yoffset)
 {
-  Zoom -= (float) yoffset;
-  if (Zoom < 1.0f)
-    Zoom = 1.0f;
-  if (Zoom > 45.0f)
-    Zoom = 45.0f;
+    Zoom -= (float) yoffset;
+    
+    if (Zoom < 1.0f)
+        Zoom = 1.0f;
+    
+    if (Zoom > 45.0f)
+        Zoom = 45.0f;
 }
 
 
 
 
-
-
-
- 
-     void Graphics::Camera::setCameraFront(glm::vec3 direction)
-    {
-      CameraFront = direction;
-    }
-
-
-void Graphics::Camera::enableCamera()
+void Graphics::Camera::setCameraFront(glm::vec3 direction)
 {
-    CAMERA_ENABLED = true;
+    CameraFront = direction;
 }
+
+
+
 
 void Graphics::Camera::disableCamera()
 {
@@ -197,10 +205,21 @@ void Graphics::Camera::disableCamera()
 
 
 
+
+void Graphics::Camera::enableCamera()
+{
+    CAMERA_ENABLED = true;
+}
+
+
+
+
 bool Graphics::Camera::getCameraStatus()
 {
     return CAMERA_ENABLED;
 }
+
+
 
 
 void Graphics::Camera::resetPosition()

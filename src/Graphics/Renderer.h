@@ -1,4 +1,3 @@
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Camera.h"
@@ -7,44 +6,46 @@
 
 
 
+
 namespace Graphics {
+
+
+
 
     class Renderer 
     {
 	public:
-
+            Renderer();
             Renderer(Graphics::ResourceManager* resourceManager, Graphics::GLCanvas* canvas, Graphics::Camera* camera);
-            void start();
-	    void end();
-	    void drawGUI();
-	    bool getGUIStatus();
-	    
-
-	    
-
-	    void initializeGUI(GLFWwindow* window);
+        
+	    void run();
+	    void shutdown();
+	  
             void disableGUI();
             void enableGUI();
-	    void updateDeltaTime();
+	 
 	    float getDeltaTime();
 
+	    Graphics::ResourceManager* getResourceManager();
+	    Graphics::GLCanvas* getCanvas();
+	    Graphics::Camera* getCamera();
+   	
+	private:	    
 	    float currentFrame;
 	    float deltaTime;
 	    float lastFrame;
-
 	    float SCREEN_WIDTH = 1920;
 	    float SCREEN_HEIGHT = 1080;
-
 	    bool GUI_ENABLED = true;
-             // Change to private  
-            void processInput(GLFWwindow *window);
-   	private:
-	    Graphics::Camera* Camera;
+            
+            Graphics::Camera* Camera;
 	    Graphics::GLCanvas* Canvas;
 	    Graphics::ResourceManager* ResourceManager;
-              };
-
-
-
+	   
+	    void drawGUI();
+	    void initializeGUI(GLFWwindow* window);
+	    void updateDeltaTime();
+            void processInput(GLFWwindow *window);	
+    };
 }
 

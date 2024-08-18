@@ -1,13 +1,28 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include <glm/glm.hpp>
 
 
-
-#include "Globals.cpp"
 
 
 namespace Graphics {
+
+
+
+
+    enum Direction 
+    {
+        LEFT,
+        RIGHT,
+        FORWARDS,
+        BACKWARDS,
+        UP,
+        DOWN
+    };
+
+
+
 
     class Camera 
     {
@@ -17,10 +32,10 @@ namespace Graphics {
 	 
             float Zoom = 45.0f; 
 
-            void setLastX(double X);
-            void setLastY(double Y);
             float getLastX();
-            float getLastY();
+            float getLastY(); 
+	    void setLastX(double X);
+            void setLastY(double Y);
             bool isFirstMouse();
             void startMouse();
             void updateDirection();
@@ -29,9 +44,9 @@ namespace Graphics {
    	    void setCameraPos(glm::vec3 position);
             void processKeyboard(Graphics::Direction keyPressed, float deltaTime);
             void processMouseScroll(float yoffset);
-	    bool getCameraStatus();
 	    void disableCamera();
-	    void enableCamera();
+	    void enableCamera(); 
+	    bool getCameraStatus();
 	    void resetPosition();
 
         private:
@@ -41,8 +56,8 @@ namespace Graphics {
             float Velocity;
             int ScreenWidth; 
             int ScreenHeight; 
-            float pitch; 
-            float yaw; 
+            float pitch = 0; 
+            float yaw = 0; 
             int lastX; 
             int lastY; 
             bool firstMouse = true; 

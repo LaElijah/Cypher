@@ -4,9 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <algorithm>
 #include <iostream>
-#include "Globals.cpp"
 #include "FileReader.h"
-// TODO: Change this into the globals being in the resource manager function 
 
 
 
@@ -68,15 +66,15 @@ Graphics::RenderEntity& Graphics::ResourceManager::generateRenderEntity(VAO_TYPE
         case STANDARD:
             {
                 glEnableVertexAttribArray(0);
-                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Graphics::Vertex), (void*)0);
 
 
                 glEnableVertexAttribArray(1);
-                glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+                glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Graphics::Vertex), (void*)offsetof(Graphics::Vertex, Graphics::Vertex::Normal));
 
 
                 glEnableVertexAttribArray(2);
-                glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+                glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Graphics::Vertex, Graphics::Vertex::TexCoords));
             }
 
 	 
