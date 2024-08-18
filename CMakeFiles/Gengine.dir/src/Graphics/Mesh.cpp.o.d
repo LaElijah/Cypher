@@ -1,7 +1,6 @@
 CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o: \
  /home/laelijah/Gengine/src/Graphics/Mesh.cpp /usr/include/stdc-predef.h \
- /home/laelijah/Gengine/src/Graphics/Mesh.h /usr/include/glad/glad.h \
- /usr/include/KHR/khrplatform.h \
+ /usr/include/glad/glad.h /usr/include/KHR/khrplatform.h \
  /usr/lib/gcc/x86_64-linux-gnu/12/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -17,7 +16,10 @@ CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
- /usr/include/c++/12/vector /usr/include/c++/12/bits/stl_algobase.h \
+ /usr/include/GLFW/glfw3.h \
+ /usr/lib/gcc/x86_64-linux-gnu/12/include/stddef.h \
+ /home/laelijah/Gengine/src/Graphics/Mesh.h /usr/include/c++/12/vector \
+ /usr/include/c++/12/bits/stl_algobase.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/os_defines.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/cpu_defines.h \
@@ -69,7 +71,6 @@ CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h \
  /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
  /usr/include/c++/12/bits/std_abs.h /usr/include/stdlib.h \
- /usr/lib/gcc/x86_64-linux-gnu/12/include/stddef.h \
  /usr/include/x86_64-linux-gnu/bits/waitflags.h \
  /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
@@ -312,7 +313,7 @@ CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o: \
  /usr/include/glm/ext/vector_uint1.hpp \
  /usr/include/glm/ext/vector_uint1_sized.hpp /usr/include/c++/12/cstring \
  /usr/include/string.h /usr/include/strings.h \
- /usr/include/glm/gtc/type_ptr.inl /usr/include/GLFW/glfw3.h \
+ /usr/include/glm/gtc/type_ptr.inl \
  /home/laelijah/Gengine/src/Graphics/ResourceManager.h \
  /usr/include/c++/12/iostream /usr/include/c++/12/ostream \
  /usr/include/c++/12/ios /usr/include/c++/12/exception \

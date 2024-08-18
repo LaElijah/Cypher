@@ -1,4 +1,7 @@
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 #include "Model.h"
 #include "Globals.cpp"
 #include <assimp/Importer.hpp>

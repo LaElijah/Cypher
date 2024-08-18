@@ -1,7 +1,6 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include <glad/glad.h>
 #include <vector>
 #include "Globals.cpp"
 #include <glm/glm.hpp>

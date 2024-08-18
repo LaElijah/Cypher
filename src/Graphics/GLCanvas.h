@@ -2,20 +2,19 @@
 #define GLCANVAS_H
 
 
-
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stdexcept>
 #include <iostream>
 #include <glm/glm.hpp>
 
-
+/*
 namespace Graphics {
 
   void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
 }
+*/
 
 
 namespace Graphics

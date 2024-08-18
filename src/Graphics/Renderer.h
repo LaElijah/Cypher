@@ -1,6 +1,6 @@
 
-
-//#include <GLFW/glfw3.h>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include "Camera.h"
 #include "ResourceManager.h"
 #include "GLCanvas.h"
@@ -13,9 +13,8 @@ namespace Graphics {
     {
 	public:
 
-            Renderer(Graphics::GLCanvas* canvas, Graphics::Camera* camera);
             Renderer(Graphics::ResourceManager* resourceManager, Graphics::GLCanvas* canvas, Graphics::Camera* camera);
-            //void start(GLFWwindow* window, Graphics::ResourceManager& resourceManager, Graphics::Camera& camera);
+            void start();
 	    void end();
 	    void drawGUI();
 	    bool getGUIStatus();
@@ -33,8 +32,8 @@ namespace Graphics {
 	    float deltaTime;
 	    float lastFrame;
 
-	    float SCREEN_WIDTH = 800;
-	    float SCREEN_HEIGHT = 600;
+	    float SCREEN_WIDTH = 1920;
+	    float SCREEN_HEIGHT = 1080;
 
 	    bool GUI_ENABLED = true;
              // Change to private  
