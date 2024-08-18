@@ -23,18 +23,19 @@ class Mesh {
     Mesh(std::vector<Vertex> verticies, 
         std::vector<unsigned int> indices, 
         std::vector<Texture> textures,
-	Graphics::ResourceManager& resourceManager
+	Graphics::ResourceManager* resourceManager
 	);
 
-    void Draw(Shader& shader, Graphics::ResourceManager& resourceManager);
+    void Draw(Shader& shader);
 
 
   private:
     unsigned int VAO, VBO, EBO;
+    Graphics::ResourceManager* resourceManager;
 
     // In the future, use polymorphism and dependencuy injection
     // passing in a resource manager, it must have the get VAO, VBO, AND EBO 
-    void setupMesh(Graphics::ResourceManager& resourceManager); 
+    void setupMesh(); 
 };
 
 }

@@ -12,18 +12,19 @@
 #include <cstring>
 
 
-void Graphics::Model::Draw(Graphics::Shader& shader, Graphics::ResourceManager& resourceManager)
+void Graphics::Model::Draw(Graphics::Shader& shader)
 {
   for(unsigned int i = 0; i < meshes.size(); i++)
-    meshes[i].Draw(shader, resourceManager);
+    meshes[i].Draw(shader);
 }
 
-Graphics::Model::Model(std::string path, Graphics::ResourceManager& resourceManager)
+Graphics::Model::Model(std::string path, Graphics::ResourceManager* rManager)
 {
-  loadModel(path, resourceManager);
+  resourceManager = rManager;
+  loadModel(path);
 }
 
-void Graphics::Model::loadModel(std::string path, Graphics::ResourceManager& resourceManager)
+void Graphics::Model::loadModel(std::string path)
 {
   Assimp::Importer importer;
   const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate || aiProcess_PreTransformVertices);
@@ -36,28 +37,28 @@ void Graphics::Model::loadModel(std::string path, Graphics::ResourceManager& res
 
   directory = path.substr(0, path.find_last_of('/'));
 
-  processNode(scene->mRootNode, scene, resourceManager);
+  processNode(scene->mRootNode, scene);
 }
 
 
 
-void Graphics::Model::processNode(aiNode *node, const aiScene *scene, Graphics::ResourceManager& resourceManager)
+void Graphics::Model::processNode(aiNode *node, const aiScene *scene)
 {
 
   for (unsigned int i = 0; i < node->mNumMeshes; i++)
   {
     aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-    meshes.push_back(processMesh(mesh, scene, resourceManager)); 
+    meshes.push_back(processMesh(mesh, scene)); 
   }
 
   for (unsigned int i = 0; i < node->mNumChildren; i++)
   {
-    processNode(node->mChildren[i], scene, resourceManager);
+    processNode(node->mChildren[i], scene);
   }
 }
 
 
-Graphics::Mesh Graphics::Model::processMesh(aiMesh *mesh, const aiScene *scene, Graphics::ResourceManager& resourceManager)
+Graphics::Mesh Graphics::Model::processMesh(aiMesh *mesh, const aiScene *scene)
 {
   std::vector<Graphics::Vertex> vertices;
   std::vector<unsigned int> indices;

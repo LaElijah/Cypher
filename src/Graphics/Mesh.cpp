@@ -11,27 +11,28 @@ Graphics::Mesh::Mesh(
     std::vector<Graphics::Vertex> 
     vertices, std::vector<unsigned int> indices, 
     std::vector<Graphics::Texture> textures,
-    Graphics::ResourceManager& resourceManager)
+    Graphics::ResourceManager* rManager)
 {
   this->Vertices= vertices; 
   this->Indices = indices;
   this->Textures = textures;
+  this->resourceManager = rManager;
 
 
-  setupMesh(resourceManager);
+  setupMesh();
 }
 
 bool flag = true;
 unsigned int count;
 unsigned int ccount;
 // VAO
-void Graphics::Mesh::Draw(Shader& shader, Graphics::ResourceManager& resourceManager)
+void Graphics::Mesh::Draw(Shader& shader)
 {
  
        
 //
 
-     Graphics::RenderEntity renderEntity = resourceManager.getRenderEntity(STANDARD);
+     Graphics::RenderEntity renderEntity = resourceManager->getRenderEntity(STANDARD);
       // Replace the initialization of a new VAO with a resource manager 
       // instead to set/create resources 
 
@@ -85,7 +86,7 @@ void Graphics::Mesh::Draw(Shader& shader, Graphics::ResourceManager& resourceMan
 // Have a destory mechanism on this object that activates when the reference pointer in the resource manager is destroyed 
 
 // VAO
-void Graphics::Mesh::setupMesh(Graphics::ResourceManager& resourceManager)
+void Graphics::Mesh::setupMesh()
 {
 
      //Graphics::Resource& vao = resourceManager.test(STANDARD);

@@ -33,7 +33,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 Graphics::GLCanvas* canvas = new Graphics::GLCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);    
 Graphics::Camera* camera = new Graphics::Camera(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-Graphics::ResourceManager resourceManager;
+Graphics::ResourceManager* resourceManager = new Graphics::ResourceManager();
 
 Graphics::Renderer renderer(canvas, camera);
 
@@ -64,7 +64,7 @@ Graphics::Shader simpleShader2(
 
 int main()
 {
-	resourceManager.loadModelPaths();
+	resourceManager->loadModelPaths();
  //fileReader.getFolders();
     //Graphics::Model simpleModel3("/home/laelijah/Gengine/data/Models/adamHead/adamHead.gltf", resourceManager);
     //Graphics::Model simpleModel4("/home/laelijah/Gengine/data/Models/swat/scene.gltf", resourceManager);
@@ -115,7 +115,7 @@ renderer.updateDeltaTime();
 
       simpleShader.setMat4("model", model);
      
-      simpleModel.Draw(simpleShader, resourceManager);
+      simpleModel.Draw(simpleShader);
 
 
 
@@ -129,7 +129,7 @@ renderer.updateDeltaTime();
       
 
 
-      simpleModel2.Draw(simpleShader, resourceManager);
+      simpleModel2.Draw(simpleShader);
            // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
       // -------------------------------------------------------------------------------
       glfwPollEvents();

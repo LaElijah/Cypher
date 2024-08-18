@@ -14,20 +14,21 @@ namespace Graphics {
   class Model 
   {
     public:
-      Model(std::string path, Graphics::ResourceManager& resourceManager);
+      Model(std::string path, Graphics::ResourceManager* resourceManager);
 
-      void Draw(Graphics::Shader& shader, Graphics::ResourceManager& resourceManager);
+      void Draw(Graphics::Shader& shader);
 
       private:
+      Graphics::ResourceManager* resourceManager;
       
       std::vector<Graphics::Mesh> meshes;
       std::vector<Graphics::Texture> texturesLoaded;
       std::string directory;
 
-      void loadModel(std::string path, Graphics::ResourceManager& resourceManager);
+      void loadModel(std::string path);
 
-      void processNode(aiNode *node, const aiScene *scene, Graphics::ResourceManager& resourceManager);
-      Graphics::Mesh processMesh(aiMesh *mesh, const aiScene *scene, Graphics::ResourceManager& resourceManager);
+      void processNode(aiNode *node, const aiScene *scene);
+      Graphics::Mesh processMesh(aiMesh *mesh, const aiScene *scene);
 
       std::vector<Graphics::Texture> loadMaterialTextures(aiMaterial *mat, const aiScene* scene, aiTextureType type, std::string typeName);
 
