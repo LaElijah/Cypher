@@ -441,30 +441,6 @@ src/Graphics/GLCanvas.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/GLCanvas.cpp.s
 .PHONY : src/Graphics/GLCanvas.cpp.s
 
-src/Graphics/Globals.o: src/Graphics/Globals.cpp.o
-.PHONY : src/Graphics/Globals.o
-
-# target to build an object file
-src/Graphics/Globals.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/Globals.cpp.o
-.PHONY : src/Graphics/Globals.cpp.o
-
-src/Graphics/Globals.i: src/Graphics/Globals.cpp.i
-.PHONY : src/Graphics/Globals.i
-
-# target to preprocess a source file
-src/Graphics/Globals.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/Globals.cpp.i
-.PHONY : src/Graphics/Globals.cpp.i
-
-src/Graphics/Globals.s: src/Graphics/Globals.cpp.s
-.PHONY : src/Graphics/Globals.s
-
-# target to generate assembly for a file
-src/Graphics/Globals.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/Globals.cpp.s
-.PHONY : src/Graphics/Globals.cpp.s
-
 src/Graphics/Mesh.o: src/Graphics/Mesh.cpp.o
 .PHONY : src/Graphics/Mesh.o
 
@@ -657,9 +633,6 @@ help:
 	@echo "... src/Graphics/GLCanvas.o"
 	@echo "... src/Graphics/GLCanvas.i"
 	@echo "... src/Graphics/GLCanvas.s"
-	@echo "... src/Graphics/Globals.o"
-	@echo "... src/Graphics/Globals.i"
-	@echo "... src/Graphics/Globals.s"
 	@echo "... src/Graphics/Mesh.o"
 	@echo "... src/Graphics/Mesh.i"
 	@echo "... src/Graphics/Mesh.s"

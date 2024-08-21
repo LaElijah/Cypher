@@ -29,7 +29,16 @@ Graphics::Renderer::Renderer(Graphics::ResourceManager* resourceManager, Graphic
 }
 
 
+/*
 
+void Graphics::Renderer::Draw()
+{
+    for (Graphics::Model model : ResourceManager->loadedModels)
+    {
+        
+    }
+}
+*/
 
 void Graphics::Renderer::run()
 {
@@ -43,79 +52,30 @@ void Graphics::Renderer::run()
         "/home/laelijah/Gengine/data/Shaders/simpleModel.vs",
         "/home/laelijah/Gengine/data/Shaders/simpleModel.fs");
 
-    Graphics::Shader simpleShader2(
-        "/home/laelijah/Gengine/data/Shaders/simpleModel.vs",
-        "/home/laelijah/Gengine/data/Shaders/simpleModel.fs");
-
-
-
-
-    glm::mat4 model = glm::mat4(1.0f);
-    glm::mat4 model2 = glm::mat4(1.0f);
-    glm::mat4 model3 = glm::mat4(1.0f);
   
-  
-    glm::mat4 view = glm::mat4(1.0f);
-    glm::mat4 projection = glm::mat4(1.0f);
-  
-    glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-  
-    Graphics::Model simpleModel2("/home/laelijah/Gengine/data/Models/wolverine/scene.gltf", ResourceManager);
-    Graphics::Model simpleModel("/home/laelijah/Gengine/data/Models/mic/scene.gltf", ResourceManager);
+    Graphics::Model simpleModel("/home/laelijah/Gengine/data/Models/adamHead/adamHead.gltf", ResourceManager);
 
     ImGuiIO& io = ImGui::GetIO();
-      
+       
     while (!glfwWindowShouldClose(window)) 
     {   
+ 
         updateDeltaTime();	    
-  
-        glm::vec3 cameraFront = Camera->getDirection();
-     
+	clear();
+         
         if (!io.WantCaptureKeyboard)
         {
             processInput(window);
         }
 
-
-        glClearColor(0, 0, 0, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        projection = glm::perspective(glm::radians(Camera->Zoom), SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 100.0f); 
-        view = Camera->getViewMatrix();
-
-        
-        model = glm::mat4(1.0f);
-        model2 = glm::mat4(1.0f);
-
-
-
         simpleShader.use();
-        simpleShader.setMat4("view", view);
-        simpleShader.setMat4("projection", projection);
 
-
-        model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
-
-        simpleShader.setMat4("model", model);
+        simpleShader.setMat4("model", simpleModel.getModelMatrix());        
+        simpleShader.setMat4("view", Camera->getViewMatrix());
+        simpleShader.setMat4("projection", Camera->getProjectionMatrix());
         
-        simpleModel.Draw(simpleShader);
+	simpleModel.Draw(simpleShader);
 
-
-
-
-
-
-        model2 = glm::translate(model2, glm::vec3(2.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model2 = glm::scale(model2, glm::vec3(10.0f, 10.0f, 10.0f));
-
-        simpleShader.setMat4("model", model2);
-        
-
-
-        simpleModel2.Draw(simpleShader);
-             // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
         glfwPollEvents();
         drawGUI();
         glfwSwapBuffers(window);
@@ -132,6 +92,15 @@ void Graphics::Renderer::shutdown()
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext(); 
+}
+
+
+
+
+void Graphics::Renderer::clear()
+{
+    glClearColor(0, 0.01f, 0.01f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 

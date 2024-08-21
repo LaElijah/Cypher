@@ -119,6 +119,11 @@ glm::mat4 Graphics::Camera::getViewMatrix()
     return glm::lookAt(Position, Position + CameraFront, CameraUp);
 }
 
+glm::mat4 Graphics::Camera::getProjectionMatrix()
+{
+    return glm::perspective(glm::radians(Zoom), ScreenWidth / ScreenHeight, 0.1f, 100.0f); 
+}
+
 
 
 

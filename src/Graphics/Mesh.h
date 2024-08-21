@@ -2,7 +2,6 @@
 #define MESH_H
 
 #include <vector>
-#include "Globals.cpp"
 #include <glm/glm.hpp>
 #include <string>
 #include "Shader.h"

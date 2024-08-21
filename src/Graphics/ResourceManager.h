@@ -5,7 +5,17 @@
 #include <vector>
 #include <glm/glm.hpp>
 
+
 namespace Graphics {
+
+    struct ModelFile
+    {
+        std::string path;
+        std::string name;
+        std::string extension;
+    };
+
+
 
     struct Texture
     {
@@ -62,8 +72,8 @@ namespace Graphics {
         private:
             std::vector<Resource> VAOs;
     	    std::vector<Resource> VBOs;
-    	    //std::vector<Graphics::Model> Models;
-    	    //std::vector<std::string> ModelFiles;
+    	    //std::vector<Graphics::Model> loadedModels;
+    	    std::vector<Graphics::ModelFile> ModelFiles;
     	    std::vector<Graphics::RenderEntity> RenderEntities;
     	    VAO_TYPE CurrentVao;
     };

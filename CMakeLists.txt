@@ -17,7 +17,6 @@ set(SOURCES
   ${SRC_DIR}/Graphics/Camera.cpp
   ${SRC_DIR}/Graphics/GLCanvas.cpp
   ${SRC_DIR}/Graphics/Shader.cpp
-  ${SRC_DIR}/Graphics/Globals.cpp
   ${SRC_DIR}/Graphics/Model.cpp
   ${SRC_DIR}/Graphics/Mesh.cpp
   ${SRC_DIR}/Graphics/ResourceManager.cpp

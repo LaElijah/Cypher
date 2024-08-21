@@ -20,7 +20,8 @@ namespace Graphics {
         
 	    void run();
 	    void shutdown();
-	  
+            
+            void clear();	    
             void disableGUI();
             void enableGUI();
 	 
@@ -41,7 +42,8 @@ namespace Graphics {
             Graphics::Camera* Camera;
 	    Graphics::GLCanvas* Canvas;
 	    Graphics::ResourceManager* ResourceManager;
-	   
+
+	    void Draw(); 
 	    void drawGUI();
 	    void initializeGUI(GLFWwindow* window);
 	    void updateDeltaTime();

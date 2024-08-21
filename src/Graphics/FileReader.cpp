@@ -6,8 +6,9 @@
 #include <iostream>
 
 
-std::pair<std::string, std::string> splitFilename(std::string& filename)
+std::pair<std::string, std::string> Graphics::FileReader::splitFilename(std::string& filename)
 {
+
     size_t index = filename.find_last_of(".");
     
     if (index == std::string::npos)

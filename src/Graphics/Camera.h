@@ -41,8 +41,9 @@ namespace Graphics {
             void updateDirection();
 	    glm::vec3 getDirection();
             glm::mat4 getViewMatrix(); 
-   	    void setCameraPos(glm::vec3 position);
-            void processKeyboard(Graphics::Direction keyPressed, float deltaTime);
+	    glm::mat4 getProjectionMatrix();
+	    void setCameraPos(glm::vec3 position);
+	    void processKeyboard(Graphics::Direction keyPressed, float deltaTime);
             void processMouseScroll(float yoffset);
 	    void disableCamera();
 	    void enableCamera(); 
@@ -54,8 +55,8 @@ namespace Graphics {
 	    float MouseSensitivity = 0.1f; 
             float MovementSpeed = 2.5f;
             float Velocity;
-            int ScreenWidth; 
-            int ScreenHeight; 
+            float ScreenWidth; 
+            float ScreenHeight; 
             float pitch = 0; 
             float yaw = 0; 
             int lastX; 

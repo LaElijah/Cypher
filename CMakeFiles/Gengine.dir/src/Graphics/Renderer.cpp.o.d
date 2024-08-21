@@ -323,7 +323,6 @@ CMakeFiles/Gengine.dir/src/Graphics/Renderer.cpp.o: \
  /home/laelijah/Gengine/src/Graphics/GLCanvas.h \
  /home/laelijah/Gengine/src/Graphics/Model.h \
  /home/laelijah/Gengine/src/Graphics/Mesh.h \
- /home/laelijah/Gengine/src/Graphics/Globals.cpp \
  /usr/include/assimp/Importer.hpp /usr/include/assimp/types.h \
  /usr/include/assimp/defs.h /usr/include/assimp/config.h \
  /usr/include/assimp/vector2.h /usr/include/assimp/vector3.h \

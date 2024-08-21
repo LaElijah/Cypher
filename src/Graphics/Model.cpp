@@ -3,7 +3,6 @@
 #include <GLFW/glfw3.h>
 
 #include "Model.h"
-#include "Globals.cpp"
 #include <assimp/Importer.hpp>
 #include <assimp/material.h>
 #include <assimp/scene.h>
@@ -14,6 +13,8 @@
 #include "ResourceManager.h"
 #include <cstring>
 
+
+glm::mat4 ConvertMatrixToGLMFormat(const aiMatrix4x4& from);
 
 void Graphics::Model::Draw(Graphics::Shader& shader)
 {
@@ -40,28 +41,31 @@ void Graphics::Model::loadModel(std::string path)
 
   directory = path.substr(0, path.find_last_of('/'));
 
-  processNode(scene->mRootNode, scene);
+  processNode(scene->mRootNode, scene, glm::mat4(1.0f));
 }
 
 
 
-void Graphics::Model::processNode(aiNode *node, const aiScene *scene)
+void Graphics::Model::processNode(aiNode *node, const aiScene *scene, const glm::mat4& parentTransform)
 {
+  glm::mat4 nodeTransform = ConvertMatrixToGLMFormat(node->mTransformation);
+
+  glm::mat4 globalTransform = parentTransform * nodeTransform;
 
   for (unsigned int i = 0; i < node->mNumMeshes; i++)
   {
     aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-    meshes.push_back(processMesh(mesh, scene)); 
+    meshes.push_back(processMesh(mesh, scene, globalTransform)); 
   }
 
   for (unsigned int i = 0; i < node->mNumChildren; i++)
   {
-    processNode(node->mChildren[i], scene);
+    processNode(node->mChildren[i], scene, globalTransform);
   }
 }
 
 
-Graphics::Mesh Graphics::Model::processMesh(aiMesh *mesh, const aiScene *scene)
+Graphics::Mesh Graphics::Model::processMesh(aiMesh *mesh, const aiScene *scene, const glm::mat4& transform)
 {
   std::vector<Graphics::Vertex> vertices;
   std::vector<unsigned int> indices;
@@ -71,12 +75,9 @@ Graphics::Mesh Graphics::Model::processMesh(aiMesh *mesh, const aiScene *scene)
   for(unsigned int i = 0; i < mesh->mNumVertices; i++)
   {
     Vertex vertex;
-    glm::vec3 vector;
-    vector.x = mesh->mVertices[i].x;
-    vector.y = mesh->mVertices[i].y;
-    vector.z = mesh->mVertices[i].z;
+    glm::vec3 vector = glm::vec3(transform * glm::vec4(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z, 1.0f));  
     vertex.Position = vector;
-
+    
     if (mesh->HasNormals())
     {
       vector.x = mesh->mNormals[i].x;
@@ -127,7 +128,34 @@ Graphics::Mesh Graphics::Model::processMesh(aiMesh *mesh, const aiScene *scene)
         "texture_specular");
 
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-    
+
+    /*
+    std::vector<Texture> ambientMaps = loadMaterialTextures(
+        material,
+	scene,
+        aiTextureType_AMBIENT, 
+        "texture_ambient");
+
+    textures.insert(textures.end(), ambientMaps.begin(), ambientMaps.end());
+  
+    std::vector<Texture> lightMaps = loadMaterialTextures(
+        material,
+	scene,
+        aiTextureType_LIGHTMAP, 
+        "texture_lightmap");
+
+    textures.insert(textures.end(), lightMaps.begin(), lightMaps.end());
+ 
+
+    std::vector<Texture> reflectionMaps = loadMaterialTextures(
+        material,
+	scene,
+        aiTextureType_REFLECTION, 
+        "texture_reflection");
+
+    textures.insert(textures.end(), reflectionMaps.begin(), reflectionMaps.end());
+*/ 
+
   return Mesh(vertices, indices, textures, resourceManager);
 }
 
@@ -298,3 +326,24 @@ unsigned int Graphics::Model::TextureFromFile(std::string path, std::string dire
   
   return textureID;
 }
+
+
+glm::mat4 Graphics::Model::getModelMatrix()
+{
+    return glm::scale(glm::translate(glm::mat4(1.0f), Position), Scale);
+}
+
+
+
+glm::mat4 ConvertMatrixToGLMFormat(const aiMatrix4x4& from)
+	{
+		glm::mat4 to;
+		//the a,b,c,d in assimp is the row ; the 1,2,3,4 is the column
+		to[0][0] = from.a1; to[1][0] = from.a2; to[2][0] = from.a3; to[3][0] = from.a4;
+		to[0][1] = from.b1; to[1][1] = from.b2; to[2][1] = from.b3; to[3][1] = from.b4;
+		to[0][2] = from.c1; to[1][2] = from.c2; to[2][2] = from.c3; to[3][2] = from.c4;
+		to[0][3] = from.d1; to[1][3] = from.d2; to[2][3] = from.d3; to[3][3] = from.d4;
+		return to;
+	}
+
+

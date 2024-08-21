@@ -17,6 +17,8 @@ Graphics::ResourceManager Graphics::ResourceManager::ResourceManager()
 }
 */
 
+
+
 void Graphics::ResourceManager::loadModelPaths(std::string modelDirectory)
 {
     Graphics::FileReader fileReader(modelDirectory);
@@ -27,15 +29,20 @@ void Graphics::ResourceManager::loadModelPaths(std::string modelDirectory)
    
     for (std::string model : models)
     {
+        Graphics::ModelFile modelFile;
+
 	workingModel = modelDirectory + "/" + model;
-        std::cout << "PRINTING MODEL: " << workingModel << std::endl; 
-        
 	fileReader.setDirname(workingModel);
 	std::vector<std::string> modelFiles = fileReader.getFiles("gltf");
 
-	for (std::string modelFile : modelFiles)
+	for (std::string filename : modelFiles)
 	{
-            //resourceManager.addModelFile(workingModel + "/" + modelFile);	
+                auto [name, extension] = FileReader::splitFilename(filename);
+		modelFile.name = name;
+		modelFile.extension = extension;
+		modelFile.path = std::string(workingModel + "/" + filename);
+
+	        ModelFiles.push_back(modelFile); 
 	}
     }
 

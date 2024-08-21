@@ -21,7 +21,6 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/laelijah/Gengine/src/Graphics/Camera.cpp" "CMakeFiles/Gengine.dir/src/Graphics/Camera.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/Camera.cpp.o.d"
   "/home/laelijah/Gengine/src/Graphics/FileReader.cpp" "CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o.d"
   "/home/laelijah/Gengine/src/Graphics/GLCanvas.cpp" "CMakeFiles/Gengine.dir/src/Graphics/GLCanvas.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/GLCanvas.cpp.o.d"
-  "/home/laelijah/Gengine/src/Graphics/Globals.cpp" "CMakeFiles/Gengine.dir/src/Graphics/Globals.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/Globals.cpp.o.d"
   "/home/laelijah/Gengine/src/Graphics/Mesh.cpp" "CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o.d"
   "/home/laelijah/Gengine/src/Graphics/Model.cpp" "CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o.d"
   "/home/laelijah/Gengine/src/Graphics/Renderer.cpp" "CMakeFiles/Gengine.dir/src/Graphics/Renderer.cpp.o" "gcc" "CMakeFiles/Gengine.dir/src/Graphics/Renderer.cpp.o.d"
