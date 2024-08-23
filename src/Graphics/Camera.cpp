@@ -6,26 +6,43 @@
 
 
 
-
+/*
+ * Camera Constructor
+ * Initializes the camera object with a given 
+ * screen width and height in ints representing pixels.
+ * To get the first mouse position, calculate the midpoint of both axis
+ * by dividing resolution in half.
+ */
 Graphics::Camera::Camera(int width, int height)
 {
+    // Setting screen resolution
     ScreenWidth = width;
     ScreenHeight = height;
+
+    // Calculating screen midpoint for first mouse
     lastX = width / 2;
     lastY = height / 2; 
 }
 
 
 
-
+/*
+ * processMousePosition
+ * This function calculates the new angle of the mouse
+ * from the cursors offset from the center
+ * when the cursor is captured. 
+ * Modululates offset impact with mouse sensitivity
+ */
 void Graphics::Camera::processMousePosition(double xoffset, double yoffset, bool constrainPitch)
 {
+    // Modulate offset impact
     xoffset *= MouseSensitivity;
     yoffset *= MouseSensitivity;
 
     yaw += xoffset;
     pitch += yoffset;
-
+   
+    // Prevent axis flipping
     if (constrainPitch)
     {
         if (pitch > 89.0f)
@@ -38,8 +55,25 @@ void Graphics::Camera::processMousePosition(double xoffset, double yoffset, bool
             pitch = -89.0f;
         }
     }    
-
+    // Updates camera direction vector
     updateDirection();
+}
+
+
+
+
+/*
+ * 
+ * */
+void Graphics::Camera::updateDirection()
+{  
+    Direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    Direction.y = sin(glm::radians(pitch));
+    Direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch)); 
+    CameraFront = glm::normalize(Direction);
+
+    CameraRight = glm::normalize(glm::cross(CameraFront, WorldUp));
+    CameraUp = glm::normalize(glm::cross(CameraRight, CameraFront));
 }
 
 
@@ -90,18 +124,6 @@ void Graphics::Camera::startMouse()
 }
 
 
-
-
-void Graphics::Camera::updateDirection()
-{  
-    Direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    Direction.y = sin(glm::radians(pitch));
-    Direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch)); 
-    CameraFront = glm::normalize(Direction);
-
-    CameraRight = glm::normalize(glm::cross(CameraFront, WorldUp));
-    CameraUp = glm::normalize(glm::cross(CameraRight, CameraFront));
-}
 
 
 

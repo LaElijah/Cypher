@@ -18,13 +18,14 @@ glm::mat4 ConvertMatrixToGLMFormat(const aiMatrix4x4& from);
 
 void Graphics::Model::Draw(Graphics::Shader& shader)
 {
+	/*
   for(unsigned int i = 0; i < meshes.size(); i++)
     meshes[i].Draw(shader);
+    */
 }
 
-Graphics::Model::Model(std::string path, Graphics::ResourceManager* rManager)
+Graphics::Model::Model(std::string path)
 {
-  resourceManager = rManager;
   loadModel(path);
 }
 
@@ -156,7 +157,7 @@ Graphics::Mesh Graphics::Model::processMesh(aiMesh *mesh, const aiScene *scene, 
     textures.insert(textures.end(), reflectionMaps.begin(), reflectionMaps.end());
 */ 
 
-  return Mesh(vertices, indices, textures, resourceManager);
+  return Mesh(vertices, indices, textures);
 }
 
 std::vector<Graphics::Texture> Graphics::Model::loadMaterialTextures(aiMaterial *mat, const aiScene* scene, aiTextureType type, std::string typeName)
@@ -174,7 +175,7 @@ std::vector<Graphics::Texture> Graphics::Model::loadMaterialTextures(aiMaterial 
     mat->GetTexture(type, i, &str);
     bool skip = false;
     
-    // Are any  found in all the textures loaded?
+    // Does this current mesh have any textures already loaded into memory for this model? 
     for (unsigned int j = 0; j < texturesLoaded.size(); j++)
     {
    
@@ -333,6 +334,22 @@ glm::mat4 Graphics::Model::getModelMatrix()
     return glm::scale(glm::translate(glm::mat4(1.0f), Position), Scale);
 }
 
+std::vector<Graphics::Mesh>& Graphics::Model::getMeshes()
+{
+    return meshes;
+}
+
+
+std::string Graphics::Model::getShaderName()
+{
+    return shaderName;
+}
+
+
+void Graphics::Model::setShaderName(std::string name)
+{
+    shaderName = name;
+}
 
 
 glm::mat4 ConvertMatrixToGLMFormat(const aiMatrix4x4& from)

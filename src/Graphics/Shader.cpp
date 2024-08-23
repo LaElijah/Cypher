@@ -22,6 +22,53 @@ namespace Graphics
 {
 
 
+  Shader::Shader(std::string vertexShaderPath, std::string fragmentShaderPath)
+  {
+      std::string vertexCode;
+      std::string fragmentCode;
+
+      std::fstream vertexShaderFile;
+      std::fstream fragmentShaderFile;
+      
+      vertexShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
+      fragmentShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
+
+      try {
+        vertexShaderFile.open(vertexShaderPath.c_str());
+        fragmentShaderFile.open(fragmentShaderPath.c_str());
+        
+        std::stringstream vertexShaderStream, fragmentShaderStream;
+
+        vertexShaderStream << vertexShaderFile.rdbuf();
+        fragmentShaderStream << fragmentShaderFile.rdbuf(); 
+
+        vertexShaderFile.close();
+        fragmentShaderFile.close();
+
+
+        vertexCode = vertexShaderStream.str();
+        fragmentCode = fragmentShaderStream.str();
+      }
+
+
+      catch (std::ifstream::failure e)
+      {
+        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ\n" << e.what() << "\n" << std::endl;
+      }
+
+      const char *vertexShaderCode = vertexCode.c_str();
+      const char *fragmentShaderCode = fragmentCode.c_str();
+      
+      unsigned int vertex, fragment;
+
+      vertex = Shader::compileShader(GL_VERTEX_SHADER, vertexShaderCode);
+      fragment = Shader::compileShader(GL_FRAGMENT_SHADER, fragmentShaderCode);
+      linkShaders(vertex, fragment);
+
+  }
+
+
+
 
   Shader::Shader(const char *vertexShaderPath, const char *fragmentShaderPath)
   {

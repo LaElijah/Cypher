@@ -3,46 +3,17 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <glm/glm.hpp>
-
+#include <iostream>
+#include "Model.h"
+#include "MeshTypes.h"
 
 namespace Graphics {
 
-    struct ModelFile
-    {
-        std::string path;
-        std::string name;
-        std::string extension;
-    };
 
 
-
-    struct Texture
-    {
-      std::string type;
-      std::string path;
-      unsigned int id;
-  
-    };
-  
-    struct Vertex
-    {
-      glm::vec3 Position;
-      glm::vec3 Normal;
-      glm::vec2 TexCoords;
-    };
-  
- 
-
-    enum VAO_TYPE {
-    	NONE,
-    	STANDARD
-    };
-
-
-
-
-    struct RenderEntity {
+    struct RenderResource {
     	VAO_TYPE vaoType;
     	std::string shaderName;
     	unsigned int VAO;
@@ -50,7 +21,7 @@ namespace Graphics {
     	unsigned int EBO; // Same thing as VBO, also maybe give an index per buffer
     	// Graphics::Shader& shader;
     	// TODO: Add texture vector, up to 16/32 with texture units and what 
-    	// sounds like 64 with texture arrays
+    	// sounds like 1024 with texture arrays
     	// Add a material reference and replace shader
     	
            // I could have a property that counts the amount of textures loaded in the texture array
@@ -61,21 +32,47 @@ namespace Graphics {
     
     
     struct Resource {
+	    unsigned int v;
     };
     
     
     class ResourceManager {
     	public:
             void loadModelPaths(std::string modelDirectory = "./data/Models");
-            Graphics::RenderEntity& getRenderEntity(VAO_TYPE type);
-            Graphics::RenderEntity& generateRenderEntity(VAO_TYPE type);
-        private:
-            std::vector<Resource> VAOs;
-    	    std::vector<Resource> VBOs;
-    	    //std::vector<Graphics::Model> loadedModels;
+            Graphics::RenderResource& getRenderResource(VAO_TYPE type);
+            Graphics::RenderResource& generateRenderResource(VAO_TYPE type);
+       	  
+            std::vector<Graphics::Model*>& getLoadedModels();
+
+	    Graphics::Shader* getShader(std::string); 
+	    void loadShader(Graphics::Shader* shader, std::string name); 
+	    void loadShaders(std::string shaderDirectory = "./data/Shaders"); 
+
+
+            void loadModel(Graphics::Model* model);
+	    void generateVAO(VAO_TYPE vaoType); 
+	    unsigned int& getVAO(VAO_TYPE vaoType);
+
+    	    void generateVBO(VAO_TYPE vaoType);
+	    unsigned int& getVBO(VAO_TYPE vaoType);
+	    
+	    void generateEBO(VAO_TYPE vaoType);
+	    unsigned int& getEBO(VAO_TYPE vaoType);
+	
+
+
+       
+	private:
+            std::map<VAO_TYPE, unsigned int> VAOs;
+    	    std::map<VAO_TYPE, unsigned int> VBOs;
+    	    std::map<VAO_TYPE, unsigned int> EBOs;
+	    std::map<std::string, Graphics::Texture> loadedTextures;
+	    std::vector<Graphics::Model*> loadedModels;
+	    std::map<std::string, Graphics::Shader*> loadedShaders;
     	    std::vector<Graphics::ModelFile> ModelFiles;
-    	    std::vector<Graphics::RenderEntity> RenderEntities;
-    	    VAO_TYPE CurrentVao;
+    	    std::map<VAO_TYPE, Graphics::RenderResource> RenderResources;
+    	    VAO_TYPE CurrentVao = NONE;
+	    std::string CurrentShader;
     };
 
 

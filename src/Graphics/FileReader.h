@@ -16,7 +16,10 @@ namespace Graphics {
 	std::vector<std::string> getFolders();
 	std::vector<std::string> getFiles();
 	std::vector<std::string> getFiles(std::string extension);
-        static std::pair<std::string, std::string> splitFilename(std::string& filename); 
+
+	std::vector<std::string> getFile();
+	std::string getFile(std::string extension);
+	static std::pair<std::string, std::string> splitFilename(std::string& filename);
 
 	private: 
 	std::string dirname;

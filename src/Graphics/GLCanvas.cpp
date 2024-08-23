@@ -8,7 +8,8 @@
 namespace Graphics {
 
     void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-    {
+    { 
+	std::cout << width << std::endl;
         glViewport(0, 0, width, height);
     }
 

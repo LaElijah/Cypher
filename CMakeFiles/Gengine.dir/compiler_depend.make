@@ -2621,6 +2621,15 @@ CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o: src/Graphics/Mesh.cpp \
   /usr/include/c++/12/istream \
   /usr/include/c++/12/bits/istream.tcc \
   src/Graphics/ResourceManager.h \
+  /usr/include/c++/12/map \
+  /usr/include/c++/12/bits/stl_tree.h \
+  /usr/include/c++/12/ext/aligned_buffer.h \
+  /usr/include/c++/12/bits/node_handle.h \
+  /usr/include/c++/12/bits/stl_map.h \
+  /usr/include/c++/12/tuple \
+  /usr/include/c++/12/bits/uses_allocator.h \
+  /usr/include/c++/12/bits/stl_multimap.h \
+  /usr/include/c++/12/bits/erase_if.h \
   /usr/include/glm/glm.hpp \
   /usr/include/glm/detail/_fixes.hpp \
   /usr/include/c++/12/cmath \
@@ -2796,6 +2805,7 @@ CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o: src/Graphics/Mesh.cpp \
   /usr/include/glm/detail/type_half.inl \
   /usr/include/glm/integer.hpp \
   /usr/include/glm/detail/func_integer.inl \
+  src/Graphics/Model.h \
   src/Graphics/Mesh.h \
   src/Graphics/Shader.h \
   /usr/include/glm/ext/matrix_transform.hpp \
@@ -2850,7 +2860,45 @@ CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o: src/Graphics/Mesh.cpp \
   /usr/include/c++/12/cstring \
   /usr/include/string.h \
   /usr/include/strings.h \
-  /usr/include/glm/gtc/type_ptr.inl
+  /usr/include/glm/gtc/type_ptr.inl \
+  src/Graphics/MeshTypes.h \
+  /usr/include/assimp/Importer.hpp \
+  /usr/include/assimp/types.h \
+  /usr/include/assimp/defs.h \
+  /usr/include/assimp/config.h \
+  /usr/include/assimp/vector2.h \
+  /usr/include/assimp/vector3.h \
+  /usr/include/assimp/color4.h \
+  /usr/include/assimp/matrix3x3.h \
+  /usr/include/assimp/matrix4x4.h \
+  /usr/include/assimp/quaternion.h \
+  /usr/include/assimp/vector2.inl \
+  /usr/include/assimp/vector3.inl \
+  /usr/include/assimp/color4.inl \
+  /usr/include/assimp/matrix3x3.inl \
+  /usr/include/c++/12/algorithm \
+  /usr/include/c++/12/bits/stl_algo.h \
+  /usr/include/c++/12/bits/algorithmfwd.h \
+  /usr/include/c++/12/bits/stl_heap.h \
+  /usr/include/c++/12/bits/stl_tempbuf.h \
+  /usr/include/c++/12/bits/uniform_int_dist.h \
+  /usr/include/c++/12/pstl/glue_algorithm_defs.h \
+  /usr/include/c++/12/pstl/execution_defs.h \
+  /usr/include/assimp/matrix4x4.inl \
+  /usr/include/assimp/MathFunctions.h \
+  /usr/include/assimp/quaternion.inl \
+  /usr/include/assimp/scene.h \
+  /usr/include/assimp/texture.h \
+  /usr/include/assimp/Compiler/pushpack1.h \
+  /usr/include/assimp/Compiler/poppack1.h \
+  /usr/include/assimp/mesh.h \
+  /usr/include/assimp/aabb.h \
+  /usr/include/assimp/light.h \
+  /usr/include/assimp/camera.h \
+  /usr/include/assimp/material.h \
+  /usr/include/assimp/material.inl \
+  /usr/include/assimp/anim.h \
+  /usr/include/assimp/metadata.h
 
 CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o: src/Graphics/Model.cpp \
   /usr/include/stdc-predef.h \
@@ -3228,7 +3276,7 @@ CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o: src/Graphics/Model.cpp \
   /usr/include/string.h \
   /usr/include/strings.h \
   /usr/include/glm/gtc/type_ptr.inl \
-  src/Graphics/ResourceManager.h \
+  src/Graphics/MeshTypes.h \
   /usr/include/assimp/Importer.hpp \
   /usr/include/assimp/types.h \
   /usr/include/assimp/defs.h \
@@ -3314,7 +3362,17 @@ CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o: src/Graphics/Model.cpp \
   /usr/include/c++/12/istream \
   /usr/include/c++/12/bits/istream.tcc \
   external/STB_IMAGE/stb_image.h \
-  /usr/include/c++/12/stdlib.h
+  /usr/include/c++/12/stdlib.h \
+  src/Graphics/ResourceManager.h \
+  /usr/include/c++/12/map \
+  /usr/include/c++/12/bits/stl_tree.h \
+  /usr/include/c++/12/ext/aligned_buffer.h \
+  /usr/include/c++/12/bits/node_handle.h \
+  /usr/include/c++/12/bits/stl_map.h \
+  /usr/include/c++/12/tuple \
+  /usr/include/c++/12/bits/uses_allocator.h \
+  /usr/include/c++/12/bits/stl_multimap.h \
+  /usr/include/c++/12/bits/erase_if.h
 
 CMakeFiles/Gengine.dir/src/Graphics/Renderer.cpp.o: src/Graphics/Renderer.cpp \
   /usr/include/stdc-predef.h \
@@ -3697,9 +3755,64 @@ CMakeFiles/Gengine.dir/src/Graphics/Renderer.cpp.o: src/Graphics/Renderer.cpp \
   src/Graphics/Renderer.h \
   src/Graphics/Camera.h \
   src/Graphics/ResourceManager.h \
-  src/Graphics/GLCanvas.h \
+  /usr/include/c++/12/map \
+  /usr/include/c++/12/bits/stl_tree.h \
+  /usr/include/c++/12/ext/aligned_buffer.h \
+  /usr/include/c++/12/bits/node_handle.h \
+  /usr/include/c++/12/bits/stl_map.h \
+  /usr/include/c++/12/tuple \
+  /usr/include/c++/12/bits/uses_allocator.h \
+  /usr/include/c++/12/bits/stl_multimap.h \
+  /usr/include/c++/12/bits/erase_if.h \
+  /usr/include/c++/12/iostream \
+  /usr/include/c++/12/ostream \
+  /usr/include/c++/12/ios \
+  /usr/include/c++/12/exception \
+  /usr/include/c++/12/bits/exception_ptr.h \
+  /usr/include/c++/12/bits/cxxabi_init_exception.h \
+  /usr/include/c++/12/typeinfo \
+  /usr/include/c++/12/bits/nested_exception.h \
+  /usr/include/c++/12/bits/ios_base.h \
+  /usr/include/c++/12/ext/atomicity.h \
+  /usr/include/x86_64-linux-gnu/c++/12/bits/gthr.h \
+  /usr/include/x86_64-linux-gnu/c++/12/bits/gthr-default.h \
+  /usr/include/pthread.h \
+  /usr/include/sched.h \
+  /usr/include/x86_64-linux-gnu/bits/sched.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h \
+  /usr/include/x86_64-linux-gnu/bits/cpu-set.h \
+  /usr/include/time.h \
+  /usr/include/x86_64-linux-gnu/bits/time.h \
+  /usr/include/x86_64-linux-gnu/bits/timex.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
+  /usr/include/x86_64-linux-gnu/bits/setjmp.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h \
+  /usr/include/x86_64-linux-gnu/c++/12/bits/atomic_word.h \
+  /usr/include/x86_64-linux-gnu/sys/single_threaded.h \
+  /usr/include/c++/12/bits/locale_classes.h \
+  /usr/include/c++/12/bits/locale_classes.tcc \
+  /usr/include/c++/12/system_error \
+  /usr/include/x86_64-linux-gnu/c++/12/bits/error_constants.h \
+  /usr/include/c++/12/stdexcept \
+  /usr/include/c++/12/streambuf \
+  /usr/include/c++/12/bits/streambuf.tcc \
+  /usr/include/c++/12/bits/basic_ios.h \
+  /usr/include/c++/12/bits/locale_facets.h \
+  /usr/include/c++/12/cwctype \
+  /usr/include/wctype.h \
+  /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
+  /usr/include/x86_64-linux-gnu/c++/12/bits/ctype_base.h \
+  /usr/include/c++/12/bits/streambuf_iterator.h \
+  /usr/include/x86_64-linux-gnu/c++/12/bits/ctype_inline.h \
+  /usr/include/c++/12/bits/locale_facets.tcc \
+  /usr/include/c++/12/bits/basic_ios.tcc \
+  /usr/include/c++/12/bits/ostream.tcc \
+  /usr/include/c++/12/istream \
+  /usr/include/c++/12/bits/istream.tcc \
   src/Graphics/Model.h \
   src/Graphics/Mesh.h \
+  src/Graphics/MeshTypes.h \
   /usr/include/assimp/Importer.hpp \
   /usr/include/assimp/types.h \
   /usr/include/assimp/defs.h \
@@ -3725,11 +3838,6 @@ CMakeFiles/Gengine.dir/src/Graphics/Renderer.cpp.o: src/Graphics/Renderer.cpp \
   /usr/include/assimp/matrix4x4.inl \
   /usr/include/assimp/MathFunctions.h \
   /usr/include/assimp/quaternion.inl \
-  /usr/include/c++/12/exception \
-  /usr/include/c++/12/bits/exception_ptr.h \
-  /usr/include/c++/12/bits/cxxabi_init_exception.h \
-  /usr/include/c++/12/typeinfo \
-  /usr/include/c++/12/bits/nested_exception.h \
   /usr/include/assimp/scene.h \
   /usr/include/assimp/texture.h \
   /usr/include/assimp/Compiler/pushpack1.h \
@@ -3742,6 +3850,7 @@ CMakeFiles/Gengine.dir/src/Graphics/Renderer.cpp.o: src/Graphics/Renderer.cpp \
   /usr/include/assimp/material.inl \
   /usr/include/assimp/anim.h \
   /usr/include/assimp/metadata.h \
+  src/Graphics/GLCanvas.h \
   external/imgui/imgui.h \
   external/imgui/imconfig.h \
   external/imgui/imgui_impl_opengl3.h \
@@ -3749,10 +3858,11 @@ CMakeFiles/Gengine.dir/src/Graphics/Renderer.cpp.o: src/Graphics/Renderer.cpp \
 
 CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o: src/Graphics/ResourceManager.cpp \
   /usr/include/stdc-predef.h \
-  src/Graphics/ResourceManager.h \
-  /usr/include/c++/12/string \
-  /usr/include/x86_64-linux-gnu/c++/12/bits/c++config.h \
-  /usr/include/x86_64-linux-gnu/c++/12/bits/os_defines.h \
+  /usr/include/glad/glad.h \
+  /usr/include/KHR/khrplatform.h \
+  /usr/lib/gcc/x86_64-linux-gnu/12/include/stdint.h \
+  /usr/include/stdint.h \
+  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
   /usr/include/features.h \
   /usr/include/features-time64.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -3761,6 +3871,18 @@ CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o: src/Graphics/Resource
   /usr/include/x86_64-linux-gnu/bits/long-double.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
+  /usr/include/x86_64-linux-gnu/bits/types.h \
+  /usr/include/x86_64-linux-gnu/bits/typesizes.h \
+  /usr/include/x86_64-linux-gnu/bits/time64.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar.h \
+  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+  /usr/include/GLFW/glfw3.h \
+  /usr/lib/gcc/x86_64-linux-gnu/12/include/stddef.h \
+  src/Graphics/ResourceManager.h \
+  /usr/include/c++/12/string \
+  /usr/include/x86_64-linux-gnu/c++/12/bits/c++config.h \
+  /usr/include/x86_64-linux-gnu/c++/12/bits/os_defines.h \
   /usr/include/x86_64-linux-gnu/c++/12/bits/cpu_defines.h \
   /usr/include/c++/12/pstl/pstl_config.h \
   /usr/include/c++/12/bits/stringfwd.h \
@@ -3769,12 +3891,9 @@ CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o: src/Graphics/Resource
   /usr/include/c++/12/bits/postypes.h \
   /usr/include/c++/12/cwchar \
   /usr/include/wchar.h \
-  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
   /usr/include/x86_64-linux-gnu/bits/floatn.h \
   /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
-  /usr/lib/gcc/x86_64-linux-gnu/12/include/stddef.h \
   /usr/lib/gcc/x86_64-linux-gnu/12/include/stdarg.h \
-  /usr/include/x86_64-linux-gnu/bits/wchar.h \
   /usr/include/x86_64-linux-gnu/bits/types/wint_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
@@ -3784,13 +3903,6 @@ CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o: src/Graphics/Resource
   /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
   /usr/include/c++/12/type_traits \
   /usr/include/c++/12/cstdint \
-  /usr/lib/gcc/x86_64-linux-gnu/12/include/stdint.h \
-  /usr/include/stdint.h \
-  /usr/include/x86_64-linux-gnu/bits/types.h \
-  /usr/include/x86_64-linux-gnu/bits/typesizes.h \
-  /usr/include/x86_64-linux-gnu/bits/time64.h \
-  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
-  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
   /usr/include/c++/12/bits/allocator.h \
   /usr/include/x86_64-linux-gnu/c++/12/bits/c++allocator.h \
   /usr/include/c++/12/bits/new_allocator.h \
@@ -3889,6 +4001,15 @@ CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o: src/Graphics/Resource
   /usr/include/c++/12/bits/stl_vector.h \
   /usr/include/c++/12/bits/stl_bvector.h \
   /usr/include/c++/12/bits/vector.tcc \
+  /usr/include/c++/12/map \
+  /usr/include/c++/12/bits/stl_tree.h \
+  /usr/include/c++/12/ext/aligned_buffer.h \
+  /usr/include/c++/12/bits/node_handle.h \
+  /usr/include/c++/12/bits/stl_map.h \
+  /usr/include/c++/12/tuple \
+  /usr/include/c++/12/bits/uses_allocator.h \
+  /usr/include/c++/12/bits/stl_multimap.h \
+  /usr/include/c++/12/bits/erase_if.h \
   /usr/include/glm/glm.hpp \
   /usr/include/glm/detail/_fixes.hpp \
   /usr/include/c++/12/cmath \
@@ -4065,26 +4186,14 @@ CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o: src/Graphics/Resource
   /usr/include/glm/detail/type_half.inl \
   /usr/include/glm/integer.hpp \
   /usr/include/glm/detail/func_integer.inl \
-  /usr/include/c++/12/stdexcept \
+  /usr/include/c++/12/iostream \
+  /usr/include/c++/12/ostream \
+  /usr/include/c++/12/ios \
   /usr/include/c++/12/exception \
   /usr/include/c++/12/bits/exception_ptr.h \
   /usr/include/c++/12/bits/cxxabi_init_exception.h \
   /usr/include/c++/12/typeinfo \
   /usr/include/c++/12/bits/nested_exception.h \
-  /usr/include/glad/glad.h \
-  /usr/include/KHR/khrplatform.h \
-  /usr/include/GLFW/glfw3.h \
-  /usr/include/c++/12/algorithm \
-  /usr/include/c++/12/bits/stl_algo.h \
-  /usr/include/c++/12/bits/algorithmfwd.h \
-  /usr/include/c++/12/bits/stl_heap.h \
-  /usr/include/c++/12/bits/stl_tempbuf.h \
-  /usr/include/c++/12/bits/uniform_int_dist.h \
-  /usr/include/c++/12/pstl/glue_algorithm_defs.h \
-  /usr/include/c++/12/pstl/execution_defs.h \
-  /usr/include/c++/12/iostream \
-  /usr/include/c++/12/ostream \
-  /usr/include/c++/12/ios \
   /usr/include/c++/12/bits/ios_base.h \
   /usr/include/c++/12/ext/atomicity.h \
   /usr/include/x86_64-linux-gnu/c++/12/bits/gthr.h \
@@ -4107,6 +4216,7 @@ CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o: src/Graphics/Resource
   /usr/include/c++/12/bits/locale_classes.tcc \
   /usr/include/c++/12/system_error \
   /usr/include/x86_64-linux-gnu/c++/12/bits/error_constants.h \
+  /usr/include/c++/12/stdexcept \
   /usr/include/c++/12/streambuf \
   /usr/include/c++/12/bits/streambuf.tcc \
   /usr/include/c++/12/bits/basic_ios.h \
@@ -4122,6 +4232,100 @@ CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o: src/Graphics/Resource
   /usr/include/c++/12/bits/ostream.tcc \
   /usr/include/c++/12/istream \
   /usr/include/c++/12/bits/istream.tcc \
+  src/Graphics/Model.h \
+  src/Graphics/Mesh.h \
+  src/Graphics/Shader.h \
+  /usr/include/glm/ext/matrix_transform.hpp \
+  /usr/include/glm/gtc/constants.hpp \
+  /usr/include/glm/ext/scalar_constants.hpp \
+  /usr/include/glm/ext/scalar_constants.inl \
+  /usr/include/glm/gtc/constants.inl \
+  /usr/include/glm/ext/matrix_transform.inl \
+  /usr/include/c++/12/math.h \
+  /usr/include/glm/gtc/matrix_transform.hpp \
+  /usr/include/glm/ext/matrix_projection.hpp \
+  /usr/include/glm/ext/matrix_projection.inl \
+  /usr/include/glm/ext/matrix_clip_space.hpp \
+  /usr/include/glm/ext/matrix_clip_space.inl \
+  /usr/include/glm/gtc/matrix_transform.inl \
+  /usr/include/glm/gtc/type_ptr.hpp \
+  /usr/include/glm/gtc/quaternion.hpp \
+  /usr/include/glm/ext/vector_relational.hpp \
+  /usr/include/glm/ext/vector_relational.inl \
+  /usr/include/glm/detail/type_float.hpp \
+  /usr/include/glm/ext/quaternion_common.hpp \
+  /usr/include/glm/ext/quaternion_geometric.hpp \
+  /usr/include/glm/ext/quaternion_geometric.inl \
+  /usr/include/glm/ext/quaternion_common.inl \
+  /usr/include/glm/ext/quaternion_float.hpp \
+  /usr/include/glm/detail/type_quat.hpp \
+  /usr/include/glm/ext/quaternion_relational.hpp \
+  /usr/include/glm/ext/quaternion_relational.inl \
+  /usr/include/glm/detail/type_quat.inl \
+  /usr/include/glm/ext/quaternion_float_precision.hpp \
+  /usr/include/glm/ext/quaternion_double.hpp \
+  /usr/include/glm/ext/quaternion_double_precision.hpp \
+  /usr/include/glm/ext/quaternion_trigonometric.hpp \
+  /usr/include/glm/ext/quaternion_trigonometric.inl \
+  /usr/include/glm/ext/quaternion_transform.hpp \
+  /usr/include/glm/ext/quaternion_transform.inl \
+  /usr/include/glm/gtc/quaternion.inl \
+  /usr/include/glm/gtc/epsilon.hpp \
+  /usr/include/glm/detail/setup.hpp \
+  /usr/include/glm/gtc/epsilon.inl \
+  /usr/include/glm/gtc/vec1.hpp \
+  /usr/include/glm/ext/vector_bool1.hpp \
+  /usr/include/glm/ext/vector_bool1_precision.hpp \
+  /usr/include/glm/ext/vector_float1.hpp \
+  /usr/include/glm/ext/vector_float1_precision.hpp \
+  /usr/include/glm/ext/vector_double1.hpp \
+  /usr/include/glm/ext/vector_double1_precision.hpp \
+  /usr/include/glm/ext/vector_int1.hpp \
+  /usr/include/glm/ext/vector_int1_sized.hpp \
+  /usr/include/glm/ext/vector_uint1.hpp \
+  /usr/include/glm/ext/vector_uint1_sized.hpp \
+  /usr/include/c++/12/cstring \
+  /usr/include/string.h \
+  /usr/include/strings.h \
+  /usr/include/glm/gtc/type_ptr.inl \
+  src/Graphics/MeshTypes.h \
+  /usr/include/assimp/Importer.hpp \
+  /usr/include/assimp/types.h \
+  /usr/include/assimp/defs.h \
+  /usr/include/assimp/config.h \
+  /usr/include/assimp/vector2.h \
+  /usr/include/assimp/vector3.h \
+  /usr/include/assimp/color4.h \
+  /usr/include/assimp/matrix3x3.h \
+  /usr/include/assimp/matrix4x4.h \
+  /usr/include/assimp/quaternion.h \
+  /usr/include/assimp/vector2.inl \
+  /usr/include/assimp/vector3.inl \
+  /usr/include/assimp/color4.inl \
+  /usr/include/assimp/matrix3x3.inl \
+  /usr/include/c++/12/algorithm \
+  /usr/include/c++/12/bits/stl_algo.h \
+  /usr/include/c++/12/bits/algorithmfwd.h \
+  /usr/include/c++/12/bits/stl_heap.h \
+  /usr/include/c++/12/bits/stl_tempbuf.h \
+  /usr/include/c++/12/bits/uniform_int_dist.h \
+  /usr/include/c++/12/pstl/glue_algorithm_defs.h \
+  /usr/include/c++/12/pstl/execution_defs.h \
+  /usr/include/assimp/matrix4x4.inl \
+  /usr/include/assimp/MathFunctions.h \
+  /usr/include/assimp/quaternion.inl \
+  /usr/include/assimp/scene.h \
+  /usr/include/assimp/texture.h \
+  /usr/include/assimp/Compiler/pushpack1.h \
+  /usr/include/assimp/Compiler/poppack1.h \
+  /usr/include/assimp/mesh.h \
+  /usr/include/assimp/aabb.h \
+  /usr/include/assimp/light.h \
+  /usr/include/assimp/camera.h \
+  /usr/include/assimp/material.h \
+  /usr/include/assimp/material.inl \
+  /usr/include/assimp/anim.h \
+  /usr/include/assimp/metadata.h \
   src/Graphics/FileReader.h \
   /usr/include/dirent.h \
   /usr/include/x86_64-linux-gnu/bits/dirent.h \
@@ -4922,6 +5126,107 @@ CMakeFiles/Gengine.dir/src/Graphics/index.cpp.o: src/Graphics/index.cpp \
   /usr/include/c++/12/bits/stl_vector.h \
   /usr/include/c++/12/bits/stl_bvector.h \
   /usr/include/c++/12/bits/vector.tcc \
+  /usr/include/c++/12/map \
+  /usr/include/c++/12/bits/stl_tree.h \
+  /usr/include/c++/12/ext/aligned_buffer.h \
+  /usr/include/c++/12/bits/node_handle.h \
+  /usr/include/c++/12/bits/stl_map.h \
+  /usr/include/c++/12/tuple \
+  /usr/include/c++/12/bits/uses_allocator.h \
+  /usr/include/c++/12/bits/stl_multimap.h \
+  /usr/include/c++/12/bits/erase_if.h \
+  src/Graphics/Model.h \
+  src/Graphics/Mesh.h \
+  src/Graphics/Shader.h \
+  /usr/include/glm/ext/matrix_transform.hpp \
+  /usr/include/glm/gtc/constants.hpp \
+  /usr/include/glm/ext/scalar_constants.hpp \
+  /usr/include/glm/ext/scalar_constants.inl \
+  /usr/include/glm/gtc/constants.inl \
+  /usr/include/glm/ext/matrix_transform.inl \
+  /usr/include/c++/12/math.h \
+  /usr/include/glm/gtc/matrix_transform.hpp \
+  /usr/include/glm/ext/matrix_projection.hpp \
+  /usr/include/glm/ext/matrix_projection.inl \
+  /usr/include/glm/ext/matrix_clip_space.hpp \
+  /usr/include/glm/ext/matrix_clip_space.inl \
+  /usr/include/glm/gtc/matrix_transform.inl \
+  /usr/include/glm/gtc/type_ptr.hpp \
+  /usr/include/glm/gtc/quaternion.hpp \
+  /usr/include/glm/ext/vector_relational.hpp \
+  /usr/include/glm/ext/vector_relational.inl \
+  /usr/include/glm/detail/type_float.hpp \
+  /usr/include/glm/ext/quaternion_common.hpp \
+  /usr/include/glm/ext/quaternion_geometric.hpp \
+  /usr/include/glm/ext/quaternion_geometric.inl \
+  /usr/include/glm/ext/quaternion_common.inl \
+  /usr/include/glm/ext/quaternion_float.hpp \
+  /usr/include/glm/detail/type_quat.hpp \
+  /usr/include/glm/ext/quaternion_relational.hpp \
+  /usr/include/glm/ext/quaternion_relational.inl \
+  /usr/include/glm/detail/type_quat.inl \
+  /usr/include/glm/ext/quaternion_float_precision.hpp \
+  /usr/include/glm/ext/quaternion_double.hpp \
+  /usr/include/glm/ext/quaternion_double_precision.hpp \
+  /usr/include/glm/ext/quaternion_trigonometric.hpp \
+  /usr/include/glm/ext/quaternion_trigonometric.inl \
+  /usr/include/glm/ext/quaternion_transform.hpp \
+  /usr/include/glm/ext/quaternion_transform.inl \
+  /usr/include/glm/gtc/quaternion.inl \
+  /usr/include/glm/gtc/epsilon.hpp \
+  /usr/include/glm/detail/setup.hpp \
+  /usr/include/glm/gtc/epsilon.inl \
+  /usr/include/glm/gtc/vec1.hpp \
+  /usr/include/glm/ext/vector_bool1.hpp \
+  /usr/include/glm/ext/vector_bool1_precision.hpp \
+  /usr/include/glm/ext/vector_float1.hpp \
+  /usr/include/glm/ext/vector_float1_precision.hpp \
+  /usr/include/glm/ext/vector_double1.hpp \
+  /usr/include/glm/ext/vector_double1_precision.hpp \
+  /usr/include/glm/ext/vector_int1.hpp \
+  /usr/include/glm/ext/vector_int1_sized.hpp \
+  /usr/include/glm/ext/vector_uint1.hpp \
+  /usr/include/glm/ext/vector_uint1_sized.hpp \
+  /usr/include/c++/12/cstring \
+  /usr/include/glm/gtc/type_ptr.inl \
+  src/Graphics/MeshTypes.h \
+  /usr/include/assimp/Importer.hpp \
+  /usr/include/assimp/types.h \
+  /usr/include/assimp/defs.h \
+  /usr/include/assimp/config.h \
+  /usr/include/assimp/vector2.h \
+  /usr/include/assimp/vector3.h \
+  /usr/include/assimp/color4.h \
+  /usr/include/assimp/matrix3x3.h \
+  /usr/include/assimp/matrix4x4.h \
+  /usr/include/assimp/quaternion.h \
+  /usr/include/assimp/vector2.inl \
+  /usr/include/assimp/vector3.inl \
+  /usr/include/assimp/color4.inl \
+  /usr/include/assimp/matrix3x3.inl \
+  /usr/include/c++/12/algorithm \
+  /usr/include/c++/12/bits/stl_algo.h \
+  /usr/include/c++/12/bits/algorithmfwd.h \
+  /usr/include/c++/12/bits/stl_heap.h \
+  /usr/include/c++/12/bits/stl_tempbuf.h \
+  /usr/include/c++/12/bits/uniform_int_dist.h \
+  /usr/include/c++/12/pstl/glue_algorithm_defs.h \
+  /usr/include/c++/12/pstl/execution_defs.h \
+  /usr/include/assimp/matrix4x4.inl \
+  /usr/include/assimp/MathFunctions.h \
+  /usr/include/assimp/quaternion.inl \
+  /usr/include/assimp/scene.h \
+  /usr/include/assimp/texture.h \
+  /usr/include/assimp/Compiler/pushpack1.h \
+  /usr/include/assimp/Compiler/poppack1.h \
+  /usr/include/assimp/mesh.h \
+  /usr/include/assimp/aabb.h \
+  /usr/include/assimp/light.h \
+  /usr/include/assimp/camera.h \
+  /usr/include/assimp/material.h \
+  /usr/include/assimp/material.inl \
+  /usr/include/assimp/anim.h \
+  /usr/include/assimp/metadata.h \
   src/Graphics/GLCanvas.h \
   src/Graphics/Renderer.h
 
@@ -4937,6 +5242,8 @@ src/Graphics/index.cpp:
 src/Graphics/Renderer.h:
 
 /usr/include/assimp/postprocess.h:
+
+src/Graphics/Model.cpp:
 
 /usr/include/assimp/material.inl:
 
@@ -4984,9 +5291,7 @@ src/Graphics/Renderer.h:
 
 /usr/include/assimp/Importer.hpp:
 
-src/Graphics/Model.h:
-
-src/Graphics/Model.cpp:
+src/Graphics/MeshTypes.h:
 
 /usr/include/glm/ext/vector_uint1.hpp:
 
@@ -5028,11 +5333,25 @@ src/Graphics/Model.cpp:
 
 /usr/include/glm/detail/type_float.hpp:
 
+/usr/include/glm/ext/vector_relational.inl:
+
+/usr/include/glm/gtc/type_ptr.hpp:
+
+src/Graphics/Mesh.h:
+
+src/Graphics/Model.h:
+
+/usr/include/c++/12/bits/erase_if.h:
+
 /usr/include/ctype.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/12/include/float.h:
 
 /usr/include/glm/ext/matrix_projection.hpp:
+
+/usr/include/glm/ext/vector_relational.hpp:
+
+/usr/lib/gcc/x86_64-linux-gnu/12/include/tbmintrin.h:
 
 /usr/include/linux/close_range.h:
 
@@ -5065,8 +5384,6 @@ src/Graphics/Model.cpp:
 /usr/include/x86_64-linux-gnu/bits/types/sigevent_t.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/sigval_t.h:
-
-src/Graphics/Mesh.h:
 
 /usr/include/x86_64-linux-gnu/bits/siginfo-arch.h:
 
@@ -5226,8 +5543,6 @@ external/imgui/imgui.cpp:
 
 /usr/lib/gcc/x86_64-linux-gnu/12/include/mm_malloc.h:
 
-/usr/include/glm/gtc/type_ptr.hpp:
-
 /usr/lib/gcc/x86_64-linux-gnu/12/include/mmintrin.h:
 
 /usr/include/x86_64-linux-gnu/c++/12/bits/basic_file.h:
@@ -5272,6 +5587,8 @@ external/imgui/imgui.cpp:
 
 /usr/include/glm/ext/quaternion_transform.hpp:
 
+/usr/include/c++/12/bits/stl_multimap.h:
+
 /usr/include/glm/ext/matrix_float3x2_precision.hpp:
 
 /usr/include/c++/12/bits/utility.h:
@@ -5311,8 +5628,6 @@ external/imgui/imstb_textedit.h:
 /usr/lib/gcc/x86_64-linux-gnu/12/include/rtmintrin.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/12/include/avx512fp16vlintrin.h:
 
 /usr/include/c++/12/cmath:
 
@@ -5436,8 +5751,6 @@ src/Graphics/Shader.cpp:
 
 /usr/include/glm/mat3x3.hpp:
 
-/usr/include/glm/ext/vector_bool4_precision.hpp:
-
 /usr/include/x86_64-linux-gnu/bits/uintn-identity.h:
 
 /usr/include/glm/gtc/constants.inl:
@@ -5497,6 +5810,8 @@ external/imgui/imgui_impl_opengl3.h:
 /usr/include/glm/ext/matrix_float2x4.hpp:
 
 /usr/include/glm/ext/vector_uint1_sized.hpp:
+
+/usr/include/c++/12/ext/aligned_buffer.h:
 
 /usr/include/stdlib.h:
 
@@ -5832,6 +6147,8 @@ src/Graphics/Mesh.cpp:
 
 /usr/include/c++/12/bits/functional_hash.h:
 
+/usr/include/c++/12/tuple:
+
 /usr/include/c++/12/bits/hash_bytes.h:
 
 /usr/include/c++/12/ext/string_conversions.h:
@@ -5874,6 +6191,10 @@ src/Graphics/Mesh.cpp:
 
 /usr/include/c++/12/bits/istream.tcc:
 
+src/Graphics/Shader.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/error_t.h:
+
 /usr/include/glm/mat2x4.hpp:
 
 src/Graphics/Camera.h:
@@ -5884,9 +6205,15 @@ src/Graphics/Camera.h:
 
 /usr/include/c++/12/bits/charconv.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/12/include/avx512fp16vlintrin.h:
+
+/usr/include/c++/12/map:
+
 /usr/include/c++/12/bits/basic_string.tcc:
 
 external/imgui/imgui_tables.cpp:
+
+/usr/include/c++/12/bits/uses_allocator.h:
 
 external/imgui/imgui_widgets.cpp:
 
@@ -5927,10 +6254,6 @@ external/imgui/imgui_impl_glfw.cpp:
 /usr/include/assimp/matrix3x3.inl:
 
 /usr/include/glm/ext/vector_float2_precision.hpp:
-
-/usr/lib/gcc/x86_64-linux-gnu/12/include/tbmintrin.h:
-
-/usr/include/glm/ext/vector_relational.hpp:
 
 /usr/include/glm/ext/vector_int2.hpp:
 
@@ -6011,10 +6334,6 @@ external/imgui/imconfig.h:
 /usr/include/glm/detail/type_mat3x2.inl:
 
 /usr/include/glm/ext/matrix_double3x2_precision.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/types/error_t.h:
-
-src/Graphics/Shader.h:
 
 /usr/include/glm/ext/vector_bool4.hpp:
 
@@ -6104,6 +6423,8 @@ src/Graphics/Shader.h:
 
 /usr/include/c++/12/ext/atomicity.h:
 
+/usr/include/c++/12/bits/node_handle.h:
+
 /usr/include/x86_64-linux-gnu/c++/12/bits/gthr.h:
 
 /usr/include/x86_64-linux-gnu/bits/cpu-set.h:
@@ -6176,4 +6497,8 @@ src/Graphics/GLCanvas.cpp:
 
 src/Graphics/GLCanvas.h:
 
-/usr/include/glm/ext/vector_relational.inl:
+/usr/include/glm/ext/vector_bool4_precision.hpp:
+
+/usr/include/c++/12/bits/stl_tree.h:
+
+/usr/include/c++/12/bits/stl_map.h:

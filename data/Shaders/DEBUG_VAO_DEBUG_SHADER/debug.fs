@@ -7,6 +7,7 @@ uniform sampler2D texture_diffuse1;
 uniform sampler2D texture_specular1;
 
 
+
 vec4 diffuse1 = texture(texture_diffuse1, TexCoords); 
 vec4 specular1 = texture(texture_specular1, TexCoords); 
 

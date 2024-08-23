@@ -16,11 +16,11 @@ set(SOURCES
   ${SRC_DIR}/Graphics/index.cpp
   ${SRC_DIR}/Graphics/Camera.cpp
   ${SRC_DIR}/Graphics/GLCanvas.cpp
-  ${SRC_DIR}/Graphics/Shader.cpp
-  ${SRC_DIR}/Graphics/Model.cpp
-  ${SRC_DIR}/Graphics/Mesh.cpp
-  ${SRC_DIR}/Graphics/ResourceManager.cpp
+  ${SRC_DIR}/Graphics/Shader.cpp  
   ${SRC_DIR}/Graphics/FileReader.cpp
+  ${SRC_DIR}/Graphics/ResourceManager.cpp 
+  ${SRC_DIR}/Graphics/Mesh.cpp 
+  ${SRC_DIR}/Graphics/Model.cpp
   ${SRC_DIR}/Graphics/Renderer.cpp
   ${EXTERNAL_DIR}/GLAD/glad.c
   ${EXTERNAL_DIR}/STB_IMAGE/stb_image.cpp

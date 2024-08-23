@@ -8,7 +8,6 @@
 
 std::pair<std::string, std::string> Graphics::FileReader::splitFilename(std::string& filename)
 {
-
     size_t index = filename.find_last_of(".");
     
     if (index == std::string::npos)
@@ -194,6 +193,105 @@ std::vector<std::string> Graphics::FileReader::getFiles()
    
 }
 
+// TODO add regex or maybe split at the last "." in the string 
+std::vector<std::string> Graphics::FileReader::getFile()
+{
+    std::vector<std::string> file; 
+    
+    bool isEntries = false; 
+    DIR* dir = getDirectory();
+    struct dirent* entry = getEntry();
+    entry = readdir(dir);
+
+
+
+    std::string entityName;
+
+
+    if (entry != NULL)
+    {  
+	 
+        entityName = entry->d_name;
+
+	if (entityName != "." && entityName != "..")
+        {
+            std::cout << "FILE FOUND: " + std::string(entry->d_name) << " >IS REL: " << (entityName != "." && entityName != "..") << std::endl;
+             
+	    isEntries = true; 
+	    file.push_back(entityName);
+	}
+
+        entry = readdir(dir);
+    }
+
+
+
+    if (entry == NULL && isEntries)
+    {
+        std::cout << "FILE PRINTED" << std::endl;
+    }
+    
+    else if (entry == NULL && !isEntries)
+    {
+        std::cout << "NO FILE FOUND" << std::endl; 
+    }
+    
+    return file;
+}
+
+std::string Graphics::FileReader::getFile(std::string extension)
+{
+    std::vector<std::string> files; 
+    
+    bool isEntries = false; 
+    DIR* dir = getDirectory();
+    struct dirent* entry = getEntry();
+    entry = readdir(dir);
+
+
+
+    std::string entityName;
+
+
+    while (entry != NULL)
+    {  
+	 
+        entityName = entry->d_name;
+	
+	if (entityName != "." && entityName != "..")
+	{
+             auto [name, fileExtension] = FileReader::splitFilename(entityName);
+		if (fileExtension == extension)
+		{
+
+        
+            std::cout << "FILE FOUND: " + std::string(entry->d_name) << " >IS REL: " << (entityName != "." && entityName != "..") << std::endl;
+
+	    isEntries = true; 
+	    files.push_back(entityName);
+	}
+	}
+
+        entry = readdir(dir);
+    }
+
+
+    if (entry == NULL && isEntries)
+    {
+        std::cout << "FILES PRINTED" << std::endl;
+    }
+    
+    else if (entry == NULL && !isEntries)
+    {
+        std::cout << "NO FILES FOUND" << std::endl; 
+    }
+
+    return files.front();
+
+   
+}
+
+
 
 // TODO add regex or maybe split at the last "." in the string 
 std::vector<std::string> Graphics::FileReader::getFiles(std::string extension)
@@ -240,9 +338,6 @@ std::vector<std::string> Graphics::FileReader::getFiles(std::string extension)
     }
 
     return files;
-
-
-
 }
 
 

@@ -18,8 +18,9 @@ namespace Graphics {
       
       unsigned int ID;
       
-      Shader(const char *vertexShaderPath, const char *fragmentShaderPath);
-      
+      Shader(const char *vertexShaderPath, const char *fragmentShaderPath); 
+      Shader(std::string vertexShaderPath, std::string fragmentShaderPath);
+
       void use();
 
       void setBool(const std::string &name, bool value) const;

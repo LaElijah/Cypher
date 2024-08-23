@@ -125,38 +125,24 @@ CMakeFiles/Gengine.dir/src/Graphics/Shader.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Gengine.dir/src/Graphics/Shader.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/laelijah/Gengine/src/Graphics/Shader.cpp -o CMakeFiles/Gengine.dir/src/Graphics/Shader.cpp.s
 
-CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o: CMakeFiles/Gengine.dir/flags.make
-CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o: src/Graphics/Model.cpp
-CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o: CMakeFiles/Gengine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/laelijah/Gengine/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o -MF CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o.d -o CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o -c /home/laelijah/Gengine/src/Graphics/Model.cpp
+CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o: CMakeFiles/Gengine.dir/flags.make
+CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o: src/Graphics/FileReader.cpp
+CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o: CMakeFiles/Gengine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/laelijah/Gengine/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o -MF CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o.d -o CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o -c /home/laelijah/Gengine/src/Graphics/FileReader.cpp
 
-CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/laelijah/Gengine/src/Graphics/Model.cpp > CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.i
+CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/laelijah/Gengine/src/Graphics/FileReader.cpp > CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.i
 
-CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/laelijah/Gengine/src/Graphics/Model.cpp -o CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.s
-
-CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o: CMakeFiles/Gengine.dir/flags.make
-CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o: src/Graphics/Mesh.cpp
-CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o: CMakeFiles/Gengine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/laelijah/Gengine/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o -MF CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o.d -o CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o -c /home/laelijah/Gengine/src/Graphics/Mesh.cpp
-
-CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/laelijah/Gengine/src/Graphics/Mesh.cpp > CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.i
-
-CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/laelijah/Gengine/src/Graphics/Mesh.cpp -o CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.s
+CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/laelijah/Gengine/src/Graphics/FileReader.cpp -o CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.s
 
 CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o: CMakeFiles/Gengine.dir/flags.make
 CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o: src/Graphics/ResourceManager.cpp
 CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o: CMakeFiles/Gengine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/laelijah/Gengine/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/laelijah/Gengine/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o -MF CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o.d -o CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o -c /home/laelijah/Gengine/src/Graphics/ResourceManager.cpp
 
 CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.i: cmake_force
@@ -167,19 +153,33 @@ CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/laelijah/Gengine/src/Graphics/ResourceManager.cpp -o CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.s
 
-CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o: CMakeFiles/Gengine.dir/flags.make
-CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o: src/Graphics/FileReader.cpp
-CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o: CMakeFiles/Gengine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/laelijah/Gengine/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o -MF CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o.d -o CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o -c /home/laelijah/Gengine/src/Graphics/FileReader.cpp
+CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o: CMakeFiles/Gengine.dir/flags.make
+CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o: src/Graphics/Mesh.cpp
+CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o: CMakeFiles/Gengine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/laelijah/Gengine/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o -MF CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o.d -o CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o -c /home/laelijah/Gengine/src/Graphics/Mesh.cpp
 
-CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/laelijah/Gengine/src/Graphics/FileReader.cpp > CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.i
+CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/laelijah/Gengine/src/Graphics/Mesh.cpp > CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.i
 
-CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/laelijah/Gengine/src/Graphics/FileReader.cpp -o CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.s
+CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/laelijah/Gengine/src/Graphics/Mesh.cpp -o CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.s
+
+CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o: CMakeFiles/Gengine.dir/flags.make
+CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o: src/Graphics/Model.cpp
+CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o: CMakeFiles/Gengine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/laelijah/Gengine/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o -MF CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o.d -o CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o -c /home/laelijah/Gengine/src/Graphics/Model.cpp
+
+CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/laelijah/Gengine/src/Graphics/Model.cpp > CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.i
+
+CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/laelijah/Gengine/src/Graphics/Model.cpp -o CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.s
 
 CMakeFiles/Gengine.dir/src/Graphics/Renderer.cpp.o: CMakeFiles/Gengine.dir/flags.make
 CMakeFiles/Gengine.dir/src/Graphics/Renderer.cpp.o: src/Graphics/Renderer.cpp
@@ -341,10 +341,10 @@ Gengine_OBJECTS = \
 "CMakeFiles/Gengine.dir/src/Graphics/Camera.cpp.o" \
 "CMakeFiles/Gengine.dir/src/Graphics/GLCanvas.cpp.o" \
 "CMakeFiles/Gengine.dir/src/Graphics/Shader.cpp.o" \
-"CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o" \
-"CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o" \
-"CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o" \
 "CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o" \
+"CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o" \
+"CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o" \
+"CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o" \
 "CMakeFiles/Gengine.dir/src/Graphics/Renderer.cpp.o" \
 "CMakeFiles/Gengine.dir/external/GLAD/glad.c.o" \
 "CMakeFiles/Gengine.dir/external/STB_IMAGE/stb_image.cpp.o" \
@@ -364,10 +364,10 @@ Gengine: CMakeFiles/Gengine.dir/src/Graphics/index.cpp.o
 Gengine: CMakeFiles/Gengine.dir/src/Graphics/Camera.cpp.o
 Gengine: CMakeFiles/Gengine.dir/src/Graphics/GLCanvas.cpp.o
 Gengine: CMakeFiles/Gengine.dir/src/Graphics/Shader.cpp.o
-Gengine: CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o
-Gengine: CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o
-Gengine: CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o
 Gengine: CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.o
+Gengine: CMakeFiles/Gengine.dir/src/Graphics/ResourceManager.cpp.o
+Gengine: CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o
+Gengine: CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o
 Gengine: CMakeFiles/Gengine.dir/src/Graphics/Renderer.cpp.o
 Gengine: CMakeFiles/Gengine.dir/external/GLAD/glad.c.o
 Gengine: CMakeFiles/Gengine.dir/external/STB_IMAGE/stb_image.cpp.o

@@ -3,7 +3,9 @@
 #include "Shader.h"
 #include "FileReader.h"
 #include "Renderer.h"
+#include "ResourceManager.h"
 #include "Model.h"
+#include "Mesh.h"
 #include "../../external/imgui/imgui.h"
 #include "../../external/imgui/imgui_impl_opengl3.h"
 #include "../../external/imgui/imgui_impl_glfw.h"
@@ -29,16 +31,106 @@ Graphics::Renderer::Renderer(Graphics::ResourceManager* resourceManager, Graphic
 }
 
 
-/*
 
-void Graphics::Renderer::Draw()
+void Graphics::Renderer::loadTextures(std::vector<Graphics::Texture>& textures)
 {
-    for (Graphics::Model model : ResourceManager->loadedModels)
+    unsigned int diffuseN = 1;
+    unsigned int specularN = 1;
+    unsigned int ambientN = 1;
+    unsigned int lightmapN = 1;
+    unsigned int reflectionN = 1;
+   
+    for (unsigned int i = 0; i < textures.size(); i++)
     {
+        glActiveTexture(GL_TEXTURE0 + i);
+
+          
+        std::string number;
+        std::string name = textures[i].type;
+
+
+
+        if(name == "texture_diffuse")
+          number = std::to_string(diffuseN++);
         
+	else if (name == "texture_specular")
+          number = std::to_string(specularN++);
+
+	else if (name == "texture_ambient")
+          number = std::to_string(ambientN++);
+
+	else if (name == "texture_lightmap")
+          number = std::to_string(lightmapN++);
+
+	else if (name == "texture_reflection")
+          number = std::to_string(reflectionN++);
+
+
+        //shader.setInt(("material." + name + number).c_str(), i);
+        glBindTexture(GL_TEXTURE_2D, textures[i].id);
+
     }
+
+    glActiveTexture(GL_TEXTURE0);
 }
-*/
+
+
+void Graphics::Renderer::bindBuffers(std::vector<Graphics::Vertex>& vertices, std::vector<unsigned int>& indices, Graphics::VAO_TYPE vaoType)
+{
+	Graphics::RenderResource& resource = ResourceManager->getRenderResource(DEBUG);
+
+
+     glBindVertexArray(resource.VAO);
+
+
+   glBindBuffer(GL_ARRAY_BUFFER, resource.VBO);
+  
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Graphics::Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource.EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_STATIC_DRAW);
+
+
+}
+
+
+void Graphics::Renderer::draw()
+{
+
+    for (Graphics::Model* model : ResourceManager->getLoadedModels())
+    {
+        // add variable to denote vao type and shader name 
+
+        //Graphics::Shader& shader = ResourceManager->getShader(DEBUG);
+	
+
+	    Graphics::Shader* shader = ResourceManager->getShader(model->getShaderName());
+        shader->use();
+
+        shader->setMat4("model", model->getModelMatrix());      
+        shader->setMat4("view", Camera->getViewMatrix());
+        shader->setMat4("projection", Camera->getProjectionMatrix());
+        
+ 
+        for (Graphics::Mesh& mesh : model->getMeshes())
+        {
+            bindBuffers(mesh.getVertices(), mesh.getIndices(), DEBUG); 
+
+            loadTextures(mesh.getTextures());
+ 
+    glDrawElements(GL_TRIANGLES, (mesh.getIndices()).size(), GL_UNSIGNED_INT, 0);
+
+    glBindVertexArray(0);
+	
+	}
+    }
+ }
+
+
+
+
+
 
 void Graphics::Renderer::run()
 {
@@ -47,13 +139,14 @@ void Graphics::Renderer::run()
 
     GLFWwindow *window = Canvas->getWindow();
     initializeGUI(window); 
-    
-    Graphics::Shader simpleShader(
-        "/home/laelijah/Gengine/data/Shaders/simpleModel.vs",
-        "/home/laelijah/Gengine/data/Shaders/simpleModel.fs");
-
+    ResourceManager->loadShaders();   
+   /* 
+    ResourceManager->loadShader(new Graphics::Shader(
+        "/home/laelijah/Gengine/data/Shaders/DEBUG/debug.vs",
+        "/home/laelijah/Gengine/data/Shaders/DEBUG/debug.fs"), "DEBUG_VAO_DEBUG_SHADER");
+*/
   
-    Graphics::Model simpleModel("/home/laelijah/Gengine/data/Models/adamHead/adamHead.gltf", ResourceManager);
+    ResourceManager->loadModel(new Graphics::Model("/home/laelijah/Gengine/data/Models/adamHead/adamHead.gltf"));
 
     ImGuiIO& io = ImGui::GetIO();
        
@@ -67,14 +160,11 @@ void Graphics::Renderer::run()
         {
             processInput(window);
         }
+ 
+        draw();
+	//simpleModel.Draw(debugShader);
 
-        simpleShader.use();
 
-        simpleShader.setMat4("model", simpleModel.getModelMatrix());        
-        simpleShader.setMat4("view", Camera->getViewMatrix());
-        simpleShader.setMat4("projection", Camera->getProjectionMatrix());
-        
-	simpleModel.Draw(simpleShader);
 
         glfwPollEvents();
         drawGUI();

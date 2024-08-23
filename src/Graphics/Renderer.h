@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "ResourceManager.h"
 #include "GLCanvas.h"
+#include "Shader.h"
 
 
 
@@ -20,6 +21,7 @@ namespace Graphics {
         
 	    void run();
 	    void shutdown();
+	    void draw();
             
             void clear();	    
             void disableGUI();
@@ -32,6 +34,9 @@ namespace Graphics {
 	    Graphics::Camera* getCamera();
    	
 	private:	    
+
+            void loadTextures(std::vector<Texture>& Textures);
+            void bindBuffers(std::vector<Graphics::Vertex>& vertices, std::vector<unsigned int>& indices, Graphics::VAO_TYPE vaoType );
 	    float currentFrame;
 	    float deltaTime;
 	    float lastFrame;

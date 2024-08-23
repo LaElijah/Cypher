@@ -12,20 +12,24 @@ namespace Graphics {
   class Model 
   {
     public:
-      Model(std::string path, Graphics::ResourceManager* resourceManager);
-
+      Model(std::string path);
+      
+      std::vector<Graphics::Mesh>& getMeshes();
       void Draw(Graphics::Shader& shader);
       glm::mat4 getModelMatrix();
+
+      std::string getShaderName();
+      void setShaderName(std::string name);
 
 
       private:
       glm::vec3 Position = glm::vec3(0.0f, 0.0f, 1.0f);
       glm::vec3 Scale = glm::vec3(1.0f, 1.0f, 1.0f);
-      Graphics::ResourceManager* resourceManager;
       
       std::vector<Graphics::Mesh> meshes;
       std::vector<Graphics::Texture> texturesLoaded;
       std::string directory;
+      std::string shaderName = "DEBUG_VAO_DEBUG_SHADER";
 
       void loadModel(std::string path);
 

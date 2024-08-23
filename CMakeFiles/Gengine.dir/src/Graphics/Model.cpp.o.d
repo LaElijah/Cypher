@@ -314,7 +314,7 @@ CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o: \
  /usr/include/glm/ext/vector_uint1_sized.hpp /usr/include/c++/12/cstring \
  /usr/include/string.h /usr/include/strings.h \
  /usr/include/glm/gtc/type_ptr.inl \
- /home/laelijah/Gengine/src/Graphics/ResourceManager.h \
+ /home/laelijah/Gengine/src/Graphics/MeshTypes.h \
  /usr/include/assimp/Importer.hpp /usr/include/assimp/types.h \
  /usr/include/assimp/defs.h /usr/include/assimp/config.h \
  /usr/include/assimp/vector2.h /usr/include/assimp/vector3.h \
@@ -375,4 +375,12 @@ CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o: \
  /usr/include/c++/12/bits/ostream.tcc /usr/include/c++/12/istream \
  /usr/include/c++/12/bits/istream.tcc \
  /home/laelijah/Gengine/src/Graphics/../../external/STB_IMAGE/stb_image.h \
- /usr/include/c++/12/stdlib.h
+ /usr/include/c++/12/stdlib.h \
+ /home/laelijah/Gengine/src/Graphics/ResourceManager.h \
+ /usr/include/c++/12/map /usr/include/c++/12/bits/stl_tree.h \
+ /usr/include/c++/12/ext/aligned_buffer.h \
+ /usr/include/c++/12/bits/node_handle.h \
+ /usr/include/c++/12/bits/stl_map.h /usr/include/c++/12/tuple \
+ /usr/include/c++/12/bits/uses_allocator.h \
+ /usr/include/c++/12/bits/stl_multimap.h \
+ /usr/include/c++/12/bits/erase_if.h
