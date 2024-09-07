@@ -156,14 +156,10 @@ std::vector<std::string> Graphics::FileReader::getFiles()
     struct dirent* entry = getEntry();
     entry = readdir(dir);
 
-
-
     std::string entityName;
 
-
     while (entry != NULL)
-    {  
-	 
+    {  	 
         entityName = entry->d_name;
 
 	if (entityName != "." && entityName != "..")
@@ -188,13 +184,11 @@ std::vector<std::string> Graphics::FileReader::getFiles()
         std::cout << "NO FILES FOUND" << std::endl; 
     }
 
-    return files;
-
-   
+    return files; 
 }
 
 // TODO add regex or maybe split at the last "." in the string 
-std::vector<std::string> Graphics::FileReader::getFile()
+std::string Graphics::FileReader::getFile()
 {
     std::vector<std::string> file; 
     
@@ -236,12 +230,12 @@ std::vector<std::string> Graphics::FileReader::getFile()
         std::cout << "NO FILE FOUND" << std::endl; 
     }
     
-    return file;
+    return file.front();
 }
 
 std::string Graphics::FileReader::getFile(std::string extension)
 {
-    std::vector<std::string> files; 
+    std::vector<std::string> file; 
     
     bool isEntries = false; 
     DIR* dir = getDirectory();
@@ -268,7 +262,7 @@ std::string Graphics::FileReader::getFile(std::string extension)
             std::cout << "FILE FOUND: " + std::string(entry->d_name) << " >IS REL: " << (entityName != "." && entityName != "..") << std::endl;
 
 	    isEntries = true; 
-	    files.push_back(entityName);
+	    file.push_back(entityName);
 	}
 	}
 
@@ -276,17 +270,17 @@ std::string Graphics::FileReader::getFile(std::string extension)
     }
 
 
-    if (entry == NULL && isEntries)
+    if (isEntries)
     {
-        std::cout << "FILES PRINTED" << std::endl;
+        std::cout << "FILE PRINTED" << std::endl;
     }
     
-    else if (entry == NULL && !isEntries)
+    else if (!isEntries)
     {
-        std::cout << "NO FILES FOUND" << std::endl; 
+        std::cout << "NO FILE FOUND" << std::endl; 
     }
 
-    return files.front();
+    return file.front();
 
    
 }

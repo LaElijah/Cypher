@@ -22,6 +22,8 @@ set(SOURCES
   ${SRC_DIR}/Graphics/Mesh.cpp 
   ${SRC_DIR}/Graphics/Model.cpp
   ${SRC_DIR}/Graphics/Renderer.cpp
+  ${SRC_DIR}/Graphics/GUI.cpp
+  ${SRC_DIR}/Graphics/FrameBuffer.cpp
   ${EXTERNAL_DIR}/GLAD/glad.c
   ${EXTERNAL_DIR}/STB_IMAGE/stb_image.cpp
   ${EXTERNAL_DIR}/imgui/imconfig.h

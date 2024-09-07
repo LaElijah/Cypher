@@ -9,7 +9,7 @@ namespace Graphics {
 
     void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     { 
-	std::cout << width << std::endl;
+	std::cout << width << " GLCANVAS" << std::endl;
         glViewport(0, 0, width, height);
     }
 
@@ -26,12 +26,13 @@ namespace Graphics {
         unsigned int height, 
         unsigned int version) // TODO: Set an enum up for all available versions
     {
-        ScreenWidth = width;
-        ScreenHeight = height;
+
         VERSION = version;
         lastX = width / 2;
-        lastY = height / 2;
-        initializeCanvas();
+        lastY = height / 2; 
+        
+	startWindow(width, height);
+	initializeCanvas();
     }
 
 
@@ -39,7 +40,6 @@ namespace Graphics {
 
     void GLCanvas::initializeCanvas()
     {
-        GLCanvas::startWindow();
         glfwMakeContextCurrent(Window);
         // TODO: Move this outside so that i can set canvas screen width and height to correct size
         glfwSetFramebufferSizeCallback(Window, framebuffer_size_callback); 
@@ -75,21 +75,21 @@ namespace Graphics {
 
 
 
-    void GLCanvas::startWindow() 
+    void GLCanvas::startWindow(unsigned int& width, unsigned int& height) 
     {
       
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, VERSION);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, VERSION);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_DECORATED, fullscreen);      
+        glfwWindowHint(GLFW_DECORATED, !fullscreen);      
 
 
         #ifdef __APPLE__
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         #endif
 
-        Window = glfwCreateWindow(ScreenWidth, ScreenHeight, "Tester", NULL, NULL);
+        Window = glfwCreateWindow(width, height, WindowName.c_str(), NULL, NULL);
         if (Window == NULL)
         {
             std::cout << "Failed to create GLFW window" << std::endl;
@@ -111,6 +111,14 @@ namespace Graphics {
             throw std::runtime_error("GLAD ERROR");
         }
     }
+
+
+    void GLCanvas::resizeCanvas(unsigned int width, unsigned height)
+    {  
+        glViewport(0, 0, width, height);
+    }
+
+
 };
 
 

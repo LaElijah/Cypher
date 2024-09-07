@@ -17,27 +17,30 @@ namespace Graphics
     class GLCanvas 
     {
         public:
-            GLCanvas(unsigned int width, unsigned int height, unsigned int version = 3);
+            GLCanvas(unsigned int width, 
+		     unsigned int height,
+	       	     unsigned int version = 3);
             
-	    void initializeCanvas();
             void captureMouse();
             void releaseMouse(); 
             GLFWwindow* getWindow();
 
+           void resizeCanvas(unsigned int width, unsigned height);
+           std::pair<unsigned int, unsigned int> getResolution();
+
         private: 
             bool fullscreen = false; 
-	    int ScreenWidth;
-            int ScreenHeight;
             int VERSION;
             int lastX;
             int lastY;
             bool firstMouse;
 
-            const char* WindowName;
+	    void initializeCanvas();
+	    std::string  WindowName;
             GLFWwindow* Window;
             glm::vec3 cameraFront;
 
-            void startWindow(); 
+            void startWindow(unsigned int& width, unsigned int& height); 
             void loadGlad(); 
     };
 }

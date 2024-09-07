@@ -362,9 +362,9 @@ CMakeFiles/Gengine.dir/src/Graphics/Renderer.cpp.o: \
  /usr/include/c++/12/bits/basic_ios.tcc \
  /usr/include/c++/12/bits/ostream.tcc /usr/include/c++/12/istream \
  /usr/include/c++/12/bits/istream.tcc \
+ /home/laelijah/Gengine/src/Graphics/MeshTypes.h \
  /home/laelijah/Gengine/src/Graphics/Model.h \
  /home/laelijah/Gengine/src/Graphics/Mesh.h \
- /home/laelijah/Gengine/src/Graphics/MeshTypes.h \
  /usr/include/assimp/Importer.hpp /usr/include/assimp/types.h \
  /usr/include/assimp/defs.h /usr/include/assimp/config.h \
  /usr/include/assimp/vector2.h /usr/include/assimp/vector3.h \
@@ -387,8 +387,10 @@ CMakeFiles/Gengine.dir/src/Graphics/Renderer.cpp.o: \
  /usr/include/assimp/camera.h /usr/include/assimp/material.h \
  /usr/include/assimp/material.inl /usr/include/assimp/anim.h \
  /usr/include/assimp/metadata.h \
- /home/laelijah/Gengine/src/Graphics/GLCanvas.h \
  /home/laelijah/Gengine/src/Graphics/../../external/imgui/imgui.h \
  /home/laelijah/Gengine/src/Graphics/../../external/imgui/imconfig.h \
+ /home/laelijah/Gengine/src/Graphics/GLCanvas.h \
+ /home/laelijah/Gengine/src/Graphics/GUI.h \
  /home/laelijah/Gengine/src/Graphics/../../external/imgui/imgui_impl_opengl3.h \
- /home/laelijah/Gengine/src/Graphics/../../external/imgui/imgui_impl_glfw.h
+ /home/laelijah/Gengine/src/Graphics/../../external/imgui/imgui_impl_glfw.h \
+ /home/laelijah/Gengine/src/Graphics/FrameBuffer.h

@@ -4,6 +4,7 @@
 #include "ResourceManager.h"
 #include "GLCanvas.h"
 #include "Shader.h"
+#include "GUI.h"
 
 
 
@@ -24,33 +25,29 @@ namespace Graphics {
 	    void draw();
             
             void clear();	    
-            void disableGUI();
-            void enableGUI();
 	 
 	    float getDeltaTime();
 
 	    Graphics::ResourceManager* getResourceManager();
 	    Graphics::GLCanvas* getCanvas();
 	    Graphics::Camera* getCamera();
+	    Graphics::GUI* getGUI();
+
    	
 	private:	    
 
-            void loadTextures(std::vector<Texture>& Textures);
-            void bindBuffers(std::vector<Graphics::Vertex>& vertices, std::vector<unsigned int>& indices, Graphics::VAO_TYPE vaoType );
 	    float currentFrame;
 	    float deltaTime;
 	    float lastFrame;
+	    
 	    float SCREEN_WIDTH = 1920;
 	    float SCREEN_HEIGHT = 1080;
-	    bool GUI_ENABLED = true;
-            
+           
+	    Graphics::GUI* GUI; 
             Graphics::Camera* Camera;
 	    Graphics::GLCanvas* Canvas;
 	    Graphics::ResourceManager* ResourceManager;
 
-	    void Draw(); 
-	    void drawGUI();
-	    void initializeGUI(GLFWwindow* window);
 	    void updateDeltaTime();
             void processInput(GLFWwindow *window);	
     };

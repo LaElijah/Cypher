@@ -1,16 +1,14 @@
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
-#include "ResourceManager.h"
 #include <stdexcept>
-
-
-#include <algorithm>
 #include <iostream>
-#include "FileReader.h"
-#include "Model.h"
 #include "MeshTypes.h"
+#include "FileReader.h"
+#include "ResourceManager.h"
+#include "Shader.h"
+#include "Model.h"
+
+#include "../../external/imgui/imgui.h"
 
 
 
@@ -19,9 +17,7 @@ void Graphics::ResourceManager::loadModelPaths(std::string modelDirectory)
     Graphics::FileReader fileReader(modelDirectory);
     std::vector<std::string> models = fileReader.getFiles();
     std::string workingModel;
-
-   
-   
+    
     for (std::string model : models)
     {
         Graphics::ModelFile modelFile;
@@ -32,18 +28,16 @@ void Graphics::ResourceManager::loadModelPaths(std::string modelDirectory)
 
 	for (std::string filename : modelFiles)
 	{
-                auto [name, extension] = FileReader::splitFilename(filename);
-		modelFile.name = name;
-		modelFile.extension = extension;
-		modelFile.path = std::string(workingModel + "/" + filename);
+            auto [name, extension] = FileReader::splitFilename(filename);
+	    modelFile.name = name;
+	    modelFile.extension = extension;
+	    modelFile.path = std::string(workingModel + "/" + filename);
 
-	        ModelFiles.push_back(modelFile); 
+	    ModelFiles.push_back(modelFile); 
 	}
     }
-
-
-
 }
+
 
 
 
@@ -55,30 +49,25 @@ void Graphics::ResourceManager::loadShaders(std::string shaderDirectory)
  
     for (std::string shader : shaders)
     {
-
-	workingShader = shaderDirectory + "/" + shader;
-
+        workingShader = shaderDirectory + "/" + shader;
 	fileReader.setDirname(workingShader);
 
 	std::string vs = workingShader + "/" + fileReader.getFile("vs");
 	std::string fs = workingShader + "/" + fileReader.getFile("fs");
 
-    std::cout << "VS: " + vs << std::endl;
-    std::cout << "FS: " + fs << std::endl;
 	loadShader(new Graphics::Shader(vs, fs), shader);
     }
 }
 
+
+
+
 Graphics::RenderResource& Graphics::ResourceManager::generateRenderResource(VAO_TYPE vaoType)
 {
-
-	Graphics::RenderResource resource;
+    Graphics::RenderResource resource;
+    
     resource.vaoType = vaoType;
     
-   // TODO: instead of passing in the shader, set up a getShader function to get reference 
-    //entity.shader = shader;
-
-
     glGenVertexArrays(1, &resource.VAO); 
     glBindVertexArray(resource.VAO);
 
@@ -86,7 +75,6 @@ Graphics::RenderResource& Graphics::ResourceManager::generateRenderResource(VAO_
     glGenBuffers(1, &resource.EBO); 
 
     glBindBuffer(GL_ARRAY_BUFFER, resource.VBO);
-
 
     switch (vaoType)
         case DEBUG:
@@ -109,16 +97,54 @@ Graphics::RenderResource& Graphics::ResourceManager::generateRenderResource(VAO_
     return getRenderResource(vaoType);
 }
 
+
+void Graphics::ResourceManager::loadTextures(std::vector<Graphics::Texture>& textures)
+{
+    unsigned int diffuseN = 1;
+    unsigned int specularN = 1;
+    unsigned int ambientN = 1;
+    unsigned int lightmapN = 1;
+    unsigned int reflectionN = 1;
+   
+    for (unsigned int i = 0; i < textures.size(); i++)
+    {
+        glActiveTexture(GL_TEXTURE0 + i);
+
+          
+        std::string number;
+        std::string name = textures[i].type;
+
+
+
+        if(name == "texture_diffuse")
+          number = std::to_string(diffuseN++);
+        
+	else if (name == "texture_specular")
+          number = std::to_string(specularN++);
+
+	else if (name == "texture_ambient")
+          number = std::to_string(ambientN++);
+
+	else if (name == "texture_lightmap")
+          number = std::to_string(lightmapN++);
+
+	else if (name == "texture_reflection")
+          number = std::to_string(reflectionN++);
+
+
+        //shader.setInt(("material." + name + number).c_str(), i);
+        glBindTexture(GL_TEXTURE_2D, textures[i].id);
+
+    }
+
+    glActiveTexture(GL_TEXTURE0);
+}
+
+
+
+
 Graphics::RenderResource& Graphics::ResourceManager::getRenderResource(VAO_TYPE vaoType)
 {
-/*	
-	auto entity = std::find_if(
-		  RenderEntities.begin(), 
-	          RenderEntities.end(), 
-		  [type] 
-		  ( const Graphics::RenderResources& entity )
-		  { return entity.vaoType == type; });
- */   
     // Was the vao found in our vector?
     if (RenderResources.count(vaoType)) 
     {
@@ -134,144 +160,121 @@ Graphics::RenderResource& Graphics::ResourceManager::getRenderResource(VAO_TYPE 
 
 
 
-void Graphics::ResourceManager::generateVAO(VAO_TYPE vaoType)
-{
-
-    
-   // TODO: instead of passing in the shader, set up a getShader function to get reference 
-    //entity.shader = shader;
-    if (!VAOs.count(vaoType))
-    {
-        unsigned int VAO;
-        glGenVertexArrays(1, &VAO); 
-        glBindVertexArray(VAO);
-
-	    std::cout << "UNCACHED VAO" << std::endl;
-        switch (vaoType)
-            case DEBUG:
-                {
-                    glEnableVertexAttribArray(0);
-                    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Graphics::Vertex), (void*)0);
-
-
-                    glEnableVertexAttribArray(1);
-                    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Graphics::Vertex), (void*)offsetof(Graphics::Vertex, Graphics::Vertex::Normal));
-
-
-                    glEnableVertexAttribArray(2);
-                    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Graphics::Vertex, Graphics::Vertex::TexCoords));
-                }         
-         
-	VAOs[vaoType] = std::move(VAO);
-
-	    std::cout << "VAO CACHED" << std::endl;
-    }
-}
-
-unsigned int& Graphics::ResourceManager::getVAO(VAO_TYPE vaoType)
-{
-	if (CurrentVao != vaoType)
-	{
-            generateVAO(vaoType);	
-	}
-            CurrentVao = vaoType;
-
-            return VAOs[vaoType]; 	
-}
-
-
-void Graphics::ResourceManager::generateVBO(VAO_TYPE vaoType)
-{
-
-    
-   // TODO: instead of passing in the shader, set up a getShader function to get reference 
-    //entity.shader = shader;
-    if (!VBOs.count(vaoType))
-    {
-        unsigned int VBO;
-        glGenBuffers(1, &VBO); 
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
- 
-         
-	VBOs[vaoType] = std::move(VBO);
-    }
-}
-
-unsigned int& Graphics::ResourceManager::getVBO(VAO_TYPE vaoType)
-{
-        generateVBO(vaoType);	
-        return VBOs[vaoType]; 	
-}
 
 void Graphics::ResourceManager::loadModel(Graphics::Model* model)
 {
     loadedModels.push_back(model); 
 }
 
+
+
+
 void Graphics::ResourceManager::loadShader(Graphics::Shader* shader, std::string name)
 {
     loadedShaders[name] = std::move(shader);
 }
+
+
+
 
 Graphics::Shader* Graphics::ResourceManager::getShader(std::string name)
 {
     return loadedShaders[name];
 }
 
+
+
+
 std::vector<Graphics::Model*>& Graphics::ResourceManager::getLoadedModels()
 {
     return loadedModels;
 }
 
-void Graphics::ResourceManager::generateEBO(VAO_TYPE vaoType)
-{
 
-    
-   // TODO: instead of passing in the shader, set up a getShader function to get reference 
-    //entity.shader = shader;
-    if (!EBOs.count(vaoType))
+
+void Graphics::ResourceManager::bindBuffers(std::vector<Graphics::Vertex>& vertices, std::vector<unsigned int>& indices, Graphics::VAO_TYPE vaoType)
+{
+    Graphics::RenderResource& resource = getRenderResource(DEBUG);
+    glBindVertexArray(resource.VAO);
+
+    if (CurrentVao != vaoType)
     {
-        unsigned int EBO;
-        glGenBuffers(1, &EBO); 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
- 
-         
-	EBOs[vaoType] = EBO;
+        glBindBuffer(GL_ARRAY_BUFFER, resource.VBO);
     }
+     
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Graphics::Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource.EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_STATIC_DRAW);
+    
 }
 
 
 
-unsigned int& Graphics::ResourceManager::getEBO(VAO_TYPE vaoType)
+unsigned int& Graphics::ResourceManager::getFBO()
 {
-	if (CurrentVao != vaoType)
-	{
-            generateEBO(vaoType);	
-	}
-
-            return EBOs[vaoType]; 	
+    return FBO;
 }
 
-/*
-
-Graphics::Shader& Graphics::ResourceManager::getShader(SHADER_NAME shaderName)
+void Graphics::ResourceManager::generateFBO(unsigned int width, unsigned int height)
 {
-	if (CurrentShader != shaderName)
-	{
-            loadShader(shaderName);	
-	}
+        glGenFramebuffers(1, &FBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
-            return shaders[shaderName]; 	
+	glGenTextures(1, &GUITextureId);
+	glBindTexture(GL_TEXTURE_2D, GUITextureId);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, GUITextureId, 0);
+
+	glGenRenderbuffers(1, &RBO);
+	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n";
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+
+
 }
 
 
-void Graphics::ResourceManager::loadShader(SHADER_NAME shaderName)
+
+
+
+
+    unsigned int& Graphics::ResourceManager::getGUITextureId()
+    {
+        return GUITextureId; 
+    }
+
+
+void Graphics::ResourceManager::rescaleFBO(unsigned int width, unsigned int height)
 {
-    shaders[shaderName] = std::move(Graphics::Shader debugShader(
-        "/home/laelijah/Gengine/data/Shaders/DEBUG/debug.vs",
-        "/home/laelijah/Gengine/data/Shaders/DEBUG/debug.fs"));
+    	glBindTexture(GL_TEXTURE_2D, GUITextureId);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, GUITextureId, 0);
+
+	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
+}
 
 
-
-   }
-*/
+void Graphics::ResourceManager::bindFBO()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+}
+void Graphics::ResourceManager::unbindFBO()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}

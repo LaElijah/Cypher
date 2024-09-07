@@ -4,10 +4,14 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <glm/glm.hpp>
 #include <iostream>
-#include "Model.h"
 #include "MeshTypes.h"
+#include "Model.h"
+#include "Shader.h"
+
+#include "../../external/imgui/imgui.h"
+
+
 
 namespace Graphics {
 
@@ -17,25 +21,19 @@ namespace Graphics {
     	VAO_TYPE vaoType;
     	std::string shaderName;
     	unsigned int VAO;
-    	unsigned int VBO; // TODO: make this a vector and automatically push a new vbo when/if ever full and do multiple draw calls (maybe i could just have it be a vector by default and set up multidrawarrays that way? ill find out later
-    	unsigned int EBO; // Same thing as VBO, also maybe give an index per buffer
-    	// Graphics::Shader& shader;
+    	unsigned int VBO; 
+    	unsigned int EBO;     
+	// Graphics::Shader& shader;
     	// TODO: Add texture vector, up to 16/32 with texture units and what 
     	// sounds like 1024 with texture arrays
-    	// Add a material reference and replace shader
-    	
-           // I could have a property that counts the amount of textures loaded in the texture array
-           // and also the resource manager keeps track of a mesh texture index that is 
-           // incremented every time a mesh is loaded and then reset 
-           // when a render entity reaches its limit 
+    	// Add a material reference    	
+        // I could have a property that counts the amount of textures loaded in the texture array
+        // and also the resource manager keeps track of a mesh texture index that is 
+        // incremented every time a mesh is loaded and then reset 
+        // when a render entity reaches its limit 
     };
     
-    
-    struct Resource {
-	    unsigned int v;
-    };
-    
-    
+       
     class ResourceManager {
     	public:
             void loadModelPaths(std::string modelDirectory = "./data/Models");
@@ -58,7 +56,28 @@ namespace Graphics {
 	    
 	    void generateEBO(VAO_TYPE vaoType);
 	    unsigned int& getEBO(VAO_TYPE vaoType);
+  
+	    void generateFBO(unsigned int width, unsigned int height);
+	    unsigned int& getFBO();
+
+
+	    void generateRBO(VAO_TYPE vaoType);
+	    unsigned int& getRBO(VAO_TYPE vaoType);
+
+            void bindFBO();
+
+            void unbindFBO();
+
+            void bindBuffers(
+			    std::vector<Graphics::Vertex>& vertices, 
+			    std::vector<unsigned int>& indices, 
+			    Graphics::VAO_TYPE vaoType);
 	
+            void loadTextures(std::vector<Texture>& Textures);
+
+           unsigned int& getGUITextureId();
+
+	   void rescaleFBO(unsigned int width, unsigned int height);
 
 
        
@@ -66,6 +85,12 @@ namespace Graphics {
             std::map<VAO_TYPE, unsigned int> VAOs;
     	    std::map<VAO_TYPE, unsigned int> VBOs;
     	    std::map<VAO_TYPE, unsigned int> EBOs;
+
+	    unsigned int FBO; 
+	    unsigned int RBO;
+	    unsigned int GUITextureId;
+
+
 	    std::map<std::string, Graphics::Texture> loadedTextures;
 	    std::vector<Graphics::Model*> loadedModels;
 	    std::map<std::string, Graphics::Shader*> loadedShaders;

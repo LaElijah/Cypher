@@ -417,6 +417,30 @@ src/Graphics/FileReader.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/FileReader.cpp.s
 .PHONY : src/Graphics/FileReader.cpp.s
 
+src/Graphics/FrameBuffer.o: src/Graphics/FrameBuffer.cpp.o
+.PHONY : src/Graphics/FrameBuffer.o
+
+# target to build an object file
+src/Graphics/FrameBuffer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/FrameBuffer.cpp.o
+.PHONY : src/Graphics/FrameBuffer.cpp.o
+
+src/Graphics/FrameBuffer.i: src/Graphics/FrameBuffer.cpp.i
+.PHONY : src/Graphics/FrameBuffer.i
+
+# target to preprocess a source file
+src/Graphics/FrameBuffer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/FrameBuffer.cpp.i
+.PHONY : src/Graphics/FrameBuffer.cpp.i
+
+src/Graphics/FrameBuffer.s: src/Graphics/FrameBuffer.cpp.s
+.PHONY : src/Graphics/FrameBuffer.s
+
+# target to generate assembly for a file
+src/Graphics/FrameBuffer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/FrameBuffer.cpp.s
+.PHONY : src/Graphics/FrameBuffer.cpp.s
+
 src/Graphics/GLCanvas.o: src/Graphics/GLCanvas.cpp.o
 .PHONY : src/Graphics/GLCanvas.o
 
@@ -440,6 +464,30 @@ src/Graphics/GLCanvas.s: src/Graphics/GLCanvas.cpp.s
 src/Graphics/GLCanvas.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/GLCanvas.cpp.s
 .PHONY : src/Graphics/GLCanvas.cpp.s
+
+src/Graphics/GUI.o: src/Graphics/GUI.cpp.o
+.PHONY : src/Graphics/GUI.o
+
+# target to build an object file
+src/Graphics/GUI.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/GUI.cpp.o
+.PHONY : src/Graphics/GUI.cpp.o
+
+src/Graphics/GUI.i: src/Graphics/GUI.cpp.i
+.PHONY : src/Graphics/GUI.i
+
+# target to preprocess a source file
+src/Graphics/GUI.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/GUI.cpp.i
+.PHONY : src/Graphics/GUI.cpp.i
+
+src/Graphics/GUI.s: src/Graphics/GUI.cpp.s
+.PHONY : src/Graphics/GUI.s
+
+# target to generate assembly for a file
+src/Graphics/GUI.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/GUI.cpp.s
+.PHONY : src/Graphics/GUI.cpp.s
 
 src/Graphics/Mesh.o: src/Graphics/Mesh.cpp.o
 .PHONY : src/Graphics/Mesh.o
@@ -630,9 +678,15 @@ help:
 	@echo "... src/Graphics/FileReader.o"
 	@echo "... src/Graphics/FileReader.i"
 	@echo "... src/Graphics/FileReader.s"
+	@echo "... src/Graphics/FrameBuffer.o"
+	@echo "... src/Graphics/FrameBuffer.i"
+	@echo "... src/Graphics/FrameBuffer.s"
 	@echo "... src/Graphics/GLCanvas.o"
 	@echo "... src/Graphics/GLCanvas.i"
 	@echo "... src/Graphics/GLCanvas.s"
+	@echo "... src/Graphics/GUI.o"
+	@echo "... src/Graphics/GUI.i"
+	@echo "... src/Graphics/GUI.s"
 	@echo "... src/Graphics/Mesh.o"
 	@echo "... src/Graphics/Mesh.i"
 	@echo "... src/Graphics/Mesh.s"

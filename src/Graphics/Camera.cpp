@@ -6,33 +6,35 @@
 
 
 
-/*
- * Camera Constructor
- * Initializes the camera object with a given 
- * screen width and height in ints representing pixels.
- * To get the first mouse position, calculate the midpoint of both axis
- * by dividing resolution in half.
- */
-Graphics::Camera::Camera(int width, int height)
+
+Graphics::Camera::Camera(float width, float height)
 {
-    // Setting screen resolution
-    ScreenWidth = width;
-    ScreenHeight = height;
+    // Setting screen aspect ratio
+    AspectRatio = width / height;
 
     // Calculating screen midpoint for first mouse
     lastX = width / 2;
     lastY = height / 2; 
+    updateDirection();
 }
 
 
 
-/*
- * processMousePosition
- * This function calculates the new angle of the mouse
- * from the cursors offset from the center
- * when the cursor is captured. 
- * Modululates offset impact with mouse sensitivity
- */
+
+float Graphics::Camera::getZoom()
+{
+    return zoom;
+}
+
+
+
+void Graphics::Camera::setZoom(float newZoom)
+{
+    zoom = newZoom;
+}
+
+
+
 void Graphics::Camera::processMousePosition(double xoffset, double yoffset, bool constrainPitch)
 {
     // Modulate offset impact
@@ -60,21 +62,6 @@ void Graphics::Camera::processMousePosition(double xoffset, double yoffset, bool
 }
 
 
-
-
-/*
- * 
- * */
-void Graphics::Camera::updateDirection()
-{  
-    Direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    Direction.y = sin(glm::radians(pitch));
-    Direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch)); 
-    CameraFront = glm::normalize(Direction);
-
-    CameraRight = glm::normalize(glm::cross(CameraFront, WorldUp));
-    CameraUp = glm::normalize(glm::cross(CameraRight, CameraFront));
-}
 
 
 
@@ -126,6 +113,19 @@ void Graphics::Camera::startMouse()
 
 
 
+void Graphics::Camera::updateDirection()
+{  
+    Direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    Direction.y = sin(glm::radians(pitch));
+    Direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch)); 
+    CameraFront = glm::normalize(Direction);
+
+    CameraRight = glm::normalize(glm::cross(CameraFront, WorldUp));
+    CameraUp = glm::normalize(glm::cross(CameraRight, CameraFront));
+}
+
+
+
 
 
 glm::vec3 Graphics::Camera::getDirection()
@@ -141,9 +141,12 @@ glm::mat4 Graphics::Camera::getViewMatrix()
     return glm::lookAt(Position, Position + CameraFront, CameraUp);
 }
 
+
+
+
 glm::mat4 Graphics::Camera::getProjectionMatrix()
 {
-    return glm::perspective(glm::radians(Zoom), ScreenWidth / ScreenHeight, 0.1f, 100.0f); 
+    return glm::perspective(glm::radians(zoom), AspectRatio, 0.1f, 100.0f); 
 }
 
 
@@ -205,21 +208,13 @@ void Graphics::Camera::processKeyboard(Graphics::Direction keyPressed, float del
 
 void Graphics::Camera::processMouseScroll(float yoffset)
 {
-    Zoom -= (float) yoffset;
+    zoom -= (float) yoffset;
     
-    if (Zoom < 1.0f)
-        Zoom = 1.0f;
+    if (zoom < 1.0f)
+        zoom = 1.0f;
     
-    if (Zoom > 45.0f)
-        Zoom = 45.0f;
-}
-
-
-
-
-void Graphics::Camera::setCameraFront(glm::vec3 direction)
-{
-    CameraFront = direction;
+    if (zoom > 45.0f)
+        zoom = 45.0f;
 }
 
 
@@ -252,4 +247,17 @@ bool Graphics::Camera::getCameraStatus()
 void Graphics::Camera::resetPosition()
 {
     Position = glm::vec3(0.0f, 0.0f, 3.0f);
+}
+
+
+
+
+void Graphics::Camera::setCameraFront(glm::vec3 direction)
+{
+    CameraFront = direction;
+}
+
+void Graphics::Camera::setAspectRatio(float ratio)
+{
+    AspectRatio = ratio;
 }

@@ -1,9 +1,5 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <string>
 #include <vector>
-#include <iostream>
-#include "ResourceManager.h"
 #include "Mesh.h"
 
 
@@ -14,9 +10,9 @@ Graphics::Mesh::Mesh(
     vertices, std::vector<unsigned int> indices, 
     std::vector<Graphics::Texture> textures)
 {
-    this->Vertices= vertices; 
-    this->Indices = indices;
-    this->Textures = textures;
+    Vertices = vertices; 
+    Indices = indices;
+    Textures = textures;
 
 }
 
@@ -37,3 +33,16 @@ std::vector<Graphics::Texture>& Graphics::Mesh::getTextures()
     return Textures;
 }
 
+
+
+std::string& Graphics::Mesh::getShaderName() 
+{
+    return ShaderName;
+}
+
+
+
+void Graphics::Mesh::setShaderName(std::string name)
+{
+    ShaderName = name;
+}

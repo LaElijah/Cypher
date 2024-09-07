@@ -1,3 +1,4 @@
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Shader.h"
@@ -9,6 +10,7 @@
 #include "../../external/imgui/imgui.h"
 #include "../../external/imgui/imgui_impl_opengl3.h"
 #include "../../external/imgui/imgui_impl_glfw.h"
+#include "GUI.h"
 
 
 
@@ -18,6 +20,7 @@ Graphics::Renderer::Renderer()
     ResourceManager = new Graphics::ResourceManager();
     Canvas = new Graphics::GLCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);    
     Camera = new Graphics::Camera(SCREEN_WIDTH, SCREEN_HEIGHT);
+    GUI = new Graphics::GUI();
 }
 
 
@@ -28,71 +31,9 @@ Graphics::Renderer::Renderer(Graphics::ResourceManager* resourceManager, Graphic
     ResourceManager = resourceManager;
     Canvas = canvas;
     Camera = camera;
+    GUI = new Graphics::GUI();
 }
 
-
-
-void Graphics::Renderer::loadTextures(std::vector<Graphics::Texture>& textures)
-{
-    unsigned int diffuseN = 1;
-    unsigned int specularN = 1;
-    unsigned int ambientN = 1;
-    unsigned int lightmapN = 1;
-    unsigned int reflectionN = 1;
-   
-    for (unsigned int i = 0; i < textures.size(); i++)
-    {
-        glActiveTexture(GL_TEXTURE0 + i);
-
-          
-        std::string number;
-        std::string name = textures[i].type;
-
-
-
-        if(name == "texture_diffuse")
-          number = std::to_string(diffuseN++);
-        
-	else if (name == "texture_specular")
-          number = std::to_string(specularN++);
-
-	else if (name == "texture_ambient")
-          number = std::to_string(ambientN++);
-
-	else if (name == "texture_lightmap")
-          number = std::to_string(lightmapN++);
-
-	else if (name == "texture_reflection")
-          number = std::to_string(reflectionN++);
-
-
-        //shader.setInt(("material." + name + number).c_str(), i);
-        glBindTexture(GL_TEXTURE_2D, textures[i].id);
-
-    }
-
-    glActiveTexture(GL_TEXTURE0);
-}
-
-
-void Graphics::Renderer::bindBuffers(std::vector<Graphics::Vertex>& vertices, std::vector<unsigned int>& indices, Graphics::VAO_TYPE vaoType)
-{
-	Graphics::RenderResource& resource = ResourceManager->getRenderResource(DEBUG);
-
-
-     glBindVertexArray(resource.VAO);
-
-
-   glBindBuffer(GL_ARRAY_BUFFER, resource.VBO);
-  
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Graphics::Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
-
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource.EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_STATIC_DRAW);
-
-
-}
 
 
 void Graphics::Renderer::draw()
@@ -100,12 +41,9 @@ void Graphics::Renderer::draw()
 
     for (Graphics::Model* model : ResourceManager->getLoadedModels())
     {
-        // add variable to denote vao type and shader name 
 
-        //Graphics::Shader& shader = ResourceManager->getShader(DEBUG);
-	
-
-	    Graphics::Shader* shader = ResourceManager->getShader(model->getShaderName());
+	    
+	Graphics::Shader* shader = ResourceManager->getShader(model->getShaderName());
         shader->use();
 
         shader->setMat4("model", model->getModelMatrix());      
@@ -115,13 +53,12 @@ void Graphics::Renderer::draw()
  
         for (Graphics::Mesh& mesh : model->getMeshes())
         {
-            bindBuffers(mesh.getVertices(), mesh.getIndices(), DEBUG); 
-
-            loadTextures(mesh.getTextures());
+            ResourceManager->bindBuffers(mesh.getVertices(), mesh.getIndices(), DEBUG); 
+            ResourceManager->loadTextures(mesh.getTextures());
  
-    glDrawElements(GL_TRIANGLES, (mesh.getIndices()).size(), GL_UNSIGNED_INT, 0);
+            glDrawElements(GL_TRIANGLES, (mesh.getIndices()).size(), GL_UNSIGNED_INT, 0);
 
-    glBindVertexArray(0);
+            glBindVertexArray(0);
 	
 	}
     }
@@ -129,59 +66,61 @@ void Graphics::Renderer::draw()
 
 
 
-
+#include "FrameBuffer.h"
 
 
 void Graphics::Renderer::run()
 {
-    ResourceManager->loadModelPaths();
-    glEnable(GL_DEPTH_TEST);
+ 
+     	ResourceManager->loadModelPaths(); 
+    ResourceManager->loadShaders();  
+
+     	glEnable(GL_DEPTH_TEST);
 
     GLFWwindow *window = Canvas->getWindow();
-    initializeGUI(window); 
-    ResourceManager->loadShaders();   
-   /* 
-    ResourceManager->loadShader(new Graphics::Shader(
-        "/home/laelijah/Gengine/data/Shaders/DEBUG/debug.vs",
-        "/home/laelijah/Gengine/data/Shaders/DEBUG/debug.fs"), "DEBUG_VAO_DEBUG_SHADER");
-*/
-  
-    ResourceManager->loadModel(new Graphics::Model("/home/laelijah/Gengine/data/Models/adamHead/adamHead.gltf"));
 
-    ImGuiIO& io = ImGui::GetIO();
+  
+    ResourceManager->loadModel(new Graphics::Model("/home/laelijah/Gengine/data/Models/room/scene.gltf"));
+
+    ImGuiIO& io = GUI->getIO();
+
+    int width = 3840;
+    int height = 2160;
+
+    Graphics::FrameBuffer* sceneBuffer = new Graphics::FrameBuffer(width, height);
        
     while (!glfwWindowShouldClose(window)) 
     {   
  
         updateDeltaTime();	    
-	clear();
          
-        if (!io.WantCaptureKeyboard)
+        if (true)
         {
             processInput(window);
         }
- 
-        draw();
-	//simpleModel.Draw(debugShader);
 
 
+       
+        // Draw to scene frame buffer	
+	sceneBuffer->Bind();  
+	clear(); 
+	draw(); 
 
-        glfwPollEvents();
-        drawGUI();
-        glfwSwapBuffers(window);
+
+        sceneBuffer->Unbind(); 
+	GUI->drawGUI(ResourceManager, 
+		     Canvas, 
+		     Camera, 
+		     sceneBuffer);
+	
+	glfwPollEvents();
+	glfwSwapBuffers(window);
+    
+        // Clear default frame buffer 	
+	clear();
     }
-    shutdown(); 
+    GUI->shutdown(); 
     glfwTerminate(); 
-}
-
-
-
-
-void Graphics::Renderer::shutdown()
-{
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext(); 
 }
 
 
@@ -191,22 +130,6 @@ void Graphics::Renderer::clear()
 {
     glClearColor(0, 0.01f, 0.01f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-
-
-
-void Graphics::Renderer::disableGUI()
-{
-    GUI_ENABLED = false;
-}
-
-
-
-
-void Graphics::Renderer::enableGUI()
-{
-    GUI_ENABLED = true;
 }
 
 
@@ -242,32 +165,15 @@ Graphics::Camera* Graphics::Renderer::getCamera()
 }
 
 
-
-
-void Graphics::Renderer::drawGUI()
-{ 
-      if (GUI_ENABLED)
-      { 
-          ImGui_ImplOpenGL3_NewFrame();
-          ImGui_ImplGlfw_NewFrame();
-          ImGui::NewFrame();
-          ImGui::ShowDemoWindow();
-
-          ImGui::Render();
-          ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-      } 
-}
-
-
-
-
-void Graphics::Renderer::initializeGUI(GLFWwindow* window)
+Graphics::GUI* Graphics::Renderer::getGUI()
 {
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext(); 
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init();  
+    return GUI;
 }
+
+
+
+
+
 
 
 
@@ -287,7 +193,7 @@ void Graphics::Renderer::processInput(GLFWwindow* window)
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         Canvas->releaseMouse(); 
-	enableGUI();
+	GUI->enable();
         Camera->disableCamera(); 
     } 
 
@@ -315,5 +221,4 @@ void Graphics::Renderer::processInput(GLFWwindow* window)
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 
         Camera->processKeyboard(Graphics::Direction::DOWN, getDeltaTime());    
 }
-
 

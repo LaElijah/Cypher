@@ -15,15 +15,21 @@ Graphics::Renderer renderer;
 Graphics::ResourceManager* ResourceManager = renderer.getResourceManager();
 Graphics::Camera* Camera = renderer.getCamera();
 Graphics::GLCanvas* Canvas = renderer.getCanvas();    
+Graphics::GUI* GUI = renderer.getGUI();
+
 
 int main()
 {
     GLFWwindow* window = Canvas->getWindow();  
+
     glfwSetCursorPosCallback(window,  mouse_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwSetScrollCallback(window, scroll_callback); 
+
+    GUI->initialize(window); 
+    
     renderer.run();
-   return 0;
+    return 0;
 }
 
 
@@ -37,11 +43,14 @@ int main()
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-    ImGuiIO& io = ImGui::GetIO();
+    ImGuiIO& io = GUI->getIO();
+    //if (renderer.isFullScreen())
+    //{
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && !io.WantCaptureMouse)
     {
-        Canvas->captureMouse(); 
-        renderer.disableGUI();	
+       //Inverse 
+	    Canvas->releaseMouse(); 
+        GUI->disable();	
         Camera->enableCamera(); 
     }
 }
@@ -49,9 +58,9 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos)
 { 
-    ImGuiIO& io = ImGui::GetIO();
+    ImGuiIO& io = GUI->getIO();
     
-    if (!io.WantCaptureMouse)
+    if (io.WantCaptureMouse)
     {
 	if (Camera->isFirstMouse())
         {
@@ -73,8 +82,9 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos)
 
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 {
-    ImGuiIO& io = ImGui::GetIO();
+    ImGuiIO& io = GUI->getIO();
     if (!io.WantCaptureMouse)
         Camera->processMouseScroll(yoffset);
 }
+
 

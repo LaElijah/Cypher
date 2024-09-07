@@ -1,6 +1,9 @@
 #ifndef MESHTYPES_H
 #define MESHTYPES_H
 
+
+#include <glm/glm.hpp>
+
 namespace Graphics {
     struct ModelFile
     {
