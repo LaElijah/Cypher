@@ -24,6 +24,7 @@ set(SOURCES
   ${SRC_DIR}/Graphics/Renderer.cpp
   ${SRC_DIR}/Graphics/GUI.cpp
   ${SRC_DIR}/Graphics/FrameBuffer.cpp
+  ${SRC_DIR}/Graphics/GUIComponent.cpp
   ${EXTERNAL_DIR}/GLAD/glad.c
   ${EXTERNAL_DIR}/STB_IMAGE/stb_image.cpp
   ${EXTERNAL_DIR}/imgui/imconfig.h

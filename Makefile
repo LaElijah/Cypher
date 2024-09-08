@@ -489,6 +489,30 @@ src/Graphics/GUI.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/GUI.cpp.s
 .PHONY : src/Graphics/GUI.cpp.s
 
+src/Graphics/GUIComponent.o: src/Graphics/GUIComponent.cpp.o
+.PHONY : src/Graphics/GUIComponent.o
+
+# target to build an object file
+src/Graphics/GUIComponent.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/GUIComponent.cpp.o
+.PHONY : src/Graphics/GUIComponent.cpp.o
+
+src/Graphics/GUIComponent.i: src/Graphics/GUIComponent.cpp.i
+.PHONY : src/Graphics/GUIComponent.i
+
+# target to preprocess a source file
+src/Graphics/GUIComponent.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/GUIComponent.cpp.i
+.PHONY : src/Graphics/GUIComponent.cpp.i
+
+src/Graphics/GUIComponent.s: src/Graphics/GUIComponent.cpp.s
+.PHONY : src/Graphics/GUIComponent.s
+
+# target to generate assembly for a file
+src/Graphics/GUIComponent.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gengine.dir/build.make CMakeFiles/Gengine.dir/src/Graphics/GUIComponent.cpp.s
+.PHONY : src/Graphics/GUIComponent.cpp.s
+
 src/Graphics/Mesh.o: src/Graphics/Mesh.cpp.o
 .PHONY : src/Graphics/Mesh.o
 
@@ -687,6 +711,9 @@ help:
 	@echo "... src/Graphics/GUI.o"
 	@echo "... src/Graphics/GUI.i"
 	@echo "... src/Graphics/GUI.s"
+	@echo "... src/Graphics/GUIComponent.o"
+	@echo "... src/Graphics/GUIComponent.i"
+	@echo "... src/Graphics/GUIComponent.s"
 	@echo "... src/Graphics/Mesh.o"
 	@echo "... src/Graphics/Mesh.i"
 	@echo "... src/Graphics/Mesh.s"

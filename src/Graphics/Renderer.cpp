@@ -11,9 +11,9 @@
 #include "../../external/imgui/imgui_impl_opengl3.h"
 #include "../../external/imgui/imgui_impl_glfw.h"
 #include "GUI.h"
-
-
-
+#include "GUIComponent.h"
+#include "FrameBuffer.h"
+#include <functional>
 
 Graphics::Renderer::Renderer()
 {
@@ -41,11 +41,9 @@ void Graphics::Renderer::draw()
 
     for (Graphics::Model* model : ResourceManager->getLoadedModels())
     {
-
-	    
+ 
 	Graphics::Shader* shader = ResourceManager->getShader(model->getShaderName());
         shader->use();
-
         shader->setMat4("model", model->getModelMatrix());      
         shader->setMat4("view", Camera->getViewMatrix());
         shader->setMat4("projection", Camera->getProjectionMatrix());
@@ -57,7 +55,6 @@ void Graphics::Renderer::draw()
             ResourceManager->loadTextures(mesh.getTextures());
  
             glDrawElements(GL_TRIANGLES, (mesh.getIndices()).size(), GL_UNSIGNED_INT, 0);
-
             glBindVertexArray(0);
 	
 	}
@@ -66,33 +63,51 @@ void Graphics::Renderer::draw()
 
 
 
-#include "FrameBuffer.h"
+
+
+void Graphics::Renderer::updateWindow(float width, float height)
+{
+ 	  Canvas->resizeCanvas(
+			  width, 
+			  height);
+
+  	  Camera->setAspectRatio(
+			  width 
+			  / height);
+}
 
 
 void Graphics::Renderer::run()
 {
- 
-     	ResourceManager->loadModelPaths(); 
-    ResourceManager->loadShaders();  
-
-     	glEnable(GL_DEPTH_TEST);
 
     GLFWwindow *window = Canvas->getWindow();
-
-  
+ 
     ResourceManager->loadModel(new Graphics::Model("/home/laelijah/Gengine/data/Models/room/scene.gltf"));
+
 
     ImGuiIO& io = GUI->getIO();
 
-    int width = 3840;
-    int height = 2160;
+    Graphics::FrameBuffer* sceneBuffer = new Graphics::FrameBuffer(1920, 1080);
 
-    Graphics::FrameBuffer* sceneBuffer = new Graphics::FrameBuffer(width, height);
-       
+    std::function<void(float, float)> resizeFunction = [this, sceneBuffer] (float width, float height) {
+	    sceneBuffer->updateWindowSize(width, height); 
+	    updateWindow(width, height);
+    };
+   
+    GUI->addGUIComponent(
+		    new Graphics::SceneWindow(
+			    std::string("Scene"),
+			    sceneBuffer,
+			    resizeFunction, 
+			    PostRenderFunctions)
+		    );
+
+    GUI->addGUIComponent(new Graphics::TestWindow(std::string("Test")));
+      
+     
     while (!glfwWindowShouldClose(window)) 
     {   
  
-        updateDeltaTime();	    
          
         if (true)
         {
@@ -105,25 +120,51 @@ void Graphics::Renderer::run()
 	sceneBuffer->Bind();  
 	clear(); 
 	draw(); 
-
-
         sceneBuffer->Unbind(); 
-	GUI->drawGUI(ResourceManager, 
-		     Canvas, 
-		     Camera, 
-		     sceneBuffer);
+
 	
+	GUI->drawGUI(sceneBuffer);
+
 	glfwPollEvents();
 	glfwSwapBuffers(window);
+
     
         // Clear default frame buffer 	
 	clear();
+
+
+	// Handle post render duties
+	
+	while (PostRenderFunctions.size() > 0)
+	{
+	    PostRenderFunctions.back()();
+	    PostRenderFunctions.pop_back(); 
+	}
+
+        updateDeltaTime();	    
     }
     GUI->shutdown(); 
     glfwTerminate(); 
 }
 
+/*
+void Graphics::Renderer::render()
+{       
+        // Draw to scene frame buffer	
+    sceneBuffer->Bind();  
+    clear(); 
+    draw(); 
+    
+    
+    sceneBuffer->Unbind(); 
+    
+    
+    GUI->drawGUI(sceneBuffer);
+}
 
+void Graphics::Renderer::newFrame()
+{}
+*/
 
 
 void Graphics::Renderer::clear()

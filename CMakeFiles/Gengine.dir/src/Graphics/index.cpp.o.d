@@ -389,4 +389,11 @@ CMakeFiles/Gengine.dir/src/Graphics/index.cpp.o: \
  /home/laelijah/Gengine/src/Graphics/GUI.h \
  /home/laelijah/Gengine/src/Graphics/../../external/imgui/imgui_impl_opengl3.h \
  /home/laelijah/Gengine/src/Graphics/../../external/imgui/imgui_impl_glfw.h \
- /home/laelijah/Gengine/src/Graphics/FrameBuffer.h
+ /home/laelijah/Gengine/src/Graphics/FrameBuffer.h \
+ /home/laelijah/Gengine/src/Graphics/GUIComponent.h \
+ /usr/include/c++/12/functional /usr/include/c++/12/bits/std_function.h \
+ /usr/include/c++/12/unordered_map /usr/include/c++/12/bits/hashtable.h \
+ /usr/include/c++/12/bits/hashtable_policy.h \
+ /usr/include/c++/12/bits/enable_special_members.h \
+ /usr/include/c++/12/bits/unordered_map.h /usr/include/c++/12/array \
+ /usr/include/c++/12/compare

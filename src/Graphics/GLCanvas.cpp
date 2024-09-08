@@ -43,7 +43,8 @@ namespace Graphics {
         glfwMakeContextCurrent(Window);
         // TODO: Move this outside so that i can set canvas screen width and height to correct size
         glfwSetFramebufferSizeCallback(Window, framebuffer_size_callback); 
-        GLCanvas::loadGlad(); 
+        GLCanvas::loadGlad();  
+        glEnable(GL_DEPTH_TEST);
     }
 
 

@@ -54,13 +54,15 @@ void Graphics::GUI::initialize(GLFWwindow* window)
     IMGUI_CHECKVERSION();
     ImGui::CreateContext(); 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init();  
+    ImGui_ImplOpenGL3_Init(); 
+    //ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    //ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 }
 
 
 
 
-void Graphics::GUI::drawGUI(Graphics::ResourceManager* resourceManager, Graphics::GLCanvas* canvas, Graphics::Camera* camera, Graphics::FrameBuffer* sceneBuffer)
+void Graphics::GUI::drawGUI(Graphics::FrameBuffer* sceneBuffer)
 { 
 	// Change so that it checks if fullscreen isnt enabled and gui enabled
       if (true)
@@ -68,40 +70,31 @@ void Graphics::GUI::drawGUI(Graphics::ResourceManager* resourceManager, Graphics
           ImGui_ImplOpenGL3_NewFrame();
           ImGui_ImplGlfw_NewFrame();
           ImGui::NewFrame();
-	  ImGui::Begin("Scene");
 
-	  ImVec2 windowSize = ImGui::GetContentRegionAvail();
-          const float window_width = windowSize.x;
-          const float window_height = windowSize.y; 
-	
 
-          // Reset render specs to content region	
-          resourceManager->rescaleFBO(window_width, window_height);
-  	  canvas->resizeCanvas(window_width, window_height);
-  	  camera->setAspectRatio(window_width / window_height);
+          for (GUIComponent* component : Components)
+	  {
+	      component->draw();
+	      // Add if focused handle input 
+	  }
 
-  	  //ImVec2 pos = ImGui::GetCursorScreenPos(); 
-  	  ImGui::Image(
-			(ImTextureID)sceneBuffer->getFrameTexture(),
-			ImGui::GetContentRegionAvail(),
-			ImVec2(0, 1),
-			ImVec2(1, 0)
-		);
 
-	  ImGui::End();
-          ImGui::Render();
-
+	  ImGui::Render();
           ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
      
 	  // Set the draw target buffer after any changes to content are updated and
 	  // screen is rendered with scene buffer 
-          sceneBuffer->RescaleFrameBuffer(window_width, window_height);
-      } 
+
+    } 
 }
 
 
+/*
+void Graphics::GUI::render()
+{
 
-
+}
+*/
 void Graphics::GUI::shutdown()
 {
     ImGui_ImplOpenGL3_Shutdown();
@@ -109,4 +102,7 @@ void Graphics::GUI::shutdown()
     ImGui::DestroyContext(); 
 }
 
-
+void Graphics::GUI::addGUIComponent(Graphics::GUIComponent* component)
+{
+    Components.push_back(component);
+}

@@ -26,7 +26,8 @@ int main()
     glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwSetScrollCallback(window, scroll_callback); 
 
-    GUI->initialize(window); 
+    GUI->initialize(window);
+    ResourceManager->initialize(); 
     
     renderer.run();
     return 0;

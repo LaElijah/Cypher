@@ -29,6 +29,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Gengine.dir/src/Graphics/GLCanvas.cpp.o.d"
   "CMakeFiles/Gengine.dir/src/Graphics/GUI.cpp.o"
   "CMakeFiles/Gengine.dir/src/Graphics/GUI.cpp.o.d"
+  "CMakeFiles/Gengine.dir/src/Graphics/GUIComponent.cpp.o"
+  "CMakeFiles/Gengine.dir/src/Graphics/GUIComponent.cpp.o.d"
   "CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o"
   "CMakeFiles/Gengine.dir/src/Graphics/Mesh.cpp.o.d"
   "CMakeFiles/Gengine.dir/src/Graphics/Model.cpp.o"

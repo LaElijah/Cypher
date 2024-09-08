@@ -6,7 +6,7 @@
 #include "Shader.h"
 #include "GUI.h"
 
-
+// POTENTIAL NAME CYPHER;
 
 
 namespace Graphics {
@@ -33,12 +33,14 @@ namespace Graphics {
 	    Graphics::Camera* getCamera();
 	    Graphics::GUI* getGUI();
 
+            void updateWindow(float width, float height);
+
    	
 	private:	    
 
-	    float currentFrame;
-	    float deltaTime;
-	    float lastFrame;
+	    float currentFrame = 0;
+	    float deltaTime = 0;
+	    float lastFrame = 0;
 	    
 	    float SCREEN_WIDTH = 1920;
 	    float SCREEN_HEIGHT = 1080;
@@ -48,6 +50,8 @@ namespace Graphics {
 	    Graphics::GLCanvas* Canvas;
 	    Graphics::ResourceManager* ResourceManager;
 
+            std::vector<std::function<void()>> PostRenderFunctions;
+	    
 	    void updateDeltaTime();
             void processInput(GLFWwindow *window);	
     };

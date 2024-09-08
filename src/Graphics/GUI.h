@@ -12,6 +12,7 @@
 #include "GLCanvas.h"
 #include "FrameBuffer.h"
 #include "Camera.h"
+#include "GUIComponent.h"
 
 namespace Graphics {
 
@@ -24,7 +25,7 @@ namespace Graphics {
 	    GUI();
             GUI(GLFWwindow* window);
         
-	    void drawGUI(Graphics::ResourceManager* resourceManager, Graphics::GLCanvas* canvas, Graphics::Camera* camera, Graphics::FrameBuffer* sceneBuffer);
+	    void drawGUI(Graphics::FrameBuffer* sceneBuffer);
             
 	    void disable();
             void enable();
@@ -32,12 +33,15 @@ namespace Graphics {
 	    ImGuiIO& getIO();
      
 	    void shutdown();
+	    
+	    bool isEnabled();
 
 	    void initialize(GLFWwindow* window);
-	    bool isEnabled();
+	    void addGUIComponent(Graphics::GUIComponent*);
+            	
 	private:	    
 	    bool GUI_ENABLED = true;
-
+	    std::vector<Graphics::GUIComponent*> Components;
 
 
     };

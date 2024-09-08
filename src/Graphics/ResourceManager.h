@@ -45,7 +45,7 @@ namespace Graphics {
 	    Graphics::Shader* getShader(std::string); 
 	    void loadShader(Graphics::Shader* shader, std::string name); 
 	    void loadShaders(std::string shaderDirectory = "./data/Shaders"); 
-
+            void initialize();
 
             void loadModel(Graphics::Model* model);
 	    void generateVAO(VAO_TYPE vaoType); 
@@ -56,17 +56,12 @@ namespace Graphics {
 	    
 	    void generateEBO(VAO_TYPE vaoType);
 	    unsigned int& getEBO(VAO_TYPE vaoType);
-  
-	    void generateFBO(unsigned int width, unsigned int height);
-	    unsigned int& getFBO();
+           
+	     
 
 
-	    void generateRBO(VAO_TYPE vaoType);
-	    unsigned int& getRBO(VAO_TYPE vaoType);
 
-            void bindFBO();
 
-            void unbindFBO();
 
             void bindBuffers(
 			    std::vector<Graphics::Vertex>& vertices, 
@@ -75,21 +70,12 @@ namespace Graphics {
 	
             void loadTextures(std::vector<Texture>& Textures);
 
-           unsigned int& getGUITextureId();
-
-	   void rescaleFBO(unsigned int width, unsigned int height);
-
 
        
 	private:
             std::map<VAO_TYPE, unsigned int> VAOs;
     	    std::map<VAO_TYPE, unsigned int> VBOs;
     	    std::map<VAO_TYPE, unsigned int> EBOs;
-
-	    unsigned int FBO; 
-	    unsigned int RBO;
-	    unsigned int GUITextureId;
-
 
 	    std::map<std::string, Graphics::Texture> loadedTextures;
 	    std::vector<Graphics::Model*> loadedModels;
