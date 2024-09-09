@@ -25,7 +25,7 @@ namespace Graphics {
 	    GUI();
             GUI(GLFWwindow* window);
         
-	    void drawGUI(Graphics::FrameBuffer* sceneBuffer);
+	    void drawGUI();
             
 	    void disable();
             void enable();
@@ -34,14 +34,19 @@ namespace Graphics {
      
 	    void shutdown();
 	    
+	    bool isWindowed();
+	    void toggleWindow();
 	    bool isEnabled();
 
 	    void initialize(GLFWwindow* window);
-	    void addGUIComponent(Graphics::GUIComponent*);
+	    void addComponent(Graphics::GUIComponent*);
+	    void addEditorComponent(Graphics::GUIComponent*);
             	
-	private:	    
-	    bool GUI_ENABLED = true;
+	private:	   
+	    bool WINDOWED = false; 
+	    bool GUI_ENABLED = false;
 	    std::vector<Graphics::GUIComponent*> Components;
+	    std::vector<Graphics::GUIComponent*> EditorComponents;
 
 
     };

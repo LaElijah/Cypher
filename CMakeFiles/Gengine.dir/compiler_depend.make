@@ -2789,7 +2789,31 @@ CMakeFiles/Gengine.dir/src/Graphics/GLCanvas.cpp.o: src/Graphics/GLCanvas.cpp \
   /usr/include/c++/12/bits/ostream.tcc \
   /usr/include/c++/12/istream \
   /usr/include/c++/12/bits/istream.tcc \
-  src/Graphics/GLCanvas.h
+  src/Graphics/GLCanvas.h \
+  /usr/include/c++/12/functional \
+  /usr/include/c++/12/tuple \
+  /usr/include/c++/12/bits/uses_allocator.h \
+  /usr/include/c++/12/bits/std_function.h \
+  /usr/include/c++/12/unordered_map \
+  /usr/include/c++/12/ext/aligned_buffer.h \
+  /usr/include/c++/12/bits/hashtable.h \
+  /usr/include/c++/12/bits/hashtable_policy.h \
+  /usr/include/c++/12/bits/enable_special_members.h \
+  /usr/include/c++/12/bits/node_handle.h \
+  /usr/include/c++/12/bits/unordered_map.h \
+  /usr/include/c++/12/bits/erase_if.h \
+  /usr/include/c++/12/vector \
+  /usr/include/c++/12/bits/stl_uninitialized.h \
+  /usr/include/c++/12/bits/stl_vector.h \
+  /usr/include/c++/12/bits/stl_bvector.h \
+  /usr/include/c++/12/bits/vector.tcc \
+  /usr/include/c++/12/array \
+  /usr/include/c++/12/compare \
+  /usr/include/c++/12/bits/stl_algo.h \
+  /usr/include/c++/12/bits/algorithmfwd.h \
+  /usr/include/c++/12/bits/stl_heap.h \
+  /usr/include/c++/12/bits/stl_tempbuf.h \
+  /usr/include/c++/12/bits/uniform_int_dist.h
 
 CMakeFiles/Gengine.dir/src/Graphics/GUI.cpp.o: src/Graphics/GUI.cpp \
   /usr/include/stdc-predef.h \
@@ -6370,18 +6394,6 @@ src/Graphics/Model.cpp:
 
 src/Graphics/GUIComponent.cpp:
 
-/usr/include/c++/12/compare:
-
-/usr/include/c++/12/array:
-
-/usr/include/c++/12/bits/enable_special_members.h:
-
-/usr/include/c++/12/bits/hashtable_policy.h:
-
-/usr/include/c++/12/bits/hashtable.h:
-
-/usr/include/c++/12/bits/std_function.h:
-
 /usr/include/glm/ext/vector_uint1.hpp:
 
 /usr/include/glm/ext/vector_int1_sized.hpp:
@@ -6448,14 +6460,6 @@ src/Graphics/GUIComponent.cpp:
 
 /usr/include/c++/12/pstl/glue_algorithm_defs.h:
 
-/usr/include/c++/12/bits/uniform_int_dist.h:
-
-/usr/include/c++/12/bits/stl_heap.h:
-
-/usr/include/c++/12/bits/algorithmfwd.h:
-
-/usr/include/c++/12/bits/stl_algo.h:
-
 /usr/include/c++/12/algorithm:
 
 /usr/include/assimp/vector2.inl:
@@ -6476,15 +6480,31 @@ src/Graphics/Model.h:
 
 src/Graphics/MeshTypes.h:
 
-/usr/include/c++/12/bits/erase_if.h:
-
-/usr/include/c++/12/unordered_map:
-
-/usr/include/c++/12/tuple:
-
 /usr/include/c++/12/bits/stl_map.h:
 
+src/Graphics/ResourceManager.h:
+
+/usr/include/c++/12/bits/uniform_int_dist.h:
+
+/usr/include/c++/12/bits/stl_heap.h:
+
+/usr/include/c++/12/bits/algorithmfwd.h:
+
+/usr/include/c++/12/bits/stl_algo.h:
+
+/usr/include/c++/12/compare:
+
+/usr/include/c++/12/array:
+
+/usr/include/c++/12/bits/erase_if.h:
+
 /usr/include/c++/12/bits/node_handle.h:
+
+/usr/include/c++/12/bits/enable_special_members.h:
+
+/usr/include/c++/12/bits/hashtable_policy.h:
+
+/usr/include/c++/12/bits/hashtable.h:
 
 /usr/include/ctype.h:
 
@@ -6552,6 +6572,10 @@ src/Graphics/FrameBuffer.cpp:
 
 /usr/lib/gcc/x86_64-linux-gnu/12/include/avx512bf16intrin.h:
 
+src/Graphics/GUI.h:
+
+/usr/include/c++/12/bits/allocator.h:
+
 /usr/include/glm/ext/vector_double1.hpp:
 
 /usr/lib/gcc/x86_64-linux-gnu/12/include/vpclmulqdqintrin.h:
@@ -6591,10 +6615,6 @@ src/Graphics/FrameBuffer.cpp:
 /usr/include/glm/ext/matrix_projection.inl:
 
 /usr/include/x86_64-linux-gnu/bits/posix_opt.h:
-
-/usr/include/c++/12/functional:
-
-/usr/lib/gcc/x86_64-linux-gnu/12/include/xsaveintrin.h:
 
 /usr/include/glm/ext/matrix_double2x4.hpp:
 
@@ -6758,6 +6778,10 @@ external/imgui/imstb_textedit.h:
 
 /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/12/include/xsaveintrin.h:
+
+/usr/include/c++/12/functional:
+
 /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
 
 /usr/include/c++/12/bits/alloc_traits.h:
@@ -6777,6 +6801,10 @@ external/imgui/imstb_textedit.h:
 /usr/lib/gcc/x86_64-linux-gnu/12/include/rtmintrin.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
+
+/usr/include/c++/12/map:
+
+/usr/lib/gcc/x86_64-linux-gnu/12/include/avx512fp16vlintrin.h:
 
 /usr/include/c++/12/cmath:
 
@@ -6817,6 +6845,10 @@ external/imgui/imstb_textedit.h:
 /usr/include/c++/12/ext/type_traits.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h:
+
+src/Graphics/GUI.cpp:
+
+/usr/include/x86_64-linux-gnu/bits/timesize.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/12/include/xsavesintrin.h:
 
@@ -6897,6 +6929,10 @@ src/Graphics/Shader.cpp:
 /usr/include/glm/exponential.hpp:
 
 /usr/include/glm/mat3x3.hpp:
+
+/usr/include/c++/12/bits/stl_tree.h:
+
+/usr/include/glm/ext/vector_bool4_precision.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/uintn-identity.h:
 
@@ -7140,10 +7176,6 @@ external/imgui/imgui_stdlib.cpp:
 
 /usr/include/c++/12/pstl/pstl_config.h:
 
-/usr/include/x86_64-linux-gnu/bits/timesize.h:
-
-src/Graphics/GUI.cpp:
-
 /usr/include/x86_64-linux-gnu/bits/uio_lim.h:
 
 /usr/include/x86_64-linux-gnu/bits/sigthread.h:
@@ -7354,17 +7386,9 @@ src/Graphics/Camera.h:
 
 /usr/include/c++/12/bits/charconv.h:
 
-/usr/lib/gcc/x86_64-linux-gnu/12/include/avx512fp16vlintrin.h:
-
-/usr/include/c++/12/map:
-
 /usr/include/c++/12/bits/basic_string.tcc:
 
 external/imgui/imgui_tables.cpp:
-
-/usr/include/c++/12/bits/uses_allocator.h:
-
-external/imgui/imgui_widgets.cpp:
 
 /usr/include/glm/gtc/matrix_transform.hpp:
 
@@ -7459,10 +7483,6 @@ external/imgui/imgui_impl_glfw.cpp:
 external/imgui/imconfig.h:
 
 /usr/include/glm/ext/matrix_float2x2.hpp:
-
-/usr/include/c++/12/bits/allocator.h:
-
-src/Graphics/GUI.h:
 
 /usr/include/glm/mat2x3.hpp:
 
@@ -7594,8 +7614,6 @@ src/Graphics/GUI.h:
 
 /usr/include/c++/12/system_error:
 
-src/Graphics/ResourceManager.h:
-
 /usr/include/c++/12/stdexcept:
 
 /usr/include/glm/detail/type_mat4x3.inl:
@@ -7652,6 +7670,12 @@ src/Graphics/GLCanvas.cpp:
 
 src/Graphics/GLCanvas.h:
 
-/usr/include/glm/ext/vector_bool4_precision.hpp:
+external/imgui/imgui_widgets.cpp:
 
-/usr/include/c++/12/bits/stl_tree.h:
+/usr/include/c++/12/bits/uses_allocator.h:
+
+/usr/include/c++/12/bits/std_function.h:
+
+/usr/include/c++/12/tuple:
+
+/usr/include/c++/12/unordered_map:

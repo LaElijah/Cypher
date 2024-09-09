@@ -4,12 +4,16 @@
 #include <stdexcept>
 #include <iostream>
 #include "GLCanvas.h"
+#include <functional>
+
 
 namespace Graphics {
 
+
     void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     { 
-	std::cout << width << " GLCANVAS" << std::endl;
+       	
+	    std::cout << width << " " << height << std::endl;
         glViewport(0, 0, width, height);
     }
 
@@ -30,24 +34,46 @@ namespace Graphics {
         VERSION = version;
         lastX = width / 2;
         lastY = height / 2; 
-        
+        Width = width;
+        Height = height;
+
 	startWindow(width, height);
-	initializeCanvas();
+	initialize();
     }
 
 
-
-
-    void GLCanvas::initializeCanvas()
+    void GLCanvas::toggleDecoration()
+    {
+         
+    }
+ 
+    void GLCanvas::setResolution(float width, float height)
+    {
+        Width = width;
+        Height = height;	
+    }
+    void GLCanvas::initialize()
     {
         glfwMakeContextCurrent(Window);
         // TODO: Move this outside so that i can set canvas screen width and height to correct size
-        glfwSetFramebufferSizeCallback(Window, framebuffer_size_callback); 
+        
+
+	glfwSetFramebufferSizeCallback(Window, framebuffer_size_callback); 
         GLCanvas::loadGlad();  
         glEnable(GL_DEPTH_TEST);
     }
 
 
+    float GLCanvas::getHeight()
+    {
+        return Height; 
+    }
+
+
+    float GLCanvas::getWidth()
+    {
+        return Width; 
+    }
 
 
     GLFWwindow *GLCanvas::getWindow() 
@@ -83,7 +109,7 @@ namespace Graphics {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, VERSION);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, VERSION);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_DECORATED, !fullscreen);      
+        glfwWindowHint(GLFW_DECORATED, fullscreen);      
 
 
         #ifdef __APPLE__
@@ -118,6 +144,7 @@ namespace Graphics {
     {  
         glViewport(0, 0, width, height);
     }
+
 
 
 };

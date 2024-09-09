@@ -10,7 +10,7 @@ Graphics::TestWindow::TestWindow(
 void Graphics::TestWindow::draw()
 {
  
-	  ImGui::Begin("Test");
+	  ImGui::Begin(Name.c_str());
 
 	  ImGui::Text("HII");
 

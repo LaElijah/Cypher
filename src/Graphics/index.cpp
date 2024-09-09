@@ -35,57 +35,71 @@ int main()
 
 
 
-
-
-
-
-
-
-
+bool pressed = false;
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
     ImGuiIO& io = GUI->getIO();
-    //if (renderer.isFullScreen())
-    //{
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && !io.WantCaptureMouse)
+
+    // If not fullscreen, drag and orient function
+    // TODO: FIX error by specifiying the scene content window is focused?
+    // else do nothing 
+    if (GUI->isWindowed() && !pressed 
+		    && button == GLFW_MOUSE_BUTTON_LEFT 
+		    && action == GLFW_PRESS 
+		    && io.WantCaptureMouse)
     {
-       //Inverse 
-	    Canvas->releaseMouse(); 
+	Canvas->captureMouse(); 
         GUI->disable();	
-        Camera->enableCamera(); 
+        Camera->enableCamera();
+        pressed = true;	
     }
+
+    // If fullscreen, move like camera follow mouse
+   
+    else if (!GUI->isWindowed() && !pressed && !io.WantCaptureMouse
+		    && button == GLFW_MOUSE_BUTTON_LEFT 
+		    && action == GLFW_PRESS)
+    {
+        Canvas->captureMouse(); 
+        GUI->disable();	
+        Camera->enableCamera();
+        pressed = true;	
+
+    } 
+
+
+    if (
+           button == GLFW_MOUSE_BUTTON_LEFT 
+           && action == GLFW_RELEASE)
+    {
+        pressed = false;    
+    }
+
 }
 
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos)
-{ 
-    ImGuiIO& io = GUI->getIO();
-    
-    if (io.WantCaptureMouse)
+{     
+    if (Camera->isFirstMouse())
     {
-	if (Camera->isFirstMouse())
-        {
-            Camera->setLastX(xpos);
-            Camera->setLastY(ypos);
-            Camera->startMouse(); 
-        }
-          
-	if (Camera->getCameraStatus())
-	{
-              Camera->processMousePosition(xpos - Camera->getLastX(), Camera->getLastY() - ypos); 
-
-              Camera->setLastX(xpos);
-              Camera->setLastY(ypos);
-        }    
+        Camera->setLastX(xpos);
+        Camera->setLastY(ypos);
+        Camera->startMouse(); 
     }
+      
+    if (Camera->getCameraStatus())
+    {
+          Camera->processMousePosition(xpos - Camera->getLastX(), Camera->getLastY() - ypos); 
+          Camera->setLastX(xpos);
+          Camera->setLastY(ypos);
+    }     
 }
 
 
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 {
-    ImGuiIO& io = GUI->getIO();
-    if (!io.WantCaptureMouse)
-        Camera->processMouseScroll(yoffset);
+    Camera->processMouseScroll(yoffset);
 }
+
 
 

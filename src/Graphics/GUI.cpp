@@ -24,7 +24,8 @@ Graphics::GUI::GUI(GLFWwindow* window)
 
 void Graphics::GUI::disable()
 {
-    GUI_ENABLED = true;
+    GUI_ENABLED = false;
+    
 }
 
 
@@ -62,30 +63,38 @@ void Graphics::GUI::initialize(GLFWwindow* window)
 
 
 
-void Graphics::GUI::drawGUI(Graphics::FrameBuffer* sceneBuffer)
+void Graphics::GUI::drawGUI()
 { 
 	// Change so that it checks if fullscreen isnt enabled and gui enabled
-      if (true)
-      { 
           ImGui_ImplOpenGL3_NewFrame();
           ImGui_ImplGlfw_NewFrame();
           ImGui::NewFrame();
 
-
-          for (GUIComponent* component : Components)
+	  // Seperate into full screen components vs 
+	  // editor components
+          if (WINDOWED)
 	  {
-	      component->draw();
-	      // Add if focused handle input 
+	      for (GUIComponent* component : EditorComponents)
+	      {
+	          component->draw();
+	          // Add if focused handle input 
+	      }
+          }
+	  
+	  if (GUI_ENABLED && !WINDOWED)
+	  {
+	      for (GUIComponent* component : Components)
+	      {
+	          component->draw();
+	          // Add if focused handle input 
+	      }
 	  }
-
 
 	  ImGui::Render();
           ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
      
 	  // Set the draw target buffer after any changes to content are updated and
 	  // screen is rendered with scene buffer 
-
-    } 
 }
 
 
@@ -95,6 +104,17 @@ void Graphics::GUI::render()
 
 }
 */
+
+void Graphics::GUI::toggleWindow()
+{
+    WINDOWED = !WINDOWED;
+}
+
+
+bool Graphics::GUI::isWindowed()
+{
+    return WINDOWED;
+}
 void Graphics::GUI::shutdown()
 {
     ImGui_ImplOpenGL3_Shutdown();
@@ -102,7 +122,12 @@ void Graphics::GUI::shutdown()
     ImGui::DestroyContext(); 
 }
 
-void Graphics::GUI::addGUIComponent(Graphics::GUIComponent* component)
+void Graphics::GUI::addEditorComponent(Graphics::GUIComponent* component)
+{
+    EditorComponents.push_back(component);
+}
+
+void Graphics::GUI::addComponent(Graphics::GUIComponent* component)
 {
     Components.push_back(component);
 }

@@ -20,10 +20,15 @@ namespace Graphics
             GLCanvas(unsigned int width, 
 		     unsigned int height,
 	       	     unsigned int version = 3);
-            
+           
+	    void toggleDecoration();
+
             void captureMouse();
             void releaseMouse(); 
             GLFWwindow* getWindow();
+            void setResolution(float width, float height);
+            float getWidth();
+            float getHeight();
 
            void resizeCanvas(unsigned int width, unsigned height);
            std::pair<unsigned int, unsigned int> getResolution();
@@ -33,9 +38,11 @@ namespace Graphics
             int VERSION;
             int lastX;
             int lastY;
+	    float Width;
+	    float Height;
             bool firstMouse;
 
-	    void initializeCanvas();
+	    void initialize();
 	    std::string  WindowName;
             GLFWwindow* Window;
             glm::vec3 cameraFront;

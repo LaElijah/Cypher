@@ -74,6 +74,7 @@ void Graphics::Renderer::updateWindow(float width, float height)
   	  Camera->setAspectRatio(
 			  width 
 			  / height);
+	  //glViewport(0, 0, width, height);
 }
 
 
@@ -94,7 +95,7 @@ void Graphics::Renderer::run()
 	    updateWindow(width, height);
     };
    
-    GUI->addGUIComponent(
+    GUI->addEditorComponent(
 		    new Graphics::SceneWindow(
 			    std::string("Scene"),
 			    sceneBuffer,
@@ -102,7 +103,10 @@ void Graphics::Renderer::run()
 			    PostRenderFunctions)
 		    );
 
-    GUI->addGUIComponent(new Graphics::TestWindow(std::string("Test")));
+    GUI->addEditorComponent(new Graphics::TestWindow(std::string("Test")));
+
+
+    GUI->addComponent(new Graphics::TestWindow(std::string("WOAAH")));
       
      
     while (!glfwWindowShouldClose(window)) 
@@ -116,14 +120,26 @@ void Graphics::Renderer::run()
 
 
        
-        // Draw to scene frame buffer	
-	sceneBuffer->Bind();  
-	clear(); 
-	draw(); 
-        sceneBuffer->Unbind(); 
+        // Draw to scene frame buffer
 
+
+        if (GUI->isWindowed())
+	{	
+	    sceneBuffer->Bind();  
+	    clear(); 
+	    draw(); 
+            sceneBuffer->Unbind(); 
+
+	    
+	    GUI->drawGUI();
+        }
 	
-	GUI->drawGUI(sceneBuffer);
+	else 
+	{	
+	    draw(); 
+
+	    GUI->drawGUI();
+	}
 
 	glfwPollEvents();
 	glfwSwapBuffers(window);
@@ -229,6 +245,7 @@ void Graphics::Renderer::updateDeltaTime()
 
 
 
+bool toggleWindowPressed = false;
 void Graphics::Renderer::processInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -237,6 +254,41 @@ void Graphics::Renderer::processInput(GLFWwindow* window)
 	GUI->enable();
         Camera->disableCamera(); 
     } 
+
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !toggleWindowPressed) 
+    {
+	   int width;
+	   int height;
+
+	   glfwGetWindowSize(window, &width, &height);
+
+	   std::cout << height << std::endl;
+	    GUI->toggleWindow();
+            //Canvas->toggleDecoration(); 
+	    if (!GUI->isWindowed())
+	    {
+	        updateWindow(
+		    width, 
+		    height);
+
+                Canvas->captureMouse(); 
+                GUI->disable();	
+                Camera->enableCamera();      
+	    }
+	    else 
+	    {
+	          Canvas->releaseMouse(); 
+		  GUI->enable();	
+		  Camera->disableCamera();
+		 
+	    }
+
+            toggleWindowPressed = true;	    
+    }
+    else if ( glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE)
+    {
+        toggleWindowPressed = false; 
+    }
 
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) 
         Camera->resetPosition(); 
@@ -262,4 +314,6 @@ void Graphics::Renderer::processInput(GLFWwindow* window)
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 
         Camera->processKeyboard(Graphics::Direction::DOWN, getDeltaTime());    
 }
+
+
 
