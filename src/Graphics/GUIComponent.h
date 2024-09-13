@@ -13,9 +13,16 @@
 namespace Graphics {
     class GUIComponent {
     	public: 
-    	    //virtual ~GUIComponent();	
+
+	    GUIComponent(std::string name);
+	    std::string getName();
+    		//virtual ~GUIComponent();	
     	    virtual void draw() = 0;
     	    virtual void handleInput() = 0;
+
+        protected:
+	    std::string Name; 
+
     };
     
     class TestWindow : public GUIComponent {
@@ -23,8 +30,8 @@ namespace Graphics {
             TestWindow(std::string name);
 	    void draw();
 	    void handleInput();
-	private: 
-	    std::string Name; 
+
+	
     };
 
     class SceneWindow : public GUIComponent {
@@ -41,7 +48,6 @@ namespace Graphics {
     
         private:
             Graphics::FrameBuffer* SceneBuffer;
-            std::string Name;
 	    std::function<void(float, float)>& resizeWindow; 
 	    std::vector<std::function<void()>>& postRenderFunctions;
     };

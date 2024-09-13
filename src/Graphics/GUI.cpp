@@ -56,7 +56,8 @@ void Graphics::GUI::initialize(GLFWwindow* window)
     ImGui::CreateContext(); 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(); 
-    //ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+   
+    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     //ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 }
 
@@ -74,24 +75,28 @@ void Graphics::GUI::drawGUI()
 	  // editor components
           if (WINDOWED)
 	  {
-	      for (GUIComponent* component : EditorComponents)
+              for (std::pair<std::string, Graphics::GUIComponent*> component : EditorComponents)
 	      {
-	          component->draw();
+	          component.second->draw();
 	          // Add if focused handle input 
 	      }
           }
 	  
 	  if (GUI_ENABLED && !WINDOWED)
 	  {
-	      for (GUIComponent* component : Components)
+
+              for (std::pair<std::string, Graphics::GUIComponent*> component : Components)
 	      {
-	          component->draw();
+	          component.second->draw();
 	          // Add if focused handle input 
 	      }
 	  }
 
 	  ImGui::Render();
           ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+
+
      
 	  // Set the draw target buffer after any changes to content are updated and
 	  // screen is rendered with scene buffer 
@@ -124,10 +129,10 @@ void Graphics::GUI::shutdown()
 
 void Graphics::GUI::addEditorComponent(Graphics::GUIComponent* component)
 {
-    EditorComponents.push_back(component);
+    EditorComponents[component->getName()] = component;
 }
 
 void Graphics::GUI::addComponent(Graphics::GUIComponent* component)
 {
-    Components.push_back(component);
+    Components[component->getName()] = component;
 }

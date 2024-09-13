@@ -195,10 +195,11 @@ std::vector<Graphics::Model*>& Graphics::ResourceManager::getLoadedModels()
 void Graphics::ResourceManager::bindBuffers(std::vector<Graphics::Vertex>& vertices, std::vector<unsigned int>& indices, Graphics::VAO_TYPE vaoType)
 {
     Graphics::RenderResource& resource = getRenderResource(DEBUG);
-    glBindVertexArray(resource.VAO);
 
     if (CurrentVao != vaoType)
     {
+
+        glBindVertexArray(resource.VAO);
         glBindBuffer(GL_ARRAY_BUFFER, resource.VBO);
     }
      

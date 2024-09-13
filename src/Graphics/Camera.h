@@ -28,15 +28,10 @@ namespace Graphics {
     {
         public:
             Camera(float width, float height); 
-            float Zoom = 45.0f;
 	    
 	    void setZoom(float zoom);
 	    float getZoom();  
 
-            float getLastX();
-            float getLastY(); 
-	    void setLastX(double X);
-            void setLastY(double Y);
         
             void processMousePosition(double xoffset, double yoffset, bool constrainPitch = true);
 	    bool isFirstMouse();
@@ -80,12 +75,9 @@ namespace Graphics {
 
 	    float Velocity;
             float AspectRatio; 
-	    int lastX; 
-            int lastY; 
 	     
 	    glm::vec3 Direction; 
             glm::vec3 CameraFront;
-            GLFWwindow *window;
 
             void setCameraFront(glm::vec3 direction);
     };

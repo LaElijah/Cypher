@@ -12,9 +12,6 @@ Graphics::Camera::Camera(float width, float height)
     // Setting screen aspect ratio
     AspectRatio = width / height;
 
-    // Calculating screen midpoint for first mouse
-    lastX = width / 2;
-    lastY = height / 2; 
     updateDirection();
 }
 
@@ -60,40 +57,6 @@ void Graphics::Camera::processMousePosition(double xoffset, double yoffset, bool
     // Updates camera direction vector
     updateDirection();
 }
-
-
-
-
-
-
-float Graphics::Camera::getLastX()
-{
-    return lastX;
-}
-
-
-
-
-float Graphics::Camera::getLastY()
-{
-    return lastY;
-}
-
-
-
-void Graphics::Camera::setLastX(double X)
-{
-    lastX = X;
-}
-
-
-
-
-void Graphics::Camera::setLastY(double Y)
-{
-    lastY = Y;
-}
-
 
 
 

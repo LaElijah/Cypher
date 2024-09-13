@@ -67,7 +67,7 @@ void Graphics::Renderer::draw()
 
 void Graphics::Renderer::updateWindow(float width, float height)
 {
- 	  Canvas->resizeCanvas(
+ 	  Canvas->resizeViewport(
 			  width, 
 			  height);
 
@@ -242,7 +242,13 @@ void Graphics::Renderer::updateDeltaTime()
     lastFrame = currentFrame;
 }
 
-
+// have different "modes" under some identifier key
+// like a string naming it, or ma
+// into a map and have that map be keys with values 
+// of function objects that each have their own implementation of
+// the processing of inputs since a person can only have 1 "mode"
+// active at a time (theoretically) and pass in the associated key 
+// and press type, then
 
 
 bool toggleWindowPressed = false;

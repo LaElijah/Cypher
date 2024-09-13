@@ -34,8 +34,6 @@ int main()
 }
 
 
-
-bool pressed = false;
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
     ImGuiIO& io = GUI->getIO();
@@ -43,7 +41,14 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
     // If not fullscreen, drag and orient function
     // TODO: FIX error by specifiying the scene content window is focused?
     // else do nothing 
-    if (GUI->isWindowed() && !pressed 
+    //ImGuiWindow* currentWindow = ImGui::GetCurrentWindow();
+ 
+   // TODO: Fix scene selection bug maybe by 
+   // getting content region of scene window
+   // but what if theres things on top of it? 
+   // maybe i should see what the currently selected window
+   // is?  
+    if (GUI->isWindowed() 
 		    && button == GLFW_MOUSE_BUTTON_LEFT 
 		    && action == GLFW_PRESS 
 		    && io.WantCaptureMouse)
@@ -51,48 +56,46 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 	Canvas->captureMouse(); 
         GUI->disable();	
         Camera->enableCamera();
-        pressed = true;	
     }
 
     // If fullscreen, move like camera follow mouse
    
-    else if (!GUI->isWindowed() && !pressed && !io.WantCaptureMouse
+    else if (!GUI->isWindowed() 
+		    && !io.WantCaptureMouse
 		    && button == GLFW_MOUSE_BUTTON_LEFT 
 		    && action == GLFW_PRESS)
     {
         Canvas->captureMouse(); 
         GUI->disable();	
         Camera->enableCamera();
-        pressed = true;	
 
     } 
 
-
-    if (
-           button == GLFW_MOUSE_BUTTON_LEFT 
-           && action == GLFW_RELEASE)
-    {
-        pressed = false;    
-    }
-
 }
+
 
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos)
 {     
     if (Camera->isFirstMouse())
     {
-        Camera->setLastX(xpos);
-        Camera->setLastY(ypos);
-        Camera->startMouse(); 
+        Canvas->setLastX(xpos);
+        Canvas->setLastY(ypos);
+  	
+	Camera->startMouse(); 
+   
     }
       
     if (Camera->getCameraStatus())
     {
-          Camera->processMousePosition(xpos - Camera->getLastX(), Camera->getLastY() - ypos); 
-          Camera->setLastX(xpos);
-          Camera->setLastY(ypos);
-    }     
+          Camera->processMousePosition(xpos - Canvas->getLastX(), Canvas->getLastY() - ypos); 
+          Canvas->setLastX(xpos);
+          Canvas->setLastY(ypos);
+    }
+    else 
+    {
+        glfwSetCursorPos(Canvas->getWindow(), Canvas->getLastX(), Canvas->getLastY()); 
+    }    
 }
 
 

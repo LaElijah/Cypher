@@ -21,18 +21,27 @@ namespace Graphics
 		     unsigned int height,
 	       	     unsigned int version = 3);
            
-	    void toggleDecoration();
 
             void captureMouse();
-            void releaseMouse(); 
+            void releaseMouse();
+
+
             GLFWwindow* getWindow();
-            void setResolution(float width, float height);
             float getWidth();
             float getHeight();
 
-           void resizeCanvas(unsigned int width, unsigned height);
-           std::pair<unsigned int, unsigned int> getResolution();
+	    float getLastX();
+	    float getLastY();
+	    void setLastX(double X);
+	    void setLastY(double Y);
 
+	   // Canvas Settings
+
+	   void resizeViewport(unsigned int width, unsigned int height); 
+           std::pair<unsigned int, unsigned int> getResolution();
+            void setResolution(float width, float height);
+
+	    //void toggleDecoration();
         private: 
             bool fullscreen = false; 
             int VERSION;
@@ -45,7 +54,6 @@ namespace Graphics
 	    void initialize();
 	    std::string  WindowName;
             GLFWwindow* Window;
-            glm::vec3 cameraFront;
 
             void startWindow(unsigned int& width, unsigned int& height); 
             void loadGlad(); 

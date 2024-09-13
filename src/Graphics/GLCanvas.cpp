@@ -42,25 +42,29 @@ namespace Graphics {
     }
 
 
+	/*
     void GLCanvas::toggleDecoration()
     {
          
     }
+
+    */
  
     void GLCanvas::setResolution(float width, float height)
     {
         Width = width;
         Height = height;	
     }
+
+
     void GLCanvas::initialize()
     {
         glfwMakeContextCurrent(Window);
-        // TODO: Move this outside so that i can set canvas screen width and height to correct size
-        
 
 	glfwSetFramebufferSizeCallback(Window, framebuffer_size_callback); 
         GLCanvas::loadGlad();  
-        glEnable(GL_DEPTH_TEST);
+
+	glEnable(GL_DEPTH_TEST);
     }
 
 
@@ -82,6 +86,35 @@ namespace Graphics {
     }
 
 
+    float GLCanvas::getLastX()
+    {
+        return lastX;
+    }
+    
+    
+    
+    
+    float GLCanvas::getLastY()
+    {
+        return lastY;
+    }
+
+
+
+    void GLCanvas::setLastX(double X)
+    {
+        lastX = X;
+    }
+
+
+
+
+    void GLCanvas::setLastY(double Y)
+    {
+        lastY = Y;
+    }
+
+
 
 
     void GLCanvas::releaseMouse()
@@ -97,6 +130,7 @@ namespace Graphics {
     {	
 	GLFWwindow* window = getWindow();
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetCursorPos(Window, lastX, lastY); 
     }	
 
 
@@ -140,7 +174,7 @@ namespace Graphics {
     }
 
 
-    void GLCanvas::resizeCanvas(unsigned int width, unsigned height)
+    void GLCanvas::resizeViewport(unsigned int width, unsigned height)
     {  
         glViewport(0, 0, width, height);
     }

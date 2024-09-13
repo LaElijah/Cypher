@@ -43,10 +43,10 @@ namespace Graphics {
 	    void addEditorComponent(Graphics::GUIComponent*);
             	
 	private:	   
-	    bool WINDOWED = false; 
+	    bool WINDOWED = true; 
 	    bool GUI_ENABLED = false;
-	    std::vector<Graphics::GUIComponent*> Components;
-	    std::vector<Graphics::GUIComponent*> EditorComponents;
+	    std::map<std::string, Graphics::GUIComponent*> Components;
+	    std::map<std::string, Graphics::GUIComponent*> EditorComponents;
 
 
     };
