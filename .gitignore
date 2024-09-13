@@ -1,5 +1,11 @@
 /bin
 
 /data/Models/
+/CMakeFiles
+/trsh
+/CMakeCache.txt
+/imgui.ini
+/cmake_install.cmake
+/Makefile
 
 /_deps/
