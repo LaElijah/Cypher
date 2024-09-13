@@ -1,7 +1,7 @@
 #ifndef GUICOMPONENT_H
 #define GUICOMPONENT_H
 
-
+#include <set>
 #include "../../external/imgui/imgui.h"
 #include "../../external/imgui/imgui_impl_opengl3.h"
 #include "../../external/imgui/imgui_impl_glfw.h"

@@ -36,41 +36,7 @@ int main()
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-    ImGuiIO& io = GUI->getIO();
-
-    // If not fullscreen, drag and orient function
-    // TODO: FIX error by specifiying the scene content window is focused?
-    // else do nothing 
-    //ImGuiWindow* currentWindow = ImGui::GetCurrentWindow();
  
-   // TODO: Fix scene selection bug maybe by 
-   // getting content region of scene window
-   // but what if theres things on top of it? 
-   // maybe i should see what the currently selected window
-   // is?  
-    if (GUI->isWindowed() 
-		    && button == GLFW_MOUSE_BUTTON_LEFT 
-		    && action == GLFW_PRESS 
-		    && io.WantCaptureMouse)
-    {
-	Canvas->captureMouse(); 
-        GUI->disable();	
-        Camera->enableCamera();
-    }
-
-    // If fullscreen, move like camera follow mouse
-   
-    else if (!GUI->isWindowed() 
-		    && !io.WantCaptureMouse
-		    && button == GLFW_MOUSE_BUTTON_LEFT 
-		    && action == GLFW_PRESS)
-    {
-        Canvas->captureMouse(); 
-        GUI->disable();	
-        Camera->enableCamera();
-
-    } 
-
 }
 
 

@@ -46,11 +46,13 @@ namespace Graphics {
 	    void addComponent(Graphics::GUIComponent*);
 	    void addEditorComponent(Graphics::GUIComponent*);
             void handleInputs();        	
+            void handleClick();        	
 	private:	   
 	    bool WINDOWED = true; 
 	    bool GUI_ENABLED = false;
 	    std::map<std::string, Graphics::GUIComponent*> Components;
 	    std::map<std::string, Graphics::GUIComponent*> EditorComponents;
+	    std::set<std::string> loggedComponents;
 
 
     };

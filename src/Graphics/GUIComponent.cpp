@@ -81,4 +81,8 @@ void Graphics::SceneWindow::draw()
 }
 
 void Graphics::SceneWindow::handleInput()
-{}
+{
+    std::cout << "CLICKED" << std::endl;
+    // Add here the click and drag function
+    // and other functions to make outside the gui
+}
