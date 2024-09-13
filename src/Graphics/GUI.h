@@ -16,6 +16,10 @@
 
 namespace Graphics {
 
+     bool isWithinWindow(ImVec2 mousePos, ImVec2 windowPos, ImVec2 windowSize);
+     bool isWithinContentRegion(ImVec2 mousePos, ImVec2 contentRegionMin, ImVec2 contentRegionMax);
+
+
 
 
 
@@ -41,7 +45,7 @@ namespace Graphics {
 	    void initialize(GLFWwindow* window);
 	    void addComponent(Graphics::GUIComponent*);
 	    void addEditorComponent(Graphics::GUIComponent*);
-            	
+            void handleInputs();        	
 	private:	   
 	    bool WINDOWED = true; 
 	    bool GUI_ENABLED = false;
