@@ -36,7 +36,13 @@ int main()
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
- 
+    ImGuiIO& io = ImGui::GetIO();
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && !io.WantCaptureMouse)
+    {
+        Canvas->captureMouse(); 
+        GUI->disable();	
+        Camera->enableCamera(); 
+    } 
 }
 
 
