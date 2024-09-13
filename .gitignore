@@ -7,5 +7,5 @@
 /imgui.ini
 /cmake_install.cmake
 /Makefile
-
+.swp
 /_deps/
