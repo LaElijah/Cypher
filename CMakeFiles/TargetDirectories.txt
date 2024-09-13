@@ -1,3 +1,0 @@
-/home/laelijah/Gengine/CMakeFiles/Gengine.dir
-/home/laelijah/Gengine/CMakeFiles/edit_cache.dir
-/home/laelijah/Gengine/CMakeFiles/rebuild_cache.dir
