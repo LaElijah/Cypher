@@ -26,6 +26,7 @@ void main()
         fragResult = fragResult * specular1;
     }
 
+    fragResult = vec4(1.0, 0.0, 0.0, 0.0);
 
 
     FragColor = fragResult;

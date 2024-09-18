@@ -1,5 +1,5 @@
 
-#include <glad/glad.h>
+#include "../../external/GLAD/glad.h"
 #include <GLFW/glfw3.h>
 #include "Shader.h"
 #include "FileReader.h"
@@ -14,6 +14,9 @@
 #include "GUIComponent.h"
 #include "FrameBuffer.h"
 #include <functional>
+#include "RenderBatch.h"
+#include "System.h"
+
 
 Graphics::Renderer::Renderer()
 {
@@ -21,6 +24,8 @@ Graphics::Renderer::Renderer()
     Canvas = new Graphics::GLCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);    
     Camera = new Graphics::Camera(SCREEN_WIDTH, SCREEN_HEIGHT);
     GUI = new Graphics::GUI();
+
+    renderSystem = new Graphics::RenderSystem();
 }
 
 
@@ -35,31 +40,47 @@ Graphics::Renderer::Renderer(Graphics::ResourceManager* resourceManager, Graphic
 }
 
 
+// Render
+//
 
-void Graphics::Renderer::draw()
+void Graphics::Renderer::draw(std::vector<Graphics::RenderBatch>& batches)
 {
 
-    for (Graphics::Model* model : ResourceManager->getLoadedModels())
-    {
- 
-	Graphics::Shader* shader = ResourceManager->getShader(model->getShaderName());
-        shader->use();
-        shader->setMat4("model", model->getModelMatrix());      
-        shader->setMat4("view", Camera->getViewMatrix());
-        shader->setMat4("projection", Camera->getProjectionMatrix());
-        
- 
-        for (Graphics::Mesh& mesh : model->getMeshes())
-        {
-            ResourceManager->bindBuffers(mesh.getVertices(), mesh.getIndices(), DEBUG); 
-            ResourceManager->loadTextures(mesh.getTextures());
- 
-            glDrawElements(GL_TRIANGLES, (mesh.getIndices()).size(), GL_UNSIGNED_INT, 0);
-            glBindVertexArray(0);
+    Graphics::Shader* shader; 
+    for (Graphics::RenderBatch batch : batchi)
+    { 
+	// Get shader name from batch and set it
+    	if (lastShader != batch.shaderName)
+	{
 	
+	    //lastShader = batch->shaderName;
 	}
+
+	shader = ResourceManager->getShader(batch.shaderName);
+        shader->use();
+        shader->setMat4("model", batch.modelTransforms[0]);   
+
+        shader->setMat4("view", Camera->getViewMatrix());
+        shader->setMat4("projection", Camera->getProjectionMatrix());        
+        // For now return simply vertex indices array and textures but soon 
+        // vertecies will be all piled into one array, counts of vertices will
+        // be stored in an array, and indices will be in a vector of vectors of uints	
+        
+	//for (Graphics::Mesh& mesh : batch->meshes)
+        //{
+         ResourceManager->bindBuffers(batch.vertices, batch.indices, batch.drawCalls, DEBUG); 
+            //ResourceManager->loadTextures(mesh.getTextures());
+ 
+         glMultiDrawElementsIndirect(
+			    GL_TRIANGLES, 
+			    GL_UNSIGNED_INT, 
+			    nullptr, 
+			    batch.drawCalls.size(), 
+			    sizeof(Graphics::GLDrawElementsIndirectCommand));
+        glBindVertexArray(0);	
+     
     }
- }
+}
 
 
 
@@ -83,18 +104,21 @@ void Graphics::Renderer::run()
 
     GLFWwindow *window = Canvas->getWindow();
  
-    ResourceManager->loadModel(new Graphics::Model("/home/laelijah/Gengine/data/Models/room/scene.gltf"));
+    //ResourceManager->loadModel(new Graphics::Model("/home/laelijah/Gengine/data/Models/room/scene.gltf"));
 
 
+    batchi = renderSystem->getBatches();
+    //std::vector<Graphics::RenderBatch> batches = renderSystem->getBatches();
     ImGuiIO& io = GUI->getIO();
 
     Graphics::FrameBuffer* sceneBuffer = new Graphics::FrameBuffer(1920, 1080);
 
+   
     std::function<void(float, float)> resizeFunction = [this, sceneBuffer] (float width, float height) {
 	    sceneBuffer->updateWindowSize(width, height); 
 	    updateWindow(width, height);
     };
-   
+  
     GUI->addEditorComponent(
 		    new Graphics::SceneWindow(
 			    std::string("Scene"),
@@ -108,7 +132,7 @@ void Graphics::Renderer::run()
 
     GUI->addComponent(new Graphics::TestWindow(std::string("WOAAH")));
       
-     
+    
     while (!glfwWindowShouldClose(window)) 
     {   
  
@@ -118,16 +142,13 @@ void Graphics::Renderer::run()
             processInput(window);
         }
 
-
-       
-        // Draw to scene frame buffer
-
+	          // Draw to scene frame buffer
 
         if (GUI->isWindowed())
 	{	
 	    sceneBuffer->Bind();  
 	    clear(); 
-	    draw(); 
+	    draw(batchi); 
             sceneBuffer->Unbind(); 
 
 	    
@@ -136,7 +157,7 @@ void Graphics::Renderer::run()
 	
 	else 
 	{	
-	    draw(); 
+	    draw(batchi); 
 
 	    GUI->drawGUI();
 	}
@@ -156,7 +177,6 @@ void Graphics::Renderer::run()
 	    PostRenderFunctions.back()();
 	    PostRenderFunctions.pop_back(); 
 	}
-
         updateDeltaTime();	    
     }
     GUI->shutdown(); 

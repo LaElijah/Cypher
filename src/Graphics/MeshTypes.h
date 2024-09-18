@@ -3,6 +3,7 @@
 
 
 #include <glm/glm.hpp>
+#include <string>
 
 namespace Graphics {
     struct ModelFile
@@ -16,6 +17,7 @@ namespace Graphics {
     {
       std::string type;
       std::string path;
+      // Remove this, leave texture handling to render api
       unsigned int id;
   
     };

@@ -6,6 +6,7 @@ set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(EXTERNAL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external)
 
 find_package(glfw3 3.3.8 REQUIRED)
+find_package(OpenGL REQUIRED)
 
 FetchContent_Declare(
   assimp
@@ -25,6 +26,7 @@ set(SOURCES
   ${SRC_DIR}/Graphics/GUI.cpp
   ${SRC_DIR}/Graphics/FrameBuffer.cpp
   ${SRC_DIR}/Graphics/GUIComponent.cpp
+  ${SRC_DIR}/Graphics/System.cpp
   ${EXTERNAL_DIR}/GLAD/glad.c
   ${EXTERNAL_DIR}/STB_IMAGE/stb_image.cpp
   ${EXTERNAL_DIR}/imgui/imconfig.h
@@ -45,11 +47,11 @@ set(SOURCES
   ${EXTERNAL_DIR}/imgui/imgui_impl_opengl3_loader.h 
   ${EXTERNAL_DIR}/imgui/imgui_stdlib.cpp
   ${EXTERNAL_DIR}/imgui/imgui_stdlib.h
+)
 
-  )
-
+add_library(GLAD ${EXTERNAL_DIR}/GLAD/glad.c)
 
 add_executable(Gengine ${SOURCES})
 
-target_link_libraries(Gengine assimp)
-target_link_libraries(Gengine glfw)
+target_link_libraries(Gengine GLAD glfw OpenGL::GL assimp)
+

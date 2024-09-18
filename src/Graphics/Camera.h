@@ -65,7 +65,7 @@ namespace Graphics {
 	    float zoom = 45.0f; 
 
 	    // Camera vector data
-	    glm::vec3 Position = glm::vec3(0.0f, 1.0f, 3.0f);
+	    glm::vec3 Position = glm::vec3(0.0f, 0.0f, 3.0f);
             glm::vec3 CameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
             glm::vec3 CameraDirection = glm::normalize(Position - CameraTarget); 
             glm::mat4 Projection = glm::mat4(1.0f);

@@ -18,10 +18,12 @@ namespace Graphics {
       
       unsigned int ID;
       
-      Shader(const char *vertexShaderPath, const char *fragmentShaderPath); 
-      Shader(std::string vertexShaderPath, std::string fragmentShaderPath);
+      Shader(const char *vertexShaderPath, const char *fragmentShaderPath, const char* name); 
+      Shader(std::string vertexShaderPath, std::string fragmentShaderPath, std::string name);
 
       void use();
+      std::string getName();
+
 
       void setBool(const std::string &name, bool value) const;
       void setInt(const std::string &name, int value) const;
@@ -33,6 +35,7 @@ namespace Graphics {
     private:
       unsigned int compileShader(unsigned int type, const char *shaderCode);
       void linkShaders(unsigned int vertex, unsigned int fragment);
+      std::string Name; 
   };      
 }
 

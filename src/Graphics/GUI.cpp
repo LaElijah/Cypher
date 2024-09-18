@@ -69,6 +69,7 @@ void Graphics::GUI::initialize(GLFWwindow* window)
 void Graphics::GUI::drawGUI()
 { 
 	// Change so that it checks if fullscreen isnt enabled and gui enabled
+    if (GUI_ENABLED) {
           ImGui_ImplOpenGL3_NewFrame();
           ImGui_ImplGlfw_NewFrame();
           ImGui::NewFrame();
@@ -94,13 +95,14 @@ void Graphics::GUI::drawGUI()
 	      }
 	  }
 
+
 	  ImGui::Render();
           ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 
 	  handleInputs();
 
-
+    }
 
      
 	  // Set the draw target buffer after any changes to content are updated and
@@ -162,10 +164,12 @@ void Graphics::GUI::handleClick()
 
 		if (getIO().WantCaptureMouse)
 		{
+			/*
 	   	    if (WINDOWED)
     	                EditorComponents[window->Name]; 
     	            else if (!WINDOWED && GUI_ENABLED) 
     	                Components[window->Name]; 
+			*/
                 }
 		// End for loop
 		return;

@@ -1,46 +1,60 @@
+# TODO: 
+
+# GUI: 
+    - Create a layout [ ]
+
+# Renderer: 
+    - Create an entity component system [ ]
+        - Set up basic render pipeline
+            - Create Batch class
+                - fit in vao 
+                - fit in shader 
+                - fit in vbo (for now the same across batches  
+                - fit in ebo (same as vbo)
+                - 
+            - Create a sparse set class
+            - create a map with an entity id key and a pointer value generic 
+            - create an inheritance tree with either a sparse set for unique 
+            indexes (set), and a map for common indexes (wip)
+            - Create Systems manager ( pass into renderer as batch delivery ) ( maybe i could make a queue that gets pulled from every frame ? )
+                - Make a tick method that (hopefully this is what glfw time gives) divides delta time by the tick rate and loops
+                  the method that was passed into the function
+                - Make a rate function that counts the amount of ticks and updates at the right rate 
+                - Create Entity manager 
+                    - Make a create entity method that creates, handles, and delivers an entity id as a return 
+                    - When a deletion occurs, go through all systems and call their clean function which will check their entity
+                    index storage method and remove associated indexes
+            - Create RenderSystem
+                - Create batches by looping through entities that have a model 
+            - Create TransformSystem
+                - Make a modify transform method 
+                - pulls from velocity component which for now is a sine wave on x but
+                will be created and modified by physics system in previous part of pipeline
+            - Link RenderSystem Batch vector to renderer through return value, and clear vector on new update 
 
 
 
-a batch contains
-
-
-a vector of all collected  vertices 
-a vector of vectors of indices 
-
-
-So heres how it goes
-
-
-Using mult draw elements will condense many draw calls of different meshes into one
-
-It will use a vao with one vbo binded to it and that VBO must be filled with the vertices of each mesh to be rendered, the limiting factor of each batch is the amount of textures, for now (there may be some expansion with texture arrays, there is a max of 16/32 texture units, so i should have a btach object that looks like this
-
-
-vao,
-vbo,
-shader (reference to a shader, given through batch creation call),
-counts (vertex counts per mesh),
-indicies (array of arrays of indices)
-Textures
-
-
-vao, vbo is self explanatory and can be handled through initialization
-
-counts will be push_back on to fill it with the full counts of vertecies push_back directly after full mesh has loaded. indices will be pushed into their own array and then pushed into the main indices array in the resource manager.
-
-textures will 
 
 
 
-there should be a texture index on each render entity 
 
+Formalization:
+- Must have 4 space indentation
+- always use the full word in names
+- maintain one or two word per variable, function, and classname 
 
+- Classes
+    - Must have Upper Case:
+        - Public variables 
+        - Class Name
+        - private variables 
+    - Must have Lower Case: 
+        - function names
+        - local variables
 
-i should set the shader name to something that semantically includes the VAO type, i could have 
+File structure:
+    - namespace represents folder 
+    - All classes are in .h file
+    - All classes have source .cpp file to compile
+    - Functions that dont belong to any class goes into a utils.cpp and .h file
 
-
-
-The plan now is to set up the redner entity, the entity should only be a collection of references to objectes being held into it s own memory area within the resource manager (through a vector or a map).
-
-Then, if its a single draw call,
-within the mesh, use the resource manager to binf the VAO usign the reference in the render entity, binf the vbo  

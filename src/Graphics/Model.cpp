@@ -200,9 +200,13 @@ std::vector<Graphics::Texture> Graphics::Model::loadMaterialTextures(aiMaterial 
             Graphics::Texture texture;
 
             // Check here for embedded or not and emply the right texture load function
-            if (str.length > 0 && str.data[0] == '*') // If embedded
-                texture.id = TextureFromEmbedded(scene, std::stoi(&str.data[1]));
-            else
+            //if (str.length > 0 && str.data[0] == '*') // If embedded
+            if (scene->GetEmbeddedTexture(str.C_Str()) != NULL)
+	    {
+		 int textureIndex = std::stoi(std::string(str.C_Str()).substr(1));
+	         texture.id = TextureFromEmbedded(scene->mTextures[textureIndex]);
+	    } 
+	    else
                 texture.id = TextureFromFile(str.C_Str(), this->directory);
  
             texture.type = typeName;
@@ -218,45 +222,58 @@ std::vector<Graphics::Texture> Graphics::Model::loadMaterialTextures(aiMaterial 
 
 
 // TODO: MAKE FUNCTIONAL
-unsigned int Graphics::Model::TextureFromEmbedded(const aiScene* scene, int embeddedIndex)
+unsigned int Graphics::Model::TextureFromEmbedded(const aiTexture* embeddedTexture)
 { 
-    std::cout << "LOADING EMBEDDED TEXTURE" << std::endl;
+    std::cout << "LOADING EMBEDDED TEXTURE: " << std::endl;
+
     unsigned int textureID;
     glGenTextures(1, &textureID);
 
-    const aiTexture* embeddedTexture = scene->mTextures[embeddedIndex];
-   
-    if (embeddedTexture->pcData) 
-    {
-        // Update for a wider range of channels
+    // Update for a wider range of channels
 
-	int width = embeddedTexture->mWidth;
-	int height = embeddedTexture->mHeight;
-        int format = 3;
-	
-	        // Not yet working need to fnd a way to get format	
-		//embeddedTexture->mFormat == aiTextureFormat::aiTextureFormat_RGBA ? 4 : 3;
-        
-        unsigned char* data = new unsigned char[width * height * format];
-        std::memcpy(data, embeddedTexture->pcData, width * height * format);
-       
+    int width = embeddedTexture->mWidth;
+    int height = embeddedTexture->mHeight;
+    
+    int format = GL_RGB;
+
+    /*
+    switch (embeddedTexture->mFormat)
+    {
+        case aiTextureFormat_RGBA:
+            format = GL_RGBA;
+            break;
+        case aiTextureFormat_RGB:
+            format = GL_RGB;
+            break;
+        // Add more cases if needed
+        default:
+            format = GL_RGB; // Default to RGB if format is unknown
+            break;
+    }
+
+    */
+
+
+        // Not yet working need to fnd a way to get format	
+	//embeddedTexture->mFormat == aiTextureFormat::aiTextureFormat_RGBA ? 4 : 3;
+
+
 	glBindTexture(GL_TEXTURE_2D, textureID);
-     	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+     	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, embeddedTexture->pcData);
         glGenerateMipmap(GL_TEXTURE_2D);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+/*   
 
-        delete[] data;
     }
-
-    else 
+else 
     {
         std::cout << "Texture failed to load at embedded index: " << embeddedIndex << std::endl;
     }
-
+*/
 
     return textureID;
 

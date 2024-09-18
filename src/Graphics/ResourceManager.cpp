@@ -1,4 +1,6 @@
-#include <glad/glad.h>
+//#include <glad/glad.h>
+
+#include "../../external/GLAD/glad.h"
 #include <GLFW/glfw3.h>
 #include <stdexcept>
 #include <iostream>
@@ -7,6 +9,7 @@
 #include "ResourceManager.h"
 #include "Shader.h"
 #include "Model.h"
+#include "RenderBatch.h"
 
 #include "../../external/imgui/imgui.h"
 
@@ -55,7 +58,7 @@ void Graphics::ResourceManager::loadShaders(std::string shaderDirectory)
 	std::string vs = workingShader + "/" + fileReader.getFile("vs");
 	std::string fs = workingShader + "/" + fileReader.getFile("fs");
 
-	loadShader(new Graphics::Shader(vs, fs), shader);
+	loadShader(new Graphics::Shader(vs, fs, shader), shader);
     }
 }
 
@@ -73,6 +76,8 @@ Graphics::RenderResource& Graphics::ResourceManager::generateRenderResource(VAO_
 
     glGenBuffers(1, &resource.VBO);
     glGenBuffers(1, &resource.EBO); 
+
+    glGenBuffers(1, &resource.IBO); 
 
     glBindBuffer(GL_ARRAY_BUFFER, resource.VBO);
 
@@ -192,22 +197,28 @@ std::vector<Graphics::Model*>& Graphics::ResourceManager::getLoadedModels()
 
 
 
-void Graphics::ResourceManager::bindBuffers(std::vector<Graphics::Vertex>& vertices, std::vector<unsigned int>& indices, Graphics::VAO_TYPE vaoType)
+void Graphics::ResourceManager::bindBuffers(std::vector<Graphics::Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Graphics::GLDrawElementsIndirectCommand> drawCalls, Graphics::VAO_TYPE vaoType)
 {
     Graphics::RenderResource& resource = getRenderResource(DEBUG);
 
     if (CurrentVao != vaoType)
     {
-
+        //std::cout << "VAO: " << resource.VAO << std::endl;
         glBindVertexArray(resource.VAO);
         glBindBuffer(GL_ARRAY_BUFFER, resource.VBO);
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource.EBO);
+        glBindBuffer(GL_DRAW_INDIRECT_BUFFER, resource.IBO);
     }
-     
+   
     glBufferData(GL_ARRAY_BUFFER, sizeof(Graphics::Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource.EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_STATIC_DRAW);
-    
+  
+    glBufferData(GL_DRAW_INDIRECT_BUFFER, drawCalls.size() * sizeof(Graphics::GLDrawElementsIndirectCommand), drawCalls.data(), GL_STATIC_DRAW); 
+
+  
+ 
 }
 
 

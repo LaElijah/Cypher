@@ -15,17 +15,22 @@ namespace Graphics {
             Model(std::string path);
             
             std::vector<Graphics::Mesh>& getMeshes();
+
+	    // In transform system 
             glm::mat4 getModelMatrix();
 
             std::string getShaderName();
             void setShaderName(std::string name);
 
         private:
-            glm::vec3 Position = glm::vec3(0.0f, 0.0f, -1.0f);
-            glm::vec3 Scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	    // Transform component
+            glm::vec3 Position = glm::vec3(25.0f, 0.0f, -60.0f);
+            glm::vec3 Scale = glm::vec3(10.0f, 10.0f, 10.0f);
             
             std::vector<Graphics::Mesh> meshes;
             std::vector<Graphics::Texture> texturesLoaded;
+
+	    // Make default to mesh component 
             std::string shaderName = "DEBUG_VAO_DEBUG_SHADER";
             std::string directory;
 
@@ -47,7 +52,7 @@ namespace Graphics {
 			    std::string typeName);
 
             unsigned int TextureFromFile(std::string path, std::string directory); 
-            unsigned int TextureFromEmbedded(const aiScene* scene, int embeddedIndex);
+            unsigned int TextureFromEmbedded(const aiTexture* embeddedTexture);
     };
 }
 

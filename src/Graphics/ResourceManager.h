@@ -10,7 +10,7 @@
 #include "Shader.h"
 
 #include "../../external/imgui/imgui.h"
-
+#include "RenderBatch.h"
 
 
 namespace Graphics {
@@ -23,6 +23,7 @@ namespace Graphics {
     	unsigned int VAO;
     	unsigned int VBO; 
     	unsigned int EBO;     
+        unsigned int IBO;
 	// Graphics::Shader& shader;
     	// TODO: Add texture vector, up to 16/32 with texture units and what 
     	// sounds like 1024 with texture arrays
@@ -65,7 +66,7 @@ namespace Graphics {
 
             void bindBuffers(
 			    std::vector<Graphics::Vertex>& vertices, 
-			    std::vector<unsigned int>& indices, 
+			    std::vector<unsigned int>& indices, std::vector<Graphics::GLDrawElementsIndirectCommand> drawCalls,
 			    Graphics::VAO_TYPE vaoType);
 	
             void loadTextures(std::vector<Texture>& Textures);

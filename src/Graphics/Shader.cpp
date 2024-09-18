@@ -22,7 +22,7 @@ namespace Graphics
 {
 
 
-  Shader::Shader(std::string vertexShaderPath, std::string fragmentShaderPath)
+  Shader::Shader(std::string vertexShaderPath, std::string fragmentShaderPath, std::string name)
   {
       std::string vertexCode;
       std::string fragmentCode;
@@ -64,13 +64,17 @@ namespace Graphics
       vertex = Shader::compileShader(GL_VERTEX_SHADER, vertexShaderCode);
       fragment = Shader::compileShader(GL_FRAGMENT_SHADER, fragmentShaderCode);
       linkShaders(vertex, fragment);
+      Name = name;
 
   }
 
 
+  std::string Shader::getName()
+  {
+      return Name; 
+  }
 
-
-  Shader::Shader(const char *vertexShaderPath, const char *fragmentShaderPath)
+  Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath, const char* name)
   {
       std::string vertexCode;
       std::string fragmentCode;
@@ -112,6 +116,7 @@ namespace Graphics
       vertex = Shader::compileShader(GL_VERTEX_SHADER, vertexShaderCode);
       fragment = Shader::compileShader(GL_FRAGMENT_SHADER, fragmentShaderCode);
       linkShaders(vertex, fragment);
+      Name = std::string(name);
 
   }
 
