@@ -1,28 +1,84 @@
+#ifndef RENDER_BATCH_H
+#define RENDER_BATCH_H
 
 
+#include "MeshTypes.h"
+
+#include "Mesh.h"
 namespace Graphics {
-
-    template<T>
+/*
+    //template<T>
     struct RenderBatch 
     {
-        public: 
-	    Shader shader;
-            unsigned int VAO;
-            unsigned int VBO;
-            std::vector<T> textureIndices;
+        std::string shaderName;
+	std::vector<Graphics::Vertex> vertices;
+	std::vector<std::vector<unsigned int>> indices;
+	std::vector<glm::mat4> modelTransforms;
+	std::vector<Texture> textures;	    
+        // Maybe a batch draw type (single/batch) 
+	// Remove constructor 
+	RenderBatch(
+        const std::string& shaderName,
+        const std::vector<Graphics::Vertex>& vertices,
+        const std::vector<std::vector<unsigned int>>& indices,
+        const std::vector<glm::mat4>& modelTransforms,
+        const std::vector<Texture>& textures
+    )
+        : shaderName(shaderName),
+          vertices(vertices),
+          indices(indices),
+          modelTransforms(modelTransforms),
+          textures(textures)
+    {
+        // Constructor body can be empty if there's no additional logic
+    }
+    };
+*/
+    //template<T>
+    //
+    //
 
-	    // add texture function that takes in 
-	    // the current index of meshes, and 
-	    // uses that as the index to the array of 
-	    // vectors, then it submits the texture 
-	    // to the binding function which assigns the textures to 
-	    // the appropriate resolution scale, and then assigns the 
-	    // vec component x to the resolution 
-	    
+struct GLDrawElementsIndirectCommand {
+    unsigned int count;         // Number of indices
+    unsigned int instanceCount; // Number of instances
+    unsigned int firstIndex;    // Starting index in the index buffer
+    unsigned int baseVertex;     // Base vertex added to each index
+    unsigned int baseInstance;  // Base instance added to each instance
+};
+    struct RenderBatch 
+    {
 
+	std::vector<glm::mat4> modelTransforms;
+        std::string shaderName;
+	std::vector<Graphics::Vertex> vertices;
+	std::vector<int> counts;
+	std::vector<unsigned int> indices;
+	int numCalls;	
+        std::vector<Graphics::GLDrawElementsIndirectCommand> drawCalls; 
+/*
+	RenderBatch(
+	std::vector<glm::mat4> modelTransforms,
+        const std::string& shaderName,
+	std::vector<Graphics::Vertex> vertices,
+	std::vector<int> counts,
+	std::vector<unsigned int> indices,
+	int numCalls, 
+        std::vector<Graphics::GLDrawElementsIndirectCommand> drawCalls	
+    ) : 
+	modelTransforms(modelTransforms),
+	shaderName(shaderName), 
+	vertices(vertices),
+        counts(counts),
+	indices(indices),
+	numCalls(numCalls),
+        drawCalls(drawCalls)	
+    {
+        // Constructor body can be empty if there's no additional logic
     }
 
-	
-
+    */
+    };
 
 }
+
+#endif
