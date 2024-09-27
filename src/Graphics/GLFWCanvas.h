@@ -1,32 +1,22 @@
-#ifndef GLCANVAS_H
-#define GLCANVAS_H
+#ifndef GLFWCANVAS_H
+#define GLFWCANVAS_H
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
 
-
-
 namespace Graphics
 {
-
-
-
-
-    class GLCanvas 
+    class GLFWCanvas 
     {
         public:
-            GLCanvas(unsigned int width, 
+            GLFWCanvas(unsigned int width, 
 		     unsigned int height,
 	       	     unsigned int version = 3);
-           
 
             void captureMouse();
             void releaseMouse();
-
-
-            GLFWwindow* getWindow();
             float getWidth();
             float getHeight();
 
@@ -37,25 +27,34 @@ namespace Graphics
 
 	   // Canvas Settings
 
-	   void resizeViewport(unsigned int width, unsigned int height); 
-           std::pair<unsigned int, unsigned int> getResolution();
+	    void resizeViewport(unsigned int width, unsigned int height); 
+            std::pair<unsigned int, unsigned int> getResolution();
             void setResolution(float width, float height);
+	    void updateDeltaTime();
+	    float getDeltaTime();
 
+            GLFWwindow* getWindow();
 	    //void toggleDecoration();
+	    
         private: 
-            bool fullscreen = false; 
-            int VERSION;
+	    float currentFrame = 0;
+	    float deltaTime = 0;
+	    float lastFrame = 0;
+
+	    bool fullscreen = false; 
+ 
+	    std::string  WindowName;
+            GLFWwindow* Window;
+
+       	    int VERSION;
             int lastX;
             int lastY;
 	    float Width;
 	    float Height;
             bool firstMouse;
 
-	    void initialize();
-	    std::string  WindowName;
-            GLFWwindow* Window;
-
             void startWindow(unsigned int& width, unsigned int& height); 
+	    void initialize();
             void loadGlad(); 
     };
 }

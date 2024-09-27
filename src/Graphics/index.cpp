@@ -4,8 +4,10 @@
 #include "../../external/imgui/imgui.h"
 #include "Camera.h"
 #include "ResourceManager.h"
-#include "GLCanvas.h"
+#include "GLFWCanvas.h"
 #include "Renderer.h"
+#include "RenderAPI.h"
+
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);  
@@ -14,7 +16,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 Graphics::Renderer renderer;
 Graphics::ResourceManager* ResourceManager = renderer.getResourceManager();
 Graphics::Camera* Camera = renderer.getCamera();
-Graphics::GLCanvas* Canvas = renderer.getCanvas();    
+Graphics::GLFWCanvas* Canvas = renderer.getCanvas();    
 Graphics::GUI* GUI = renderer.getGUI();
 
 
@@ -28,8 +30,9 @@ int main()
 
     GUI->initialize(window);
     ResourceManager->initialize(); 
-    
-    renderer.run();
+   
+    Graphics::OpenGLRenderAPI api = Graphics::OpenGLRenderAPI(); 
+    renderer.run(api);
     return 0;
 }
 

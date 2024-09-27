@@ -60,9 +60,10 @@ void Graphics::ResourceManager::loadShaders(std::string shaderDirectory)
 }
 
 
-
-
-Graphics::RenderResource& Graphics::ResourceManager::generateRenderResource(VAO_TYPE vaoType)
+/*
+// Move implememntation to api 
+// Should be indexed by shader name 
+Graphics::RenderResource& Graphics::ResourceManager::generateRenderResource(VAO_TYPE vaoType, std::string shaderName)
 {
     Graphics::RenderResource resource;
     
@@ -92,12 +93,15 @@ Graphics::RenderResource& Graphics::ResourceManager::generateRenderResource(VAO_
             }
 
 	 
-    RenderResources[vaoType] = std::move(resource);
+    RenderResources[shaderName] = std::move(resource);
 
-    return getRenderResource(vaoType);
+    return getRenderResource(vaoType, shaderName);
 }
 
+*/
 
+/*
+	   // Move implememntation to api 
 void Graphics::ResourceManager::loadTextures(std::vector<Graphics::Texture>& textures)
 {
     unsigned int diffuseN = 1;
@@ -139,27 +143,29 @@ void Graphics::ResourceManager::loadTextures(std::vector<Graphics::Texture>& tex
 
     glActiveTexture(GL_TEXTURE0);
 }
+*/
 
+/*
 
-
-
-Graphics::RenderResource& Graphics::ResourceManager::getRenderResource(VAO_TYPE vaoType)
+Graphics::RenderResource& Graphics::ResourceManager::getRenderResource(
+		Graphics::VAO_TYPE vaoType, 
+		std::string shaderName)
 {
     // Was the vao found in our vector?
-    if (RenderResources.count(vaoType)) 
+    if (RenderResources.count(shaderName)) 
     {
         // Return the found render entitiy
-	return RenderResources[vaoType];
+	return RenderResources[shaderName];
     }
     else 
     {
-	std::cout << "GENERATING NEW RENDER ENTITY" << std::endl;
-        return generateRenderResource(vaoType);
+	std::cout << "GENERATING NEW RENDER RESOURCE FOR: " << shaderName << std::endl;
+        return generateRenderResource(vaoType, shaderName);
     }
 }
 
 
-
+*/
 
 void Graphics::ResourceManager::loadModel(Graphics::Model* model)
 {
@@ -190,11 +196,16 @@ std::vector<Graphics::Model*>& Graphics::ResourceManager::getLoadedModels()
     return loadedModels;
 }
 
+/*
 
-
-void Graphics::ResourceManager::bindBuffers(std::vector<Graphics::Vertex>& vertices, std::vector<unsigned int>& indices, Graphics::VAO_TYPE vaoType)
+	   // Move implememntation to api 
+void Graphics::ResourceManager::bindBuffers(
+		std::vector<Graphics::Vertex>& vertices, 
+		std::vector<unsigned int>& indices, 
+		Graphics::VAO_TYPE vaoType,
+		std::string shaderName)
 {
-    Graphics::RenderResource& resource = getRenderResource(DEBUG);
+    Graphics::RenderResource& resource = getRenderResource(vaoType, shaderName);
 
     if (CurrentVao != vaoType)
     {
@@ -209,7 +220,7 @@ void Graphics::ResourceManager::bindBuffers(std::vector<Graphics::Vertex>& verti
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_STATIC_DRAW);
     
 }
-
+*/
 
 void Graphics::ResourceManager::initialize()
 {

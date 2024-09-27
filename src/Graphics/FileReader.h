@@ -1,3 +1,6 @@
+#ifndef FILE_READER_H
+#define FILE_READER_H
+
 #include <string>
 #include <dirent.h>
 #include <vector>
@@ -29,3 +32,6 @@ namespace Graphics {
         struct dirent* getEntry(std::string dirname);	 
     };
 }
+
+
+#endif

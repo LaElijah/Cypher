@@ -2,9 +2,23 @@
 #include <GLFW/glfw3.h>
 #include "Camera.h"
 #include "ResourceManager.h"
-#include "GLCanvas.h"
+#include "GLFWCanvas.h"
 #include "Shader.h"
 #include "GUI.h"
+#include "RenderAPI.h"
+
+
+#include "ResourceManager.h"
+#include "Model.h"
+#include "Mesh.h"
+#include "../../external/imgui/imgui.h"
+#include "../../external/imgui/imgui_impl_opengl3.h"
+#include "../../external/imgui/imgui_impl_glfw.h"
+#include "GUIComponent.h"
+#include "FrameBuffer.h"
+#include <functional>
+
+
 
 // POTENTIAL NAME CYPHER;
 
@@ -13,47 +27,147 @@ namespace Graphics {
 
 
 
-
     class Renderer 
     {
 	public:
             Renderer();
-            Renderer(Graphics::ResourceManager* resourceManager, Graphics::GLCanvas* canvas, Graphics::Camera* camera);
-        
-	    void run();
-	    void shutdown();
-	    void draw();
-            
-            void clear();	    
-	 
-	    float getDeltaTime();
+            Renderer(
+	        Graphics::ResourceManager* resourceManager, 
+		Graphics::GLFWCanvas* canvas, 
+		Graphics::Camera* camera);
 
 	    Graphics::ResourceManager* getResourceManager();
-	    Graphics::GLCanvas* getCanvas();
+	    Graphics::GLFWCanvas* getCanvas();
 	    Graphics::Camera* getCamera();
 	    Graphics::GUI* getGUI();
 
             void updateWindow(float width, float height);
+	    void shutdown();
 
-   	
+
+
+
+
+
+
+
+
+       
+            // API Dependent functions
+            
+	    template <typename T>	    
+            void draw(Graphics::RenderAPI<T>& renderAPI)
+            {
+                for (Graphics::Model* model : ResourceManager->getLoadedModels())
+                { 
+            	    Graphics::Shader* shader = ResourceManager->getShader(model->getShaderName());
+                    shader->use();
+                    shader->setMat4("model", model->getModelMatrix());      
+                    shader->setMat4("view", Camera->getViewMatrix());
+                    shader->setMat4("projection", Camera->getProjectionMatrix());
+                     
+                    for (Graphics::Mesh& mesh : model->getMeshes())
+                    {
+            	        renderAPI.loadData(mesh.getVertices(), mesh.getIndices(), model->getShaderName()); 
+                        // Move to implementation in api 
+	   		//ResourceManager->loadTextures(mesh.getTextures());
+            
+	   		renderAPI.loadTextures(mesh.getTextures());
+            	        renderAPI.drawElements(mesh.getIndices().size());	
+            	    }
+                }
+            }
+ 
+	    template <typename T>
+            void run(Graphics::RenderAPI<T>& renderAPI)
+            {
+		// Initialize
+                GLFWwindow *window = Canvas->getWindow();
+                ResourceManager->loadModel(new Graphics::Model(
+					"/home/laelijah/Gengine/data/Models/room/scene.gltf"));
+            
+                ImGuiIO& io = GUI->getIO();
+                Graphics::FrameBuffer* sceneBuffer = new Graphics::FrameBuffer(1920, 1080);
+            
+                std::function<void(float, float)> resizeFunction = 
+			[this, sceneBuffer] 
+			(float width, float height) 
+			{
+            	            sceneBuffer->updateWindowSize(width, height); 
+            	            updateWindow(width, height);
+                        };
+               
+                GUI->addEditorComponent(
+            		    new Graphics::SceneWindow(
+            			    std::string("Scene"),
+            			    sceneBuffer,
+            			    resizeFunction, 
+            			    PostRenderFunctions));
+            
+                GUI->addEditorComponent(new Graphics::TestWindow(std::string("Test")));
+                GUI->addComponent(new Graphics::TestWindow(std::string("WOAAH")));
+		// Initialize End
+                
+	        // Render loop	
+                while (!glfwWindowShouldClose(window)) 
+                {   
+                    if (true)
+                    {
+                        processInput(window);
+                    }
+            
+                    if (GUI->isWindowed())
+            	    {	
+            	        sceneBuffer->Bind();  
+            	        
+		        renderAPI.clear(); 
+            	        draw(renderAPI); 
+                        
+		        sceneBuffer->Unbind(); 	    
+            	        
+		        GUI->drawGUI();
+                    }
+
+            	    else 
+            	    {	
+            	        draw(renderAPI);  
+            	        GUI->drawGUI();
+            	    }
+            
+            	    glfwPollEvents();
+            	    glfwSwapBuffers(window);
+                    
+		    // Clear default frame buffer 	
+            	    renderAPI.clear();
+            
+            	    // Handle post render duties
+            	    while (PostRenderFunctions.size() > 0)
+            	    {
+            	        PostRenderFunctions.back()();
+            	        PostRenderFunctions.pop_back(); 
+            	    }
+                    
+		    Canvas->updateDeltaTime();	    
+                }
+                
+		GUI->shutdown(); 
+                glfwTerminate(); 
+            }
+
+
 	private:	    
-
-	    float currentFrame = 0;
-	    float deltaTime = 0;
-	    float lastFrame = 0;
-	    
 	    float SCREEN_WIDTH = 1920;
 	    float SCREEN_HEIGHT = 1080;
            
 	    Graphics::GUI* GUI; 
             Graphics::Camera* Camera;
-	    Graphics::GLCanvas* Canvas;
+	    Graphics::GLFWCanvas* Canvas;
 	    Graphics::ResourceManager* ResourceManager;
 
             std::vector<std::function<void()>> PostRenderFunctions;
 	    
-	    void updateDeltaTime();
-            void processInput(GLFWwindow *window);	
+            void processInput(GLFWwindow *window);
+
     };
 }
 

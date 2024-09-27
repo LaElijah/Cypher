@@ -15,7 +15,7 @@ FetchContent_Declare(
 set(SOURCES 
   ${SRC_DIR}/Graphics/index.cpp
   ${SRC_DIR}/Graphics/Camera.cpp
-  ${SRC_DIR}/Graphics/GLCanvas.cpp
+  ${SRC_DIR}/Graphics/GLFWCanvas.cpp
   ${SRC_DIR}/Graphics/Shader.cpp  
   ${SRC_DIR}/Graphics/FileReader.cpp
   ${SRC_DIR}/Graphics/ResourceManager.cpp 
@@ -25,6 +25,7 @@ set(SOURCES
   ${SRC_DIR}/Graphics/GUI.cpp
   ${SRC_DIR}/Graphics/FrameBuffer.cpp
   ${SRC_DIR}/Graphics/GUIComponent.cpp
+  ${SRC_DIR}/Graphics/RenderAPI.cpp
   ${EXTERNAL_DIR}/GLAD/glad.c
   ${EXTERNAL_DIR}/STB_IMAGE/stb_image.cpp
   ${EXTERNAL_DIR}/imgui/imconfig.h

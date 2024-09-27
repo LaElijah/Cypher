@@ -1,15 +1,13 @@
 #ifndef GUI_H
 #define GUI_H
 
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "../../external/imgui/imgui.h"
 #include "../../external/imgui/imgui_impl_opengl3.h"
 #include "../../external/imgui/imgui_impl_glfw.h"
-
 #include "ResourceManager.h"
-#include "GLCanvas.h"
+#include "GLFWCanvas.h"
 #include "FrameBuffer.h"
 #include "Camera.h"
 #include "GUIComponent.h"

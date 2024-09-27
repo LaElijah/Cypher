@@ -6,7 +6,7 @@
 #include "../../external/imgui/imgui_internal.h"
 #include "GUI.h"
 #include "ResourceManager.h"
-#include "GLCanvas.h"
+#include "GLFWCanvas.h"
 #include "Camera.h"
 
 
