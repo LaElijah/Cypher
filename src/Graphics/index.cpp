@@ -32,6 +32,7 @@ int main()
     ResourceManager->initialize(); 
    
     Graphics::OpenGLRenderAPI api = Graphics::OpenGLRenderAPI(); 
+    api.loadShaders(ResourceManager->getShaderInfo());
     renderer.run(api);
     return 0;
 }

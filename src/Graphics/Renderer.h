@@ -6,8 +6,7 @@
 #include "Shader.h"
 #include "GUI.h"
 #include "RenderAPI.h"
-
-
+#include <memory>
 #include "ResourceManager.h"
 #include "Model.h"
 #include "Mesh.h"
@@ -60,12 +59,13 @@ namespace Graphics {
             {
                 for (Graphics::Model* model : ResourceManager->getLoadedModels())
                 { 
-            	    Graphics::Shader* shader = ResourceManager->getShader(model->getShaderName());
+	            auto shader = renderAPI.getShader(model->getShaderName());
                     shader->use();
-                    shader->setMat4("model", model->getModelMatrix());      
-                    shader->setMat4("view", Camera->getViewMatrix());
-                    shader->setMat4("projection", Camera->getProjectionMatrix());
-                     
+                    shader->setUniform("model", model->getModelMatrix());      
+                    shader->setUniform("view", Camera->getViewMatrix());
+                    shader->setUniform("projection", Camera->getProjectionMatrix());
+                    
+
                     for (Graphics::Mesh& mesh : model->getMeshes())
                     {
             	        renderAPI.loadData(mesh.getVertices(), mesh.getIndices(), model->getShaderName()); 

@@ -4,7 +4,6 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-
 #include "Shader.h"
 #include <string>
 #include <glm/ext/matrix_transform.hpp>
@@ -14,148 +13,24 @@
 #include <glm/gtc/type_ptr.hpp>
 
 
-
-void print(const char *string);
-void println(const char *string);
-
-namespace Graphics
+Graphics::OpenGLShader::OpenGLShader(Graphics::ShaderInfo& infoData)
+	: Shader<OpenGLShader>(infoData)
 {
+    ID = glCreateProgram();
 
-
-  Shader::Shader(std::string vertexShaderPath, std::string fragmentShaderPath)
-  {
-      std::string vertexCode;
-      std::string fragmentCode;
-
-      std::fstream vertexShaderFile;
-      std::fstream fragmentShaderFile;
-      
-      vertexShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
-      fragmentShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
-
-      try {
-        vertexShaderFile.open(vertexShaderPath.c_str());
-        fragmentShaderFile.open(fragmentShaderPath.c_str());
-        
-        std::stringstream vertexShaderStream, fragmentShaderStream;
-
-        vertexShaderStream << vertexShaderFile.rdbuf();
-        fragmentShaderStream << fragmentShaderFile.rdbuf(); 
-
-        vertexShaderFile.close();
-        fragmentShaderFile.close();
-
-
-        vertexCode = vertexShaderStream.str();
-        fragmentCode = fragmentShaderStream.str();
-      }
-
-
-      catch (std::ifstream::failure e)
-      {
-        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ\n" << e.what() << "\n" << std::endl;
-      }
-
-      const char *vertexShaderCode = vertexCode.c_str();
-      const char *fragmentShaderCode = fragmentCode.c_str();
-      
-      unsigned int vertex, fragment;
-
-      vertex = Shader::compileShader(GL_VERTEX_SHADER, vertexShaderCode);
-      fragment = Shader::compileShader(GL_FRAGMENT_SHADER, fragmentShaderCode);
-      linkShaders(vertex, fragment);
-
-  }
-
-
-
-
-  Shader::Shader(const char *vertexShaderPath, const char *fragmentShaderPath)
-  {
-      std::string vertexCode;
-      std::string fragmentCode;
-
-      std::fstream vertexShaderFile;
-      std::fstream fragmentShaderFile;
-      
-      vertexShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
-      fragmentShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
-
-      try {
-        vertexShaderFile.open(vertexShaderPath);
-        fragmentShaderFile.open(fragmentShaderPath);
-        
-        std::stringstream vertexShaderStream, fragmentShaderStream;
-
-        vertexShaderStream << vertexShaderFile.rdbuf();
-        fragmentShaderStream << fragmentShaderFile.rdbuf(); 
-
-        vertexShaderFile.close();
-        fragmentShaderFile.close();
-
-
-        vertexCode = vertexShaderStream.str();
-        fragmentCode = fragmentShaderStream.str();
-      }
-
-
-      catch (std::ifstream::failure e)
-      {
-        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ\n" << e.what() << "\n" << std::endl;
-      }
-
-      const char *vertexShaderCode = vertexCode.c_str();
-      const char *fragmentShaderCode = fragmentCode.c_str();
-      
-      unsigned int vertex, fragment;
-
-      vertex = Shader::compileShader(GL_VERTEX_SHADER, vertexShaderCode);
-      fragment = Shader::compileShader(GL_FRAGMENT_SHADER, fragmentShaderCode);
-      linkShaders(vertex, fragment);
-
-  }
-
-
-
-
-  void Shader::setBool(const std::string &name, bool value) const
-  {
-    glUniform1i(glGetUniformLocation(ID, name.c_str()), (int) value);
-  }
-
-
-  void Shader::setInt(const std::string &name, int value) const
-  {
-    glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
-  }
-
-
-  void Shader::setFloat(const std::string &name, float value) const
-  {
-    glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
-  }
-
-  void Shader::setVec3(const std::string &name, float value1, float value2, float value3) const
-  {
-    glUniform3f(glGetUniformLocation(ID, name.c_str()), value1, value2, value3);
-  }
-
-  void Shader::setMat4(const std::string &name, glm::mat4 matrix) const
-  {
-    glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix));
-  }
-
-
-
-  void Shader::linkShaders(unsigned int vertex, unsigned int fragment)
-  {
+    for (Graphics::ShaderFileData shader : info.shaders)
+    {
+        linkShader(compileShader(shader));
+    }
+}
+ 
+  
+void Graphics::OpenGLShader::linkShader(unsigned int shader)
+{
     int success;
     char infoLog[512];
 
-    ID = glCreateProgram();
-
-    glAttachShader(ID, vertex);
-    glAttachShader(ID, fragment);
+    glAttachShader(ID, shader);
     glLinkProgram(ID);
     
     glGetProgramiv(ID, GL_LINK_STATUS, &success);
@@ -167,63 +42,89 @@ namespace Graphics
       
     }
     
-    glDeleteShader(vertex);
-    glDeleteShader(fragment);
+    glDeleteShader(shader); 
+}
 
-
-
-  }
-  
-  unsigned int Shader::compileShader(unsigned int type, const char *shaderCode)
-  {
-    int success;
-    char infoLog[512];
-
-    unsigned int shader = glCreateShader(type);
-    glShaderSource(shader, 1, &shaderCode, NULL);
-    glCompileShader(shader);
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-
-    if (!success)
-    {
  
-      const char *typeLabel;
+unsigned int Graphics::OpenGLShader::compileShader(Graphics::ShaderFileData& file)
+  {
+      int success;
+      char infoLog[512]; 
+      const char* typeLabel;
+      unsigned int shader;
 
-      switch (type)
+      switch (file.type)
       {
-        case GL_VERTEX_SHADER:
-          typeLabel = "VERTEX";
-          break;
-        
-        case GL_FRAGMENT_SHADER:
-          typeLabel = "FRAGMENT";
-          break;
+          case Graphics::SHADER_FILE_TYPE::VERTEX:
+            typeLabel = "VERTEX";
+            shader = glCreateShader(GL_VERTEX_SHADER);
+            break;
+          
+          case Graphics::SHADER_FILE_TYPE::FRAGMENT:
+            typeLabel = "FRAGMENT";
+            shader = glCreateShader(GL_FRAGMENT_SHADER);
+            break;
       }
-    
+     
+      const char* fileData = file.data.c_str();
+      glShaderSource(shader, 1, &fileData, NULL);
+      glCompileShader(shader);
+      glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 
-      glGetShaderInfoLog(shader, 512, NULL, infoLog);
-      std::cout << "ERROR::SHADER::" << typeLabel << "::COMPILATION::FAILED\n" << infoLog << std::endl;
-      
-    }
+      if (!success)
+      {
+        glGetShaderInfoLog(shader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::" << typeLabel << "::COMPILATION::FAILED\n" << infoLog << std::endl;
+        
+      }
 
-    return shader;
-
+      return shader;
   }
 
-  void Shader::use()
+
+
+
+void Graphics::OpenGLShader::useImpl()
   {
     glUseProgram(ID);
   }
 
-}
-  
-void print(const char *string) 
+
+	
+void Graphics::OpenGLShader::setUniformImpl(std::string name, bool value)
 {
-  std::cout << string;
+    glUniform1i(glGetUniformLocation(ID, name.c_str()), (int) value);
+} 
+
+void Graphics::OpenGLShader::setUniformImpl(std::string name, int value)
+{
+    glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+} 
+
+void Graphics::OpenGLShader::setUniformImpl(std::string name, float value)
+{
+    glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
 
- 
-void println(const char *string) 
+void Graphics::OpenGLShader::setUniformImpl(
+    	    std::string name, 
+    	    float value1, 
+    	    float value2, 
+    	    float value3)
 {
-  std::cout << string << std::endl;
+    glUniform3f(
+        glGetUniformLocation(ID, name.c_str()),
+       	value1, value2, value3);
 }
+
+void Graphics::OpenGLShader::setUniformImpl(std::string name, glm::mat4 value)
+{
+    glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
+}
+
+
+
+
+
+
+

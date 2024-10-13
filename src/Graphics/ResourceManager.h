@@ -14,19 +14,17 @@
 namespace Graphics { 
     class ResourceManager {
     	public:
-            void initialize();
-	    
+            void initialize(); 
 	    void loadModelPaths(std::string modelDirectory = "./data/Models");
             void loadModel(Graphics::Model* model);
             std::vector<Graphics::Model*>& getLoadedModels();
+	    std::map<std::string, Graphics::ShaderInfo>& getShaderInfo();
 
-	    Graphics::Shader* getShader(std::string); 
-	    void loadShader(Graphics::Shader* shader, std::string name); 
-	    void loadShaders(std::string shaderDirectory = "./data/Shaders"); 
+	    void loadShaderInfo(std::string directory = "./data/Shaders", bool singleFolder = true); 
 
 	private:
 	    std::map<std::string, Graphics::Texture> loadedTextures; 
-	    std::map<std::string, Graphics::Shader*> loadedShaders;
+	    std::map<std::string, Graphics::ShaderInfo> m_LoadedShaderInfo;
 	    std::vector<Graphics::Model*> loadedModels;
     	    std::vector<Graphics::ModelFile> ModelFiles;
     };

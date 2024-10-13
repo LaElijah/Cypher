@@ -1,0 +1,33 @@
+
+
+
+
+New Primitives:
+
+
+  enum VertexFormat;
+    - This describes how the data from the mesh is loaded
+      in a vertex. Each vertex format has a default
+      shader for either a texture, color, or both.
+
+  enum ShaderName;
+    - This describes the shader name to use which will be 
+      developed against and mapped/initialized. It is used
+      tp index into a 2d map where the outer map has a vertex format enum 
+      and the inner map index has the ShaderName enum, what is returned is
+      some index to be shared amongst api level shader implementations.
+
+
+
+
+Shader Changes:
+
+  
+  
+  Move:
+    - Move the openGL API specific implememntations from the source code.
+  
+  Add: 
+    - Add a function in constructor that reads and stores vertex format.
+
+   

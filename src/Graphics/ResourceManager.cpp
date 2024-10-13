@@ -11,6 +11,10 @@
 #include "../../external/imgui/imgui.h"
 
 
+std::map<std::string, Graphics::ShaderInfo>& Graphics::ResourceManager::getShaderInfo()
+{
+    return m_LoadedShaderInfo;
+}
 
 void Graphics::ResourceManager::loadModelPaths(std::string modelDirectory)
 {
@@ -40,153 +44,49 @@ void Graphics::ResourceManager::loadModelPaths(std::string modelDirectory)
 
 
 
-
-void Graphics::ResourceManager::loadShaders(std::string shaderDirectory)
+// TODO: Create a function of this 
+// but for a single given path 
+void Graphics::ResourceManager::loadShaderInfo(std::string directory, bool singleFolder)
 {
-    Graphics::FileReader fileReader(shaderDirectory);
-    std::vector<std::string> shaders = fileReader.getFiles();
-    std::string workingShader;
+
+    Graphics::FileReader fileReader(directory);
+    std::string vs, fs;
+
+    if (singleFolder)
+    {
+        vs = directory + "/" + fileReader.getFile("vs");
+        fs = directory + "/" + fileReader.getFile("fs");
+
+	// TODO: CHANGE THIS TO DYNAMICALLY GET SHADER NAME 
+	// FROM DIRECTORY
+	std::string shader = "debug";
+
+        m_LoadedShaderInfo.emplace(shader, Graphics::ShaderInfo(shader, vs, fs));
+
+    }
+    else
+    {
+        std::vector<std::string> shaders = fileReader.getFiles();
+        std::string workingShader;
  
-    for (std::string shader : shaders)
-    {
-        workingShader = shaderDirectory + "/" + shader;
-	fileReader.setDirname(workingShader);
+        for (std::string shader : shaders)
+        {
+            workingShader = directory + "/" + shader;
+            fileReader.setDirname(workingShader);
 
-	std::string vs = workingShader + "/" + fileReader.getFile("vs");
-	std::string fs = workingShader + "/" + fileReader.getFile("fs");
+            std::string vs = workingShader + "/" + fileReader.getFile("vs");
+            std::string fs = workingShader + "/" + fileReader.getFile("fs");
 
-	loadShader(new Graphics::Shader(vs, fs), shader);
+            m_LoadedShaderInfo.emplace(shader, Graphics::ShaderInfo(shader, vs, fs));
+        }
     }
 }
-
-
-/*
-// Move implememntation to api 
-// Should be indexed by shader name 
-Graphics::RenderResource& Graphics::ResourceManager::generateRenderResource(VAO_TYPE vaoType, std::string shaderName)
-{
-    Graphics::RenderResource resource;
-    
-    resource.vaoType = vaoType;
-    
-    glGenVertexArrays(1, &resource.VAO); 
-    glBindVertexArray(resource.VAO);
-
-    glGenBuffers(1, &resource.VBO);
-    glGenBuffers(1, &resource.EBO); 
-
-    glBindBuffer(GL_ARRAY_BUFFER, resource.VBO);
-
-    switch (vaoType)
-        case DEBUG:
-            {
-                glEnableVertexAttribArray(0);
-                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Graphics::Vertex), (void*)0);
-
-
-                glEnableVertexAttribArray(1);
-                glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Graphics::Vertex), (void*)offsetof(Graphics::Vertex, Graphics::Vertex::Normal));
-
-
-                glEnableVertexAttribArray(2);
-                glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Graphics::Vertex, Graphics::Vertex::TexCoords));
-            }
-
-	 
-    RenderResources[shaderName] = std::move(resource);
-
-    return getRenderResource(vaoType, shaderName);
-}
-
-*/
-
-/*
-	   // Move implememntation to api 
-void Graphics::ResourceManager::loadTextures(std::vector<Graphics::Texture>& textures)
-{
-    unsigned int diffuseN = 1;
-    unsigned int specularN = 1;
-    unsigned int ambientN = 1;
-    unsigned int lightmapN = 1;
-    unsigned int reflectionN = 1;
-   
-    for (unsigned int i = 0; i < textures.size(); i++)
-    {
-        glActiveTexture(GL_TEXTURE0 + i);
-
-          
-        std::string number;
-        std::string name = textures[i].type;
-
-
-
-        if(name == "texture_diffuse")
-          number = std::to_string(diffuseN++);
-        
-	else if (name == "texture_specular")
-          number = std::to_string(specularN++);
-
-	else if (name == "texture_ambient")
-          number = std::to_string(ambientN++);
-
-	else if (name == "texture_lightmap")
-          number = std::to_string(lightmapN++);
-
-	else if (name == "texture_reflection")
-          number = std::to_string(reflectionN++);
-
-
-        //shader.setInt(("material." + name + number).c_str(), i);
-        glBindTexture(GL_TEXTURE_2D, textures[i].id);
-
-    }
-
-    glActiveTexture(GL_TEXTURE0);
-}
-*/
-
-/*
-
-Graphics::RenderResource& Graphics::ResourceManager::getRenderResource(
-		Graphics::VAO_TYPE vaoType, 
-		std::string shaderName)
-{
-    // Was the vao found in our vector?
-    if (RenderResources.count(shaderName)) 
-    {
-        // Return the found render entitiy
-	return RenderResources[shaderName];
-    }
-    else 
-    {
-	std::cout << "GENERATING NEW RENDER RESOURCE FOR: " << shaderName << std::endl;
-        return generateRenderResource(vaoType, shaderName);
-    }
-}
-
-
-*/
 
 void Graphics::ResourceManager::loadModel(Graphics::Model* model)
 {
     loadedModels.push_back(model); 
 }
 
-
-
-
-void Graphics::ResourceManager::loadShader(Graphics::Shader* shader, std::string name)
-{
-    loadedShaders[name] = std::move(shader);
-}
-
-
-
-
-Graphics::Shader* Graphics::ResourceManager::getShader(std::string name)
-{
-    return loadedShaders[name];
-}
 
 
 
@@ -224,8 +124,9 @@ void Graphics::ResourceManager::bindBuffers(
 
 void Graphics::ResourceManager::initialize()
 {
+    // TODO: Rename to ModelInfo    
     loadModelPaths(); 
-    loadShaders();  
+    loadShaderInfo("./data/Shaders", false);  
 }
 
 

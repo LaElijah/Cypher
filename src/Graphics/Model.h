@@ -26,7 +26,7 @@ namespace Graphics {
             
             std::vector<Graphics::Mesh> meshes;
             std::vector<Graphics::Texture> texturesLoaded;
-            std::string shaderName = "DEBUG_VAO_DEBUG_SHADER";
+            std::string shaderName = "debug";
             std::string directory;
 
             void loadModel(std::string path);

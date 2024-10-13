@@ -6,6 +6,8 @@
 #include <string>
 #include "MeshTypes.h"
 #include "ResourceManager.h"
+#include <memory>
+#include "Shader.h"
 
 namespace Graphics
 {
@@ -17,15 +19,9 @@ namespace Graphics
     	unsigned int VAO;
     	unsigned int VBO; 
     	unsigned int EBO;     
-	// Graphics::Shader& shader;
-    	// TODO: Add texture vector, up to 16/32 with texture units and what 
-    	// sounds like 1024 with texture arrays
-    	// Add a material reference    	
-        // I could have a property that counts the amount of textures loaded in the texture array
-        // and also the resource manager keeps track of a mesh texture index that is 
-        // incremented every time a mesh is loaded and then reset 
-        // when a render entity reaches its limit 
     };
+
+
     
      
     template <typename BaseAPI>
@@ -56,7 +52,24 @@ namespace Graphics
 	    void drawElements(int count, bool unbind = true)
 	    {
                 static_cast<BaseAPI*>(this)->drawElementsImpl(count, unbind); 
-	    } 
+	    }
+
+	    std::shared_ptr<Graphics::OpenGLShader> getShader(std::string name)
+	    {
+	    
+                return static_cast<BaseAPI*>(this)->getShaderImpl(name); 
+	    }
+
+            void loadShader(Graphics::ShaderInfo& info)
+	    {
+                static_cast<BaseAPI*>(this)->loadShaderImpl(info);
+	    }
+
+            void loadShaders(std::map<std::string, Graphics::ShaderInfo>& infoArray )
+	    {
+                static_cast<BaseAPI*>(this)->loadShadersImpl(infoArray);
+	    }
+
 
 	private: 	
     
@@ -68,12 +81,18 @@ namespace Graphics
         public: 
 	    // Defined methods that align with render api implementation
             void clearImpl();
+
 	    void loadDataImpl(
 			    std::vector<Graphics::Vertex>& vertices, 
 			    std::vector<unsigned int>& indices, 
 			    std::string shaderName);
             void loadTexturesImpl(std::vector<Graphics::Texture>& textures);
 	    void drawElementsImpl(int count, bool unbind = true);
+	    std::shared_ptr<Graphics::OpenGLShader> getShaderImpl(std::string name);
+
+
+            void loadShaderImpl(Graphics::ShaderInfo& info);
+            void loadShadersImpl(std::map<std::string, Graphics::ShaderInfo>& infoData);
 
         private:
 	    // Private methods needed to get render api implementation done
@@ -87,6 +106,8 @@ namespace Graphics
 
     	    std::map<std::string, Graphics::RenderResource> RenderResources;
     	    VAO_TYPE CurrentVao = NONE;
+
+	    std::map<std::string, std::shared_ptr<Graphics::OpenGLShader>> m_Shaders;
     };
 }
 
