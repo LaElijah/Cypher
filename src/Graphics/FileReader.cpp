@@ -6,7 +6,14 @@
 #include <iostream>
 
 
-std::pair<std::string, std::string> Graphics::FileReader::splitFilename(std::string& filename)
+std::string Graphics::FileReader::getNameFromDirectory(std::string& directory)
+{
+
+       return directory.substr(directory.find_last_of("/\\") + 1);
+}
+
+
+std::pair<std::string, std::string> Graphics::FileReader::splitFileExtension(std::string filename)
 {
     size_t index = filename.find_last_of(".");
     
@@ -254,7 +261,7 @@ std::string Graphics::FileReader::getFile(std::string extension)
 	
 	if (entityName != "." && entityName != "..")
 	{
-             auto [name, fileExtension] = FileReader::splitFilename(entityName);
+             auto [name, fileExtension] = FileReader::splitFileExtension(entityName);
 		if (fileExtension == extension)
 		{
 
@@ -306,7 +313,7 @@ std::vector<std::string> Graphics::FileReader::getFiles(std::string extension)
     {  
 	 
         entityName = entry->d_name;
-        auto [name, fileExtension] = splitFilename(entityName);
+        auto [name, fileExtension] = splitFileExtension(entityName);
 
 	if (entityName != "." && entityName != ".." && fileExtension == extension)
         {

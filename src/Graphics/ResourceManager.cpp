@@ -32,7 +32,7 @@ void Graphics::ResourceManager::loadModelPaths(std::string modelDirectory)
 
 	for (std::string filename : modelFiles)
 	{
-            auto [name, extension] = FileReader::splitFilename(filename);
+            auto [name, extension] = FileReader::splitFileExtension(filename);
 	    modelFile.name = name;
 	    modelFile.extension = extension;
 	    modelFile.path = std::string(workingModel + "/" + filename);
@@ -46,23 +46,21 @@ void Graphics::ResourceManager::loadModelPaths(std::string modelDirectory)
 
 // TODO: Create a function of this 
 // but for a single given path 
-void Graphics::ResourceManager::loadShaderInfo(std::string directory, bool singleFolder)
+void Graphics::ResourceManager::loadShaderInfo(bool single, std::string directory)
 {
 
     Graphics::FileReader fileReader(directory);
     std::string vs, fs;
 
-    if (singleFolder)
+    if (single)
     {
-        vs = directory + "/" + fileReader.getFile("vs");
+        std::string shader = Graphics::FileReader::getNameFromDirectory(directory); 
+	std::cout << "SHADER FOUND: " << shader << std::endl;
+
+    	vs = directory + "/" + fileReader.getFile("vs");
         fs = directory + "/" + fileReader.getFile("fs");
 
-	// TODO: CHANGE THIS TO DYNAMICALLY GET SHADER NAME 
-	// FROM DIRECTORY
-	std::string shader = "debug";
-
         m_LoadedShaderInfo.emplace(shader, Graphics::ShaderInfo(shader, vs, fs));
-
     }
     else
     {
@@ -88,45 +86,17 @@ void Graphics::ResourceManager::loadModel(Graphics::Model* model)
 }
 
 
-
-
-
 std::vector<Graphics::Model*>& Graphics::ResourceManager::getLoadedModels()
 {
     return loadedModels;
 }
 
-/*
-
-	   // Move implememntation to api 
-void Graphics::ResourceManager::bindBuffers(
-		std::vector<Graphics::Vertex>& vertices, 
-		std::vector<unsigned int>& indices, 
-		Graphics::VAO_TYPE vaoType,
-		std::string shaderName)
-{
-    Graphics::RenderResource& resource = getRenderResource(vaoType, shaderName);
-
-    if (CurrentVao != vaoType)
-    {
-
-        glBindVertexArray(resource.VAO);
-        glBindBuffer(GL_ARRAY_BUFFER, resource.VBO);
-    }
-     
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Graphics::Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource.EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_STATIC_DRAW);
-    
-}
-*/
-
 void Graphics::ResourceManager::initialize()
 {
     // TODO: Rename to ModelInfo    
     loadModelPaths(); 
-    loadShaderInfo("./data/Shaders", false);  
+    //loadShaderInfo();  
+    loadShaderInfo(true, "./data/Shaders/debug");  
 }
 
 

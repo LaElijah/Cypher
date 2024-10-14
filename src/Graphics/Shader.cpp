@@ -12,6 +12,41 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+const std::set<std::string_view> Graphics::ShaderInfo::supportedExtensions = 
+{
+    "vs",
+    "fs"
+};
+
+
+
+const std::unordered_map<std::string, Graphics::SHADER_FILE_TYPE> Graphics::ShaderInfo::extensionEnums = 
+{
+    {"vs", Graphics::SHADER_FILE_TYPE::VERTEX},
+    {"fs", Graphics::SHADER_FILE_TYPE::FRAGMENT}
+};
+
+
+void Graphics::ShaderInfo::validateShaderSupport(const std::vector<std::string>& files)
+	    {
+		std::set<std::string> uniqueExtensions;
+	        for (const std::string& file : files)
+		{
+	            std::string extension = Graphics::FileReader::splitFileExtension(file).second;
+
+	            if (supportedExtensions.find(extension) == supportedExtensions.end())
+                    {
+		        throw std::invalid_argument("Unsupported file extension: " + extension); 
+		    }
+
+		    if (!uniqueExtensions.insert(extension).second)
+		    {
+		        throw std::invalid_argument("Duplicate file extension: " + extension); 
+		    }
+		}	
+	    }
+
+
 
 Graphics::OpenGLShader::OpenGLShader(Graphics::ShaderInfo& infoData)
 	: Shader<OpenGLShader>(infoData)

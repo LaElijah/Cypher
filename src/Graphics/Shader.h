@@ -11,12 +11,14 @@
 #include <GLFW/glfw3.h>
 #include <fstream>
 #include <sstream>
-
+#include <set>
 #include <iostream>
+#include "FileReader.h"
+#include <string_view>
+#include <unordered_map>
+
 
 namespace Graphics {
-    constexpr int SHADER_TYPE_SIZE = 2;
-
     
     enum SHADER_FILE_TYPE
     {
@@ -34,145 +36,84 @@ namespace Graphics {
     
     struct ShaderInfo
     {
-        ShaderFileData shaders[SHADER_TYPE_SIZE];
-	std::string name;
+	public: 
+            std::vector<ShaderFileData> shaders;
+	    std::string name;
     
-    
-        ShaderInfo(
-	    std::string shaderName,
-            std::string vertexShaderPath, 
-    	    std::string fragmentShaderPath)
-        {
-            name = shaderName; 
-            ShaderFileData vertexData;
-            ShaderFileData fragmentData;
-    
-            std::fstream vertexShaderFile;
-            std::fstream fragmentShaderFile;
-            
-            vertexShaderFile.exceptions(
-    	    std::ifstream::failbit 
-    	    | std::ifstream::badbit);
-    
-            fragmentShaderFile.exceptions(
-    	    std::ifstream::failbit 
-    	    | std::ifstream::badbit);
-    
-            try 
+            ShaderInfo(
+	        std::string shaderName,
+                std::string vertexShaderPath, 
+    	        std::string fragmentShaderPath)
             {
-                vertexShaderFile.open(vertexShaderPath.c_str());
-                fragmentShaderFile.open(fragmentShaderPath.c_str());
-                
-                std::stringstream 
-    		    vertexShaderStream, 
-    		    fragmentShaderStream;
-                
-    	    vertexShaderStream << vertexShaderFile.rdbuf();
-                fragmentShaderStream << fragmentShaderFile.rdbuf(); 
-    
-                vertexShaderFile.close();
-                fragmentShaderFile.close();
-    
-    	    // Type
-    	    vertexData.type = VERTEX;
-    
-    	    // Data
-                vertexData.data = vertexShaderStream.str();
-    
-    	    // Path
-    	    vertexData.path = vertexShaderPath;
-    	    
-    	    
-    	    fragmentData.type = FRAGMENT;
-                fragmentData.data = fragmentShaderStream.str();
-    	    fragmentData.path = fragmentShaderPath;
-
-	    shaders[0] = vertexData;
-	    shaders[1] = fragmentData;
-	    
-          }
-          catch (std::ifstream::failure e)
-          {
-            std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ\n" << e.what() << "\n" << std::endl;
-          }
-    
-    
-        };
-    
-          
-        ShaderInfo(
-            const char* shaderName,
-            const char* vertexShaderPath, 
-    	    const char* fragmentShaderPath)
-        {
-
-            name = std::string(shaderName); 
-            ShaderFileData vertexData;
-            ShaderFileData fragmentData;
-    
-            std::fstream vertexShaderFile;
-            std::fstream fragmentShaderFile;
-            
-            vertexShaderFile.exceptions(
-    			std::ifstream::failbit 
-    			| std::ifstream::badbit);
-    
-            fragmentShaderFile.exceptions(
-    			std::ifstream::failbit 
-    			| std::ifstream::badbit);
-            try 
+                name = shaderName; 
+                loadData(vertexShaderPath.c_str(), fragmentShaderPath.c_str());   
+	    };
+              
+            ShaderInfo(
+                const char* shaderName,
+                const char* vertexShaderPath, 
+    	        const char* fragmentShaderPath)
             {
-    
-    		//maybe add a switch statement and a loop taht
-                    // checks the file typeanme and that will be the 
-    		// type to add to the vector thhe
-                vertexShaderFile.open(vertexShaderPath);
-                fragmentShaderFile.open(fragmentShaderPath);
-                
-                std::stringstream 
-    		    vertexShaderStream, 
-    		    fragmentShaderStream;
-                
-    	    vertexShaderStream << vertexShaderFile.rdbuf();
-                fragmentShaderStream << fragmentShaderFile.rdbuf(); 
-    
-                vertexShaderFile.close();
-                fragmentShaderFile.close();
-    
-    
-    	    // Type
-    	    vertexData.type = VERTEX;
-    
-    	    // Data
-                vertexData.data = vertexShaderStream.str();
-    
-    	    // Path
-    	    vertexData.path = std::string(vertexShaderPath);
-    	    
-    	    
-    	    fragmentData.type = FRAGMENT;
-                fragmentData.data = fragmentShaderStream.str();
-    	    fragmentData.path = std::string(fragmentShaderPath);
+                name = std::string(shaderName); 
+	        loadData(vertexShaderPath, fragmentShaderPath);
+            };
 
+        private:
+            template <typename...Args>
+	    void loadData(Args... args)
+	    {
+	        constexpr int numArgs = sizeof...(args);
+		//static_assert(numArgs <= maxShaderTypes, "Too many shader files for one shader program");
 
-	    shaders[0] = vertexData;
-	    shaders[1] = fragmentData;
-	    
+		std::vector<std::string> shaderFiles = {args...};
+	        validateShaderSupport(shaderFiles); 
+
+                for (std::string& file : shaderFiles)
+		{
+		    ShaderFileData data;
+	            std::fstream shaderFile;	
+                     
+                    shaderFile.exceptions(
+    	    	    	std::ifstream::failbit 
+    	    	    	| std::ifstream::badbit);
     
-    	}
-          catch (std::ifstream::failure e)
-          {
-            std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ\n" << e.what() << "\n" << std::endl;
-          }
-    
-      };
-    
+                    try 
+                    {
+                        shaderFile.open(file);
+		 	std::stringstream shaderSource;
+    	                shaderSource << shaderFile.rdbuf();
+		   	shaderFile.close();
+		        	
+			data.type = extensionEnums.find(
+				Graphics::FileReader::splitFileExtension(
+				Graphics::FileReader::getNameFromDirectory(file))
+			        .second)->second;
+
+                        data.data = shaderSource.str();
+    	                data.path = std::string(file);
+                    
+		    	shaders.push_back(data);			
+    	            }
+                    catch (std::ifstream::failure e)
+                    {
+                        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ\n" << e.what() << "\n" << std::endl;
+                    }
+		}
+	    }		
+
+	    static const std::set<std::string_view> supportedExtensions;
+	    static const std::unordered_map<std::string, Graphics::SHADER_FILE_TYPE> extensionEnums;
+            
+	    // TODO: Get compile time loading for this from supported extensions
+	    static const int maxShaderTypes = 2;
+
+            void validateShaderSupport(const std::vector<std::string>& files);
     };
 
  
     template <typename T>
     class Shader
-{
+    {
         public:
 
             Shader(Graphics::ShaderInfo& info) : info(info)
@@ -225,24 +166,17 @@ namespace Graphics {
 
         protected:
 	    Graphics::ShaderInfo& info; 
-
-
     };
 
 
     class OpenGLShader : public Shader<OpenGLShader>
     {
-
 	public: 
-
             OpenGLShader(Graphics::ShaderInfo& info);
 	    void useImpl();
-
    	    void setUniformImpl(std::string name, bool value);
-
 	    void setUniformImpl(std::string name, int value);
-	    void setUniformImpl(std::string name, float value);
-	    
+	    void setUniformImpl(std::string name, float value); 
 	    void setUniformImpl(
 			    std::string name, 
 			    float value1, 
@@ -251,14 +185,11 @@ namespace Graphics {
 	    
 	    void setUniformImpl(std::string name, glm::mat4 value);
 
-
         private:
 	    unsigned int ID;
 
 	    unsigned int compileShader(Graphics::ShaderFileData& shader);
             void linkShader(unsigned int shader);
-
- 
     };
 
 

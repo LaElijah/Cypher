@@ -22,7 +22,8 @@ namespace Graphics {
 
 	std::string getFile();
 	std::string getFile(std::string extension);
-	static std::pair<std::string, std::string> splitFilename(std::string& filename);
+	static std::pair<std::string, std::string> splitFileExtension(std::string filename);
+	static std::string getNameFromDirectory(std::string& directory);
 
 	private: 
 	std::string dirname;

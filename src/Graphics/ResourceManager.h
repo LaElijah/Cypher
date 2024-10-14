@@ -20,11 +20,13 @@ namespace Graphics {
             std::vector<Graphics::Model*>& getLoadedModels();
 	    std::map<std::string, Graphics::ShaderInfo>& getShaderInfo();
 
-	    void loadShaderInfo(std::string directory = "./data/Shaders", bool singleFolder = true); 
+	    void loadShaderInfo(bool single = false, std::string directory = "./data/Shaders"); 
 
 	private:
 	    std::map<std::string, Graphics::Texture> loadedTextures; 
 	    std::map<std::string, Graphics::ShaderInfo> m_LoadedShaderInfo;
+
+
 	    std::vector<Graphics::Model*> loadedModels;
     	    std::vector<Graphics::ModelFile> ModelFiles;
     };
