@@ -57,6 +57,47 @@ Graphics::OpenGLShader::OpenGLShader(Graphics::ShaderInfo& infoData)
     {
         linkShader(compileShader(shader));
     }
+
+    // LOADING ATTRIBUTES AND UNIFORMS
+    GLint numAttributes;
+    GLint numUniforms;
+    
+    GLchar name[256];
+    GLint size;
+    GLenum type;
+    GLsizei length;
+    
+    glGetProgramiv(ID, GL_ACTIVE_ATTRIBUTES, &numAttributes);
+    
+    for (GLuint i = 0; i < numAttributes; i++) 
+    {
+   
+        glGetActiveAttrib(ID, i, sizeof(name), &length, &size, &type, name);
+    
+        printf("Uniform %d: Name=%s, Size=%d, Type=%u\n", i, name, size, type);
+        m_Attributes.push_back(Graphics::OpenGLVertexAttribute
+			{
+                            name,
+                            size,
+                            type			
+		        });
+    }
+
+
+    glGetProgramiv(ID, GL_ACTIVE_UNIFORMS, &numUniforms);
+    for (GLuint i = 0; i < numUniforms; i++) 
+    {
+        glGetActiveUniform(ID, i, sizeof(name), &length, &size, &type, name);
+        printf("Uniform %d: Name=%s, Size=%d, Type=%u\n", i, name, size, type);
+
+	m_Uniforms.push_back(Graphics::OpenGLUniform
+			{
+		            name,
+		            size,
+		            type	    
+			});
+    }
+
 }
  
   

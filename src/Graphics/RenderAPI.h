@@ -13,7 +13,7 @@ namespace Graphics
 {
 
 
-    struct RenderResource {
+    struct RenderConfig {
     	VAO_TYPE vaoType;
     	std::string shaderName;
     	unsigned int VAO;
@@ -96,16 +96,17 @@ namespace Graphics
 
         private:
 	    // Private methods needed to get render api implementation done
-            Graphics::RenderResource& generateRenderResource(
+            Graphics::RenderConfig& generateRenderConfig(
 			    VAO_TYPE vaoType, 
 			    std::string shaderName);
             
-	    Graphics::RenderResource& getRenderResource(
+	    Graphics::RenderConfig& getRenderConfig(
 		Graphics::VAO_TYPE vaoType, 
 		std::string shaderName);
 
-    	    std::map<std::string, Graphics::RenderResource> RenderResources;
+    	    std::map<std::string, Graphics::RenderConfig> m_RenderConfigs;
     	    VAO_TYPE CurrentVao = NONE;
+	    std::string currentShader;
 
 	    std::map<std::string, std::shared_ptr<Graphics::OpenGLShader>> m_Shaders;
     };

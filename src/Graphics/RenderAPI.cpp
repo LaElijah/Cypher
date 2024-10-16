@@ -92,19 +92,19 @@ void Graphics::OpenGLRenderAPI::clearImpl()
 
 // Move implememntation to api 
 // Should be indexed by shader name 
-Graphics::RenderResource& Graphics::OpenGLRenderAPI::generateRenderResource(VAO_TYPE vaoType, std::string shaderName)
+Graphics::RenderConfig& Graphics::OpenGLRenderAPI::generateRenderConfig(VAO_TYPE vaoType, std::string shaderName)
 {
-    Graphics::RenderResource resource;
+    Graphics::RenderConfig config;
     
-    resource.vaoType = vaoType;
+    config.vaoType = vaoType;
     
-    glGenVertexArrays(1, &resource.VAO); 
-    glBindVertexArray(resource.VAO);
+    glGenVertexArrays(1, &config.VAO); 
+    glBindVertexArray(config.VAO);
 
-    glGenBuffers(1, &resource.VBO);
-    glGenBuffers(1, &resource.EBO); 
+    glGenBuffers(1, &config.VBO);
+    glGenBuffers(1, &config.EBO); 
 
-    glBindBuffer(GL_ARRAY_BUFFER, resource.VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, config.VBO);
 
     switch (vaoType)
         case DEBUG:
@@ -122,26 +122,26 @@ Graphics::RenderResource& Graphics::OpenGLRenderAPI::generateRenderResource(VAO_
             }
 
 	 
-    RenderResources[shaderName] = std::move(resource);
+    m_RenderConfigs[shaderName] = std::move(config);
 
-    return getRenderResource(vaoType, shaderName);
+    return getRenderConfig(vaoType, shaderName);
 }
 
 
-Graphics::RenderResource& Graphics::OpenGLRenderAPI::getRenderResource(
+Graphics::RenderConfig& Graphics::OpenGLRenderAPI::getRenderConfig(
 		Graphics::VAO_TYPE vaoType, 
 		std::string shaderName)
 {
     // Was the vao found in our vector?
-    if (RenderResources.count(shaderName)) 
+    if (m_RenderConfigs.count(shaderName)) 
     {
         // Return the found render entitiy
-	return RenderResources[shaderName];
+	return m_RenderConfigs[shaderName];
     }
     else 
     {
-	std::cout << "GENERATING NEW RENDER RESOURCE FOR: " << shaderName << std::endl;
-        return generateRenderResource(vaoType, shaderName);
+	std::cout << "GENERATING NEW RENDER CONFIG FOR: " << shaderName << std::endl;
+        return generateRenderConfig(vaoType, shaderName);
     }
 }
 
@@ -154,17 +154,17 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(
 {
    
     // Change this to input vaotype from shader	
-    Graphics::RenderResource& resource = getRenderResource(DEBUG, shaderName);
+    Graphics::RenderConfig& config = getRenderConfig(DEBUG, shaderName);
 
     if (CurrentVao != DEBUG)
     {
-        glBindVertexArray(resource.VAO);
-        glBindBuffer(GL_ARRAY_BUFFER, resource.VBO);
+        glBindVertexArray(config.VAO);
+        glBindBuffer(GL_ARRAY_BUFFER, config.VBO);
     }
      
     glBufferData(GL_ARRAY_BUFFER, sizeof(Graphics::Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource.EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, config.EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_STATIC_DRAW);
  
 }

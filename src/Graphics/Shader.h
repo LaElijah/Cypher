@@ -169,6 +169,21 @@ namespace Graphics {
     };
 
 
+    struct OpenGLVertexAttribute
+    {
+        std::string name;
+        int size;
+        unsigned int type;	
+    };
+
+    struct OpenGLUniform
+    {
+        std::string name;
+        int size;
+        unsigned int type;	
+    };
+    
+
     class OpenGLShader : public Shader<OpenGLShader>
     {
 	public: 
@@ -190,6 +205,9 @@ namespace Graphics {
 
 	    unsigned int compileShader(Graphics::ShaderFileData& shader);
             void linkShader(unsigned int shader);
+
+	    std::vector<Graphics::OpenGLVertexAttribute> m_Attributes;
+	    std::vector<Graphics::OpenGLUniform> m_Uniforms;
     };
 
 
