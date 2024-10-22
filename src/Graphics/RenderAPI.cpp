@@ -7,7 +7,6 @@
 
 
 
-//OPENGL API
 std::shared_ptr<Graphics::OpenGLShader> Graphics::OpenGLRenderAPI::getShaderImpl(std::string name)
 {
     return (m_Shaders[name]);
@@ -22,7 +21,6 @@ void Graphics::OpenGLRenderAPI::loadShaderImpl(Graphics::ShaderInfo& info)
 
 void Graphics::OpenGLRenderAPI::loadShadersImpl(std::map<std::string, Graphics::ShaderInfo>& infoData)
 {
-
     for (std::pair<std::string, Graphics::ShaderInfo> pair    
         : infoData)
     { 
@@ -90,13 +88,11 @@ void Graphics::OpenGLRenderAPI::clearImpl()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-// Move implememntation to api 
-// Should be indexed by shader name 
-Graphics::RenderConfig& Graphics::OpenGLRenderAPI::generateRenderConfig(VAO_TYPE vaoType, std::string shaderName)
+Graphics::RenderConfig& Graphics::OpenGLRenderAPI::generateRenderConfig(size_t format, std::string shaderName)
 {
     Graphics::RenderConfig config;
     
-    config.vaoType = vaoType;
+    config.format = format;
     
     glGenVertexArrays(1, &config.VAO); 
     glBindVertexArray(config.VAO);
@@ -106,9 +102,9 @@ Graphics::RenderConfig& Graphics::OpenGLRenderAPI::generateRenderConfig(VAO_TYPE
 
     glBindBuffer(GL_ARRAY_BUFFER, config.VBO);
 
-    switch (vaoType)
-        case DEBUG:
-            {
+    std::vector<Graphics::OpenGLVertexAttribute> attributes = m_Shaders[shaderName]->getFormat().second;
+/*
+
                 glEnableVertexAttribArray(0);
                 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Graphics::Vertex), (void*)0);
 
@@ -119,17 +115,31 @@ Graphics::RenderConfig& Graphics::OpenGLRenderAPI::generateRenderConfig(VAO_TYPE
 
                 glEnableVertexAttribArray(2);
                 glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Graphics::Vertex, Graphics::Vertex::TexCoords));
-            }
 
-	 
+	   */
+    for (int i = 0; i < attributes.size(); i++)
+    {
+
+        glEnableVertexAttribArray(i);
+
+        // Add a switch case	
+        glVertexAttribPointer(
+			i, 
+			attributes[i].size, 
+			attributes[i].type, 
+			attributes[i].normalize, 
+			sizeof(Graphics::Vertex), 
+			(void*)attributes[i].offset);
+    }
+
     m_RenderConfigs[shaderName] = std::move(config);
 
-    return getRenderConfig(vaoType, shaderName);
+    return getRenderConfig(format, shaderName);
 }
 
 
 Graphics::RenderConfig& Graphics::OpenGLRenderAPI::getRenderConfig(
-		Graphics::VAO_TYPE vaoType, 
+		size_t format, 
 		std::string shaderName)
 {
     // Was the vao found in our vector?
@@ -141,7 +151,7 @@ Graphics::RenderConfig& Graphics::OpenGLRenderAPI::getRenderConfig(
     else 
     {
 	std::cout << "GENERATING NEW RENDER CONFIG FOR: " << shaderName << std::endl;
-        return generateRenderConfig(vaoType, shaderName);
+        return generateRenderConfig(format, shaderName);
     }
 }
 
@@ -152,11 +162,11 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(
 			    std::vector<unsigned int>& indices, 
 			    std::string shaderName)
 {
-   
-    // Change this to input vaotype from shader	
-    Graphics::RenderConfig& config = getRenderConfig(DEBUG, shaderName);
+    size_t format = m_Shaders[shaderName]->getFormat().first;
+    // TODO: Change this to formatKey
+    Graphics::RenderConfig& config = getRenderConfig(format, shaderName);
 
-    if (CurrentVao != DEBUG)
+    if (CURRENT_FORMAT != config.format)
     {
         glBindVertexArray(config.VAO);
         glBindBuffer(GL_ARRAY_BUFFER, config.VBO);

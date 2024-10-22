@@ -13,7 +13,6 @@ Graphics::Mesh::Mesh(
     Vertices = vertices; 
     Indices = indices;
     Textures = textures;
-
 }
 
 std::vector<Graphics::Vertex>& Graphics::Mesh::getVertices()

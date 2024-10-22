@@ -2,7 +2,6 @@
 #include <GLFW/glfw3.h>
 #include <stdexcept>
 #include <iostream>
-#include "MeshTypes.h"
 #include "FileReader.h"
 #include "ResourceManager.h"
 #include "Shader.h"

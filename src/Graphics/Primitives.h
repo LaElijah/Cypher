@@ -4,7 +4,8 @@
 
 #include <glm/glm.hpp>
 
-namespace Graphics {
+namespace Graphics 
+{
     struct ModelFile
     {
         std::string path;
@@ -27,14 +28,7 @@ namespace Graphics {
       glm::vec2 TexCoords;
     };
   
- 
-
-    enum SHADER_NAME {
-    	STANDARD_SHADER
-    };
-
-
-   }
+}
 
 
 

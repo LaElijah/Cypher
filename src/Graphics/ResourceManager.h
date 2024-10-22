@@ -5,7 +5,7 @@
 #include <vector>
 #include <map>
 #include <iostream>
-#include "MeshTypes.h"
+#include "Primitives.h"
 #include "Model.h"
 #include "Shader.h"
 

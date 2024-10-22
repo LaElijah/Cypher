@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-#include "MeshTypes.h"
+#include "Primitives.h"
 
 
 namespace Graphics{
@@ -14,7 +14,8 @@ namespace Graphics{
         public: 
             Mesh(std::vector<Graphics::Vertex> vertices, 
             std::vector<unsigned int> indices, 
-            std::vector<Texture> textures);
+            std::vector<Texture> textures
+	    );
 
             std::vector<Vertex>& getVertices();
             std::vector<unsigned int>& getIndices();
@@ -22,12 +23,14 @@ namespace Graphics{
 
 	    std::string& getShaderName();
 	    void setShaderName(std::string);
-    
+   
+
     	private:
             std::vector<Vertex> Vertices;   
             std::vector<unsigned int> Indices;
             std::vector<Texture> Textures;
-            std::string ShaderName;
+	    std::string ShaderName;
+
     };
 
 }

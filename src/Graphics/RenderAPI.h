@@ -4,17 +4,18 @@
 #include <map>
 #include <vector>
 #include <string>
-#include "MeshTypes.h"
+#include "Primitives.h"
 #include "ResourceManager.h"
 #include <memory>
 #include "Shader.h"
+
 
 namespace Graphics
 {
 
 
     struct RenderConfig {
-    	VAO_TYPE vaoType;
+	size_t format;
     	std::string shaderName;
     	unsigned int VAO;
     	unsigned int VBO; 
@@ -97,15 +98,15 @@ namespace Graphics
         private:
 	    // Private methods needed to get render api implementation done
             Graphics::RenderConfig& generateRenderConfig(
-			    VAO_TYPE vaoType, 
+			    size_t format, 
 			    std::string shaderName);
             
 	    Graphics::RenderConfig& getRenderConfig(
-		Graphics::VAO_TYPE vaoType, 
+		size_t format, 
 		std::string shaderName);
 
     	    std::map<std::string, Graphics::RenderConfig> m_RenderConfigs;
-    	    VAO_TYPE CurrentVao = NONE;
+    	    size_t CURRENT_FORMAT;
 	    std::string currentShader;
 
 	    std::map<std::string, std::shared_ptr<Graphics::OpenGLShader>> m_Shaders;

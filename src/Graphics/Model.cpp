@@ -18,14 +18,6 @@
 
 glm::mat4 ConvertMatrixToGLMFormat(const aiMatrix4x4& from);
 
-/*
-void Graphics::Model::Draw(Graphics::Shader& shader)
-{
-  for(unsigned int i = 0; i < meshes.size(); i++)
-    meshes[i].Draw(shader);
-}
-
-*/
 
 Graphics::Model::Model(std::string path)
 {
@@ -80,7 +72,7 @@ Graphics::Mesh Graphics::Model::processMesh(aiMesh *mesh, const aiScene *scene, 
     std::vector<unsigned int> indices;
     std::vector<Graphics::Texture> textures;
 
- 
+
     for(unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
         Vertex vertex;
@@ -92,14 +84,14 @@ Graphics::Mesh Graphics::Model::processMesh(aiMesh *mesh, const aiScene *scene, 
 			1.0f)); 
 
         vertex.Position = vector;
-        
         if (mesh->HasNormals())
         {
             vector.x = mesh->mNormals[i].x;
             vector.y = mesh->mNormals[i].y;
             vector.z = mesh->mNormals[i].z;
             vertex.Normal = vector;
-        }
+       
+	}
 
         if(mesh->mTextureCoords[0])
         {
@@ -109,8 +101,11 @@ Graphics::Mesh Graphics::Model::processMesh(aiMesh *mesh, const aiScene *scene, 
             vertex.TexCoords = vec; 
         }
         else 
+	{
             vertex.TexCoords = glm::vec2(0.0f, 0.0f);
-    
+        
+       
+	} 
         vertices.push_back(vertex);
     }
 
@@ -131,7 +126,6 @@ Graphics::Mesh Graphics::Model::processMesh(aiMesh *mesh, const aiScene *scene, 
         aiTextureType_DIFFUSE, 
         "texture_diffuse");
 
-    
 
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
@@ -142,33 +136,6 @@ Graphics::Mesh Graphics::Model::processMesh(aiMesh *mesh, const aiScene *scene, 
         "texture_specular");
 
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-
-    /*
-    std::vector<Texture> ambientMaps = loadMaterialTextures(
-        material,
-        scene,
-        aiTextureType_AMBIENT, 
-        "texture_ambient");
-
-    textures.insert(textures.end(), ambientMaps.begin(), ambientMaps.end());
-    
-    std::vector<Texture> lightMaps = loadMaterialTextures(
-        material,
-        scene,
-        aiTextureType_LIGHTMAP, 
-        "texture_lightmap");
-
-    textures.insert(textures.end(), lightMaps.begin(), lightMaps.end());
- 
-
-    std::vector<Texture> reflectionMaps = loadMaterialTextures(
-        material,
-        scene,
-        aiTextureType_REFLECTION, 
-        "texture_reflection");
-
-    textures.insert(textures.end(), reflectionMaps.begin(), reflectionMaps.end());
-*/ 
 
     return Mesh(vertices, indices, textures);
 }

@@ -20,6 +20,106 @@
 
 
 namespace Graphics {
+    size_t GetPrimitiveBaseType(unsigned int type)
+    {
+	switch (type)
+	{
+	    case GL_FLOAT:
+	    case GL_FLOAT_VEC2:  
+	    case GL_FLOAT_VEC3: 
+	    case GL_FLOAT_VEC4: 
+	    case GL_FLOAT_MAT2: 
+	    case GL_FLOAT_MAT3:
+	    case GL_FLOAT_MAT4:
+	    case GL_FLOAT_MAT2x3:
+	    case GL_FLOAT_MAT2x4: 
+	    case GL_FLOAT_MAT3x2: 
+	    case GL_FLOAT_MAT3x4:  
+	    case GL_FLOAT_MAT4x2: 
+	    case GL_FLOAT_MAT4x3:
+                return GL_FLOAT;
+
+	    case GL_INT:
+	    case GL_INT_VEC2:
+	    case GL_INT_VEC3: 
+	    case GL_INT_VEC4:
+                return GL_INT; 
+
+	    case GL_UNSIGNED_INT: 
+	    case GL_UNSIGNED_INT_VEC2: 
+	    case GL_UNSIGNED_INT_VEC3: 
+	    case GL_UNSIGNED_INT_VEC4: 
+		return GL_UNSIGNED_INT;
+
+/* NOT YET SUPPORTED UNTIL GL VERSION > 4.1
+	    case GL_DOUBLE:
+            case GL_DOUBLE_VEC2: 
+	    case GL_DOUBLE_VEC3:  
+	    case GL_DOUBLE_VEC4:  
+	    case GL_DOUBLE_MAT2:  
+	    case GL_DOUBLE_MAT3:
+	    case GL_DOUBLE_MAT4:
+	    case GL_DOUBLE_MAT2x3:
+	    case GL_DOUBLE_MAT2x4:
+	    case GL_DOUBLE_MAT3x2:
+	    case GL_DOUBLE_MAT3x4:
+	    case GL_DOUBLE_MAT4x2:
+	    case GL_DOUBLE_MAT4x3:
+		return GL_DOUBLE;
+*/	
+            default:
+                return 0; 
+	}
+    }
+
+
+ 
+    size_t GetPrimitiveSize(unsigned int type)
+    {
+        switch (type) 
+	{
+            case GL_FLOAT:                return sizeof(float);
+            case GL_FLOAT_VEC2:           return sizeof(float) * 2;
+            case GL_FLOAT_VEC3:           return sizeof(float) * 3;
+            case GL_FLOAT_VEC4:           return sizeof(float) * 4;
+            case GL_FLOAT_MAT2:           return sizeof(float) * 2 * 2;
+            case GL_FLOAT_MAT3:           return sizeof(float) * 3 * 3;
+            case GL_FLOAT_MAT4:           return sizeof(float) * 4 * 4;
+            case GL_FLOAT_MAT2x3:         return sizeof(float) * 2 * 3;
+            case GL_FLOAT_MAT2x4:         return sizeof(float) * 2 * 4;
+            case GL_FLOAT_MAT3x2:         return sizeof(float) * 3 * 2;
+            case GL_FLOAT_MAT3x4:         return sizeof(float) * 3 * 4;
+            case GL_FLOAT_MAT4x2:         return sizeof(float) * 4 * 2;
+            case GL_FLOAT_MAT4x3:         return sizeof(float) * 4 * 3;
+            case GL_INT:                  return sizeof(int);
+            case GL_INT_VEC2:             return sizeof(int) * 2;
+            case GL_INT_VEC3:             return sizeof(int) * 3;
+            case GL_INT_VEC4:             return sizeof(int) * 4;
+            case GL_UNSIGNED_INT:         return sizeof(unsigned int);
+            case GL_UNSIGNED_INT_VEC2:    return sizeof(unsigned int) * 2;
+            case GL_UNSIGNED_INT_VEC3:    return sizeof(unsigned int) * 3;
+            case GL_UNSIGNED_INT_VEC4:    return sizeof(unsigned int) * 4;
+
+/* NOT YET SUPPORTED UNTIL GL VERSION > 4.1
+            case GL_DOUBLE:               return sizeof(double);
+            case GL_DOUBLE_VEC2:          return sizeof(double) * 2;
+            case GL_DOUBLE_VEC3:          return sizeof(double) * 3;
+            case GL_DOUBLE_VEC4:          return sizeof(double) * 4;
+            case GL_DOUBLE_MAT2:          return sizeof(double) * 2 * 2;
+            case GL_DOUBLE_MAT3:          return sizeof(double) * 3 * 3;
+            case GL_DOUBLE_MAT4:          return sizeof(double) * 4 * 4;
+            case GL_DOUBLE_MAT2x3:        return sizeof(double) * 2 * 3;
+            case GL_DOUBLE_MAT2x4:        return sizeof(double) * 2 * 4;
+            case GL_DOUBLE_MAT3x2:        return sizeof(double) * 3 * 2;
+            case GL_DOUBLE_MAT3x4:        return sizeof(double) * 3 * 4;
+            case GL_DOUBLE_MAT4x2:        return sizeof(double) * 4 * 2;
+            case GL_DOUBLE_MAT4x3:        return sizeof(double) * 4 * 3;
+*/
+
+            default:                      return 0; // Unknown type
+        }	
+    }
+
     
     enum SHADER_FILE_TYPE
     {
@@ -31,7 +131,7 @@ namespace Graphics {
     struct ShaderFileData 
     {
         SHADER_FILE_TYPE type;
-        std::string source; 
+        std::string data; 
         std::string path;
     };
     
@@ -84,14 +184,13 @@ namespace Graphics {
 		 	std::stringstream shaderSource;
     	                shaderSource << shaderFile.rdbuf();
 		   	shaderFile.close();
-
-
+		        	
 			data.type = extensionEnums.find(
 				Graphics::FileReader::splitFileExtension(
 				Graphics::FileReader::getNameFromDirectory(file))
 			        .second)->second;
 
-                        data.source = shaderSource.str();
+                        data.data = shaderSource.str();
     	                data.path = std::string(file);
                     
 		    	shaders.push_back(data);			
@@ -103,6 +202,7 @@ namespace Graphics {
 		}
 	    }		
 
+	    static const std::set<std::string_view> supportedExtensions;
 	    static const std::unordered_map<std::string, Graphics::SHADER_FILE_TYPE> extensionEnums;
             
 	    // TODO: Get compile time loading for this from supported extensions
@@ -173,10 +273,10 @@ namespace Graphics {
     struct OpenGLVertexAttribute
     {
         std::string name;
-        unsigned int size;
+        int size;
         unsigned int type;	
 	unsigned int component;
-        int offset;
+        unsigned int offset;
 	unsigned int normalize;
     };
 
@@ -218,11 +318,7 @@ namespace Graphics {
 	    std::vector<Graphics::OpenGLUniform> m_Uniforms;
 
 
-	    static std::map<std::string, unsigned int> GLSLPrimitives;
 	    static std::map<size_t, std::vector<Graphics::OpenGLVertexAttribute>> m_Formats;
-
-            static unsigned int GetPrimitiveBaseType(unsigned int type);
-	    static size_t GetPrimitiveSize(unsigned int type);
     };
 
 
