@@ -1,2 +1,0 @@
-I want to have the ability to load any shader i want to (specifically for glsl shader language )
-read the layout for the 

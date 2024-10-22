@@ -103,33 +103,17 @@ Graphics::RenderConfig& Graphics::OpenGLRenderAPI::generateRenderConfig(size_t f
     glBindBuffer(GL_ARRAY_BUFFER, config.VBO);
 
     std::vector<Graphics::OpenGLVertexAttribute> attributes = m_Shaders[shaderName]->getFormat().second;
-/*
 
-                glEnableVertexAttribArray(0);
-                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Graphics::Vertex), (void*)0);
-
-
-                glEnableVertexAttribArray(1);
-                glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Graphics::Vertex), (void*)offsetof(Graphics::Vertex, Graphics::Vertex::Normal));
-
-
-                glEnableVertexAttribArray(2);
-                glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Graphics::Vertex, Graphics::Vertex::TexCoords));
-
-	   */
     for (int i = 0; i < attributes.size(); i++)
     {
-
         glEnableVertexAttribArray(i);
-
-        // Add a switch case	
         glVertexAttribPointer(
 			i, 
 			attributes[i].size, 
 			attributes[i].type, 
 			attributes[i].normalize, 
 			sizeof(Graphics::Vertex), 
-			(void*)attributes[i].offset);
+			(void*) attributes[i].offset);
     }
 
     m_RenderConfigs[shaderName] = std::move(config);
@@ -142,10 +126,8 @@ Graphics::RenderConfig& Graphics::OpenGLRenderAPI::getRenderConfig(
 		size_t format, 
 		std::string shaderName)
 {
-    // Was the vao found in our vector?
     if (m_RenderConfigs.count(shaderName)) 
     {
-        // Return the found render entitiy
 	return m_RenderConfigs[shaderName];
     }
     else 
@@ -163,17 +145,17 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(
 			    std::string shaderName)
 {
     size_t format = m_Shaders[shaderName]->getFormat().first;
-    // TODO: Change this to formatKey
     Graphics::RenderConfig& config = getRenderConfig(format, shaderName);
 
     if (CURRENT_FORMAT != config.format)
     {
+	std::cout << "BINDING NEW VAO" << std::endl;
         glBindVertexArray(config.VAO);
         glBindBuffer(GL_ARRAY_BUFFER, config.VBO);
+	CURRENT_FORMAT = config.format;
     }
      
     glBufferData(GL_ARRAY_BUFFER, sizeof(Graphics::Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
-
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, config.EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_STATIC_DRAW);
  

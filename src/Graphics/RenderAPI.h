@@ -50,7 +50,7 @@ namespace Graphics
 	    }
 
 
-	    void drawElements(int count, bool unbind = true)
+	    void drawElements(int count, bool unbind = false)
 	    {
                 static_cast<BaseAPI*>(this)->drawElementsImpl(count, unbind); 
 	    }

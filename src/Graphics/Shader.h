@@ -1,23 +1,16 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <utility> 
-#include <string>
-#include <glm/ext/matrix_transform.hpp>
-#include <math.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <GLFW/glfw3.h>
-#include <fstream>
-#include <sstream>
-#include <set>
 #include <iostream>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/glm.hpp>
+#include <set>
+#include <string>
+#include <sstream>
+#include <fstream>
 #include "FileReader.h"
-#include <string_view>
 #include <unordered_map>
 #include <map>
-
 
 namespace Graphics {
     
@@ -26,7 +19,6 @@ namespace Graphics {
         VERTEX,
         FRAGMENT
     };
-    
     
     struct ShaderFileData 
     {
@@ -173,7 +165,7 @@ namespace Graphics {
     struct OpenGLVertexAttribute
     {
         std::string name;
-        unsigned int size;
+        int size;
         unsigned int type;	
 	unsigned int component;
         int offset;
@@ -217,10 +209,8 @@ namespace Graphics {
 	    std::vector<Graphics::OpenGLVertexAttribute> m_Attributes;
 	    std::vector<Graphics::OpenGLUniform> m_Uniforms;
 
-
 	    static std::map<std::string, unsigned int> GLSLPrimitives;
 	    static std::map<size_t, std::vector<Graphics::OpenGLVertexAttribute>> m_Formats;
-
             static unsigned int GetPrimitiveBaseType(unsigned int type);
 	    static size_t GetPrimitiveSize(unsigned int type);
     };

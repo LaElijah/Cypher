@@ -233,7 +233,7 @@ unsigned int Graphics::Model::TextureFromEmbedded(const aiScene* scene, int embe
 unsigned int Graphics::Model::TextureFromFile(std::string path, std::string directory)
 {
 
-    std::cout << "LOADING FILE TEXTURE" << std::endl;
+    //std::cout << "LOADING FILE TEXTURE" << std::endl;
     std::string filename = std::string(path);
     filename = directory + '/' + filename;
     unsigned int textureID; 
