@@ -16,59 +16,13 @@
 #include <functional>
 #include "RenderAPI.h"
 
-Graphics::Renderer::Renderer(
-		std::shared_ptr<Graphics::GLFWCanvas> canvas,
-		std::shared_ptr<Graphics::Camera> camera,
-		std::shared_ptr<Graphics::GUI> gui)
-	        : Canvas(canvas),
-		  Camera(camera),
-		  GUI(gui)
-{
-    ResourceManager = new Graphics::ResourceManager();
-    Canvas = canvas;    
-}
-
-/*
-Graphics::Renderer::Renderer()
-{
-    ResourceManager = new Graphics::ResourceManager();
-    Canvas = std::unique_ptr<Graphics::GLFWCanvas>(new Graphics::GLFWCanvas(SCREEN_WIDTH, SCREEN_HEIGHT));    
-    Camera = new Graphics::Camera(SCREEN_WIDTH, SCREEN_HEIGHT);
-    GUI = new Graphics::GUI();
-}
-
-*/
-/*
-
-Graphics::Renderer::Render(std::shared_ptr<Graphics::GLFWCanvas> canvas)
-{
-    a_Canvas = canvas;
-    ResourceManager = new Graphics::ResourceManager();
-    Canvas = new Graphics::GLFWCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);    
-    Camera = new Graphics::Camera(SCREEN_WIDTH, SCREEN_HEIGHT);
-    GUI = new Graphics::GUI();
-}
-*/
-/*
-Graphics::Renderer::Renderer(
-		Graphics::ResourceManager* resourceManager, 
-		Graphics::GLFWCanvas* canvas, 
-		Graphics::Camera* camera)
-{
-    ResourceManager = resourceManager;
-    Canvas = canvas;
-    Camera = camera;
-    GUI = new Graphics::GUI();
-}
-*/
-
 void Graphics::Renderer::updateWindow(float width, float height)
 {
     Canvas->resizeViewport(width, height);
     Camera->setAspectRatio(width / height);
 }
 
-Graphics::ResourceManager* Graphics::Renderer::getResourceManager()
+std::shared_ptr<Graphics::ResourceManager> Graphics::Renderer::getResourceManager()
 {
     return ResourceManager;
 }

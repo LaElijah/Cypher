@@ -36,12 +36,27 @@ namespace Graphics {
             Renderer();
             Renderer(std::shared_ptr<Graphics::GLFWCanvas> canvas);
 
+	    template <typename T>
             Renderer(
 		std::shared_ptr<Graphics::GLFWCanvas> canvas,
 		std::shared_ptr<Graphics::Camera> camera,
-		std::shared_ptr<Graphics::GUI> gui);
+		std::shared_ptr<Graphics::GUI> gui,
+		std::shared_ptr<Graphics::ResourceManager> resourceManager,
+		Graphics::RenderAPI<T>& api)
+                : Canvas(canvas),
+		  Camera(camera),
+		  GUI(gui), 
+		  ResourceManager(resourceManager)
+            {
 
-	    Graphics::ResourceManager* getResourceManager();
+		    ResourceManager->initialize();
+                    api.loadShaders(ResourceManager->getShaderInfo());
+
+                    GUI->initialize(Canvas->getWindow());
+		    run(api);
+            }
+
+	    std::shared_ptr<Graphics::ResourceManager> getResourceManager();
 	    std::shared_ptr<Graphics::GLFWCanvas> getCanvas();
 	    std::shared_ptr<Graphics::Camera> getCamera();
 	    std::shared_ptr<Graphics::GUI> getGUI();
@@ -168,7 +183,7 @@ namespace Graphics {
 	    std::shared_ptr<Graphics::GUI> GUI; 
 	    std::shared_ptr<Graphics::Camera> Camera;
 	    std::shared_ptr<Graphics::GLFWCanvas> Canvas;
-	    Graphics::ResourceManager* ResourceManager;
+	    std::shared_ptr<Graphics::ResourceManager> ResourceManager;
 
             std::vector<std::function<void()>> PostRenderFunctions;
 	    

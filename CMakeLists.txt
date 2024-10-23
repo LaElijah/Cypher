@@ -13,7 +13,6 @@ FetchContent_Declare(
   GIT_TAG master)
 
 set(SOURCES 
-  ${SRC_DIR}/Graphics/index.cpp
   ${SRC_DIR}/Graphics/Camera.cpp
   ${SRC_DIR}/Graphics/GLFWCanvas.cpp
   ${SRC_DIR}/Graphics/Shader.cpp  
@@ -26,6 +25,8 @@ set(SOURCES
   ${SRC_DIR}/Graphics/FrameBuffer.cpp
   ${SRC_DIR}/Graphics/GUIComponent.cpp
   ${SRC_DIR}/Graphics/RenderAPI.cpp
+  ${SRC_DIR}/Core/index.cpp
+  ${SRC_DIR}/Core/Application.cpp
   ${EXTERNAL_DIR}/GLAD/glad.c
   ${EXTERNAL_DIR}/STB_IMAGE/stb_image.cpp
   ${EXTERNAL_DIR}/imgui/imconfig.h
