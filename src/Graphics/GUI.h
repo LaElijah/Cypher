@@ -7,7 +7,6 @@
 #include "../../external/imgui/imgui_impl_opengl3.h"
 #include "../../external/imgui/imgui_impl_glfw.h"
 #include "ResourceManager.h"
-#include "GLFWCanvas.h"
 #include "FrameBuffer.h"
 #include "Camera.h"
 #include "GUIComponent.h"

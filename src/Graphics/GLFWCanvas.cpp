@@ -16,18 +16,24 @@ namespace Graphics {
 }
 	
 Graphics::GLFWCanvas::GLFWCanvas(
-        unsigned int width,
-        unsigned int height, 
-        unsigned int version) // TODO: Set an enum up for all available versions
+		std::pair<unsigned int, unsigned int> resolution,
+		std::shared_ptr<Graphics::Camera> camera,
+		std::shared_ptr<Graphics::GUI> gui,
+	       	unsigned int version) // TODO: Set an enum up for all available versions
+	        : Camera(camera), 
+		  GUI(gui)
 {
+
     VERSION = version;
-    lastX = width / 2;
-    lastY = height / 2; 
-    Width = width;
-    Height = height;
+    lastX = resolution.first / 2;
+    lastY = resolution.second / 2; 
+    Width = resolution.first;
+    Height = resolution.second;
     
-    startWindow(width, height);
+    startWindow(resolution.first, resolution.second);
+    
     initialize();
+
 }
 
 
@@ -53,9 +59,16 @@ void Graphics::GLFWCanvas::setResolution(float width, float height)
 
 void Graphics::GLFWCanvas::initialize()
 {
-    glfwMakeContextCurrent(Window);
-    glfwSetFramebufferSizeCallback(Window, framebuffer_size_callback); 
+    glfwMakeContextCurrent(m_Window);
+    glfwSetFramebufferSizeCallback(m_Window, framebuffer_size_callback); 
+    glfwSetWindowUserPointer(m_Window, this);
 
+    glfwSetCursorPosCallback(m_Window,  mouseCallback);
+    glfwSetMouseButtonCallback(m_Window, mouseButtonCallback);
+    glfwSetScrollCallback(m_Window, scrollCallback); 
+
+
+    
     loadGlad();  
 
     glEnable(GL_DEPTH_TEST);
@@ -76,7 +89,7 @@ float Graphics::GLFWCanvas::getWidth()
 
 GLFWwindow* Graphics::GLFWCanvas::getWindow() 
 {
-    return Window;
+    return m_Window;
 }
 
 
@@ -114,8 +127,8 @@ void Graphics::GLFWCanvas::releaseMouse()
 void Graphics::GLFWCanvas::captureMouse()
 {	
     GLFWwindow* window = getWindow();
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    glfwSetCursorPos(Window, lastX, lastY); 
+    glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPos(m_Window, lastX, lastY); 
 }	
 
 
@@ -133,15 +146,15 @@ void Graphics::GLFWCanvas::startWindow(unsigned int& width, unsigned int& height
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     #endif
 
-    Window = glfwCreateWindow(width, height, WindowName.c_str(), NULL, NULL);
-    if (Window == NULL)
+    m_Window = glfwCreateWindow(width, height, WindowName.c_str(), NULL, NULL);
+    if (m_Window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         throw std::runtime_error("Window creation error");
     }
 
-    glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
 
@@ -159,6 +172,63 @@ void Graphics::GLFWCanvas::resizeViewport(unsigned int width, unsigned height)
 {  
     glViewport(0, 0, width, height);
 }
+
+
+void Graphics::GLFWCanvas::mouseCallback(GLFWwindow *window, double xpos, double ypos)
+{
+    static_cast<GLFWCanvas*>(glfwGetWindowUserPointer(window))
+	    ->mouseCallbackImpl(window, xpos, ypos);
+}
+
+
+void Graphics::GLFWCanvas::mouseCallbackImpl(GLFWwindow *window, double xpos, double ypos)
+{
+    if (Camera->isFirstMouse())
+    {
+        setLastX(xpos);
+        setLastY(ypos);
+        Camera->startMouse(); 
+    }
+      
+    if (Camera->getCameraStatus())
+    {
+          Camera->processMousePosition(xpos - getLastX(), getLastY() - ypos); 
+          setLastX(xpos);
+          setLastY(ypos);
+    }
+    else 
+    {
+        glfwSetCursorPos(getWindow(), getLastX(), getLastY()); 
+    }    
+}
+
+void Graphics::GLFWCanvas::mouseButtonCallbackImpl(GLFWwindow* window, int button, int action, int mods)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    if (button == GLFW_MOUSE_BUTTON_LEFT 
+        	    && action == GLFW_PRESS 
+        	    && !io.WantCaptureMouse
+        	    && !GUI->isWindowed())
+    {
+        captureMouse(); 
+        GUI->disable();	
+        Camera->enableCamera(); 
+    } 
+
+}
+void Graphics::GLFWCanvas::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+    static_cast<GLFWCanvas*>(glfwGetWindowUserPointer(window))
+	    ->mouseButtonCallbackImpl(window, button, action, mods);
+}
+
+void Graphics::GLFWCanvas::scrollCallback(GLFWwindow *window, double xoffset, double yoffset)
+{
+    static_cast<GLFWCanvas*>(glfwGetWindowUserPointer(window))
+	    ->Camera
+	    ->processMouseScroll(yoffset);
+}
+
 
 
 

@@ -34,15 +34,17 @@ namespace Graphics {
     {
 	public:
             Renderer();
+            Renderer(std::shared_ptr<Graphics::GLFWCanvas> canvas);
+
             Renderer(
-	        Graphics::ResourceManager* resourceManager, 
-		Graphics::GLFWCanvas* canvas, 
-		Graphics::Camera* camera);
+		std::shared_ptr<Graphics::GLFWCanvas> canvas,
+		std::shared_ptr<Graphics::Camera> camera,
+		std::shared_ptr<Graphics::GUI> gui);
 
 	    Graphics::ResourceManager* getResourceManager();
-	    Graphics::GLFWCanvas* getCanvas();
-	    Graphics::Camera* getCamera();
-	    Graphics::GUI* getGUI();
+	    std::shared_ptr<Graphics::GLFWCanvas> getCanvas();
+	    std::shared_ptr<Graphics::Camera> getCamera();
+	    std::shared_ptr<Graphics::GUI> getGUI();
 
             void updateWindow(float width, float height);
 	    void shutdown();
@@ -163,9 +165,9 @@ namespace Graphics {
 	    float SCREEN_WIDTH = 1920;
 	    float SCREEN_HEIGHT = 1080;
            
-	    Graphics::GUI* GUI; 
-            Graphics::Camera* Camera;
-	    Graphics::GLFWCanvas* Canvas;
+	    std::shared_ptr<Graphics::GUI> GUI; 
+	    std::shared_ptr<Graphics::Camera> Camera;
+	    std::shared_ptr<Graphics::GLFWCanvas> Canvas;
 	    Graphics::ResourceManager* ResourceManager;
 
             std::vector<std::function<void()>> PostRenderFunctions;

@@ -4,17 +4,20 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-
+#include <memory>
+#include "Camera.h"
+#include "GUI.h"
 
 namespace Graphics
 {
     class GLFWCanvas 
     {
         public:
-            GLFWCanvas(unsigned int width, 
-		     unsigned int height,
-	       	     unsigned int version = 3);
-
+            GLFWCanvas(std::pair<unsigned int, unsigned int> resolution,
+		     std::shared_ptr<Graphics::Camera> camera,
+		     std::shared_ptr<Graphics::GUI> gui,
+	       	     unsigned int version = 3); 
+		     
             void captureMouse();
             void releaseMouse();
             float getWidth();
@@ -44,7 +47,7 @@ namespace Graphics
 	    bool fullscreen = false; 
  
 	    std::string  WindowName;
-            GLFWwindow* Window;
+            GLFWwindow* m_Window;
 
        	    int VERSION;
             int lastX;
@@ -56,6 +59,17 @@ namespace Graphics
             void startWindow(unsigned int& width, unsigned int& height); 
 	    void initialize();
             void loadGlad(); 
+	    std::shared_ptr<Graphics::Camera> Camera;
+	    std::shared_ptr<Graphics::GUI> GUI;
+
+	    void mouseButtonCallbackImpl(GLFWwindow* window, int button, int action, int mods); 
+	    
+	    void mouseCallbackImpl(GLFWwindow *window, double xpos, double ypos);
+	    
+	    static void mouseCallback(GLFWwindow *window, double xpos, double ypos);
+	    static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+	    static void scrollCallback(GLFWwindow *window, double xoffset, double yoffset);
+            
     };
 }
 

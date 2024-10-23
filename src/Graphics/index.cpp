@@ -13,26 +13,37 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);  
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
-Graphics::Renderer renderer;
+std::shared_ptr<Graphics::Camera> Camera = std::shared_ptr<Graphics::Camera>(new Graphics::Camera(1920, 1080));
+std::shared_ptr<Graphics::GUI> GUI = std::shared_ptr<Graphics::GUI>(new Graphics::GUI());
+
+std::shared_ptr<Graphics::GLFWCanvas> Canvas = std::shared_ptr<Graphics::GLFWCanvas>(
+		new Graphics::GLFWCanvas
+		            (
+				std::make_pair(1920, 1080),
+				Camera, 
+				GUI
+		            )
+		);
+
+Graphics::Renderer renderer = Graphics::Renderer(
+		                Canvas,
+		                Camera,
+		                GUI
+		);
+
+
 Graphics::ResourceManager* ResourceManager = renderer.getResourceManager();
-Graphics::Camera* Camera = renderer.getCamera();
-Graphics::GLFWCanvas* Canvas = renderer.getCanvas();    
-Graphics::GUI* GUI = renderer.getGUI();
 
 
 int main()
 {
     GLFWwindow* window = Canvas->getWindow();  
-
-    glfwSetCursorPosCallback(window,  mouse_callback);
-    glfwSetMouseButtonCallback(window, mouse_button_callback);
-    glfwSetScrollCallback(window, scroll_callback); 
-
     GUI->initialize(window);
     ResourceManager->initialize(); 
    
     Graphics::OpenGLRenderAPI api = Graphics::OpenGLRenderAPI(); 
     api.loadShaders(ResourceManager->getShaderInfo());
+
     renderer.run(api);
     return 0;
 }
