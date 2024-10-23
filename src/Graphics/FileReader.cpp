@@ -6,11 +6,14 @@
 #include <iostream>
 
 
+
+
 std::string Graphics::FileReader::getNameFromDirectory(std::string& directory)
 {
-
        return directory.substr(directory.find_last_of("/\\") + 1);
 }
+
+
 
 
 std::pair<std::string, std::string> Graphics::FileReader::splitFileExtension(std::string filename)
@@ -31,12 +34,17 @@ std::pair<std::string, std::string> Graphics::FileReader::splitFileExtension(std
 
 
 
+
 // Uses a string parameter to make a filereader object
 // set to a given directory which can be relativley selected
 Graphics::FileReader::FileReader(const char* dir)
 {
     this->dirname = dir;
 }
+
+
+
+
 
 Graphics::FileReader::FileReader(std::string dir)
 {

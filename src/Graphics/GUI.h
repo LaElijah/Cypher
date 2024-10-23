@@ -13,6 +13,7 @@
 
 namespace Graphics {
 
+
      bool isWithinWindow(ImVec2 mousePos, ImVec2 windowPos, ImVec2 windowSize);
      bool isWithinContentRegion(ImVec2 mousePos, ImVec2 contentRegionMin, ImVec2 contentRegionMax);
 

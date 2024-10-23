@@ -8,15 +8,24 @@
 #include "Camera.h"
 #include "GUI.h"
 
-namespace Graphics
-{
+namespace Graphics {
+
+    /**
+     * This class provides window/context functionality
+     * to programs. Uses a camera and optionally a GUI
+     * for callback purposes.
+     *
+     */
     class GLFWCanvas 
     {
         public:
-            GLFWCanvas(std::pair<unsigned int, unsigned int> resolution,
-		     std::shared_ptr<Graphics::Camera> camera,
-		     std::shared_ptr<Graphics::GUI> gui,
-	       	     unsigned int version = 3); 
+            GLFWCanvas
+            (
+	        std::pair<unsigned int, unsigned int> resolution,
+		std::shared_ptr<Graphics::Camera> camera,
+		std::shared_ptr<Graphics::GUI> gui,
+	       	unsigned int version = 3
+	    ); 
 		     
             void captureMouse();
             void releaseMouse();
@@ -63,7 +72,6 @@ namespace Graphics
 	    std::shared_ptr<Graphics::GUI> GUI;
 
 	    void mouseButtonCallbackImpl(GLFWwindow* window, int button, int action, int mods); 
-	    
 	    void mouseCallbackImpl(GLFWwindow *window, double xpos, double ypos);
 	    
 	    static void mouseCallback(GLFWwindow *window, double xpos, double ypos);

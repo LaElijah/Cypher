@@ -1,17 +1,12 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <glm/gtc/matrix_transform.hpp>
-#include <iostream>
 #include "Camera.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 
 
-
-Graphics::Camera::Camera(float width, float height)
+Graphics::Camera::Camera(std::pair<float, float>& resolution)
 {
     // Setting screen aspect ratio
-    AspectRatio = width / height;
-
+    AspectRatio = resolution.first / resolution.second;
     updateDirection();
 }
 
@@ -25,10 +20,12 @@ float Graphics::Camera::getZoom()
 
 
 
+
 void Graphics::Camera::setZoom(float newZoom)
 {
     zoom = newZoom;
 }
+
 
 
 
@@ -60,21 +57,6 @@ void Graphics::Camera::processMousePosition(double xoffset, double yoffset, bool
 
 
 
-bool Graphics::Camera::isFirstMouse()
-{
-    return firstMouse;
-}
-
-
-
-
-void Graphics::Camera::startMouse()
-{
-    firstMouse = false;
-}
-
-
-
 
 void Graphics::Camera::updateDirection()
 {  
@@ -87,6 +69,29 @@ void Graphics::Camera::updateDirection()
     CameraUp = glm::normalize(glm::cross(CameraRight, CameraFront));
 }
 
+
+
+
+void Graphics::Camera::resetPosition()
+{
+    Position = glm::vec3(0.0f, 0.0f, 3.0f);
+}
+
+
+
+
+bool Graphics::Camera::isFirstMouse()
+{
+    return firstMouse;
+}
+
+
+
+
+void Graphics::Camera::startMouse()
+{
+    firstMouse = false;
+}
 
 
 
@@ -207,9 +212,9 @@ bool Graphics::Camera::getCameraStatus()
 
 
 
-void Graphics::Camera::resetPosition()
+void Graphics::Camera::setAspectRatio(float ratio)
 {
-    Position = glm::vec3(0.0f, 0.0f, 3.0f);
+    AspectRatio = ratio;
 }
 
 
@@ -220,7 +225,3 @@ void Graphics::Camera::setCameraFront(glm::vec3 direction)
     CameraFront = direction;
 }
 
-void Graphics::Camera::setAspectRatio(float ratio)
-{
-    AspectRatio = ratio;
-}

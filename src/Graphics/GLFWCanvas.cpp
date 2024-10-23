@@ -6,15 +6,18 @@
 #include "GLFWCanvas.h"
 #include <functional>
 
-namespace Graphics {
 
-    void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-    { 
-	//std::cout << width << " " << height << std::endl;
-        //glViewport(0, 0, width, height);
-    }
+
+
+void Graphics::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{ 
+    //std::cout << width << " " << height << std::endl;
+    //glViewport(0, 0, width, height);
 }
-	
+
+
+
+
 Graphics::GLFWCanvas::GLFWCanvas(
 		std::pair<unsigned int, unsigned int> resolution,
 		std::shared_ptr<Graphics::Camera> camera,
