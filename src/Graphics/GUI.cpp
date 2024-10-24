@@ -107,7 +107,7 @@ void Graphics::GUI::drawGUI()
 	  // screen is rendered with scene buffer 
 }
 
-bool Graphics::isWithinWindow(ImVec2 mousePos, ImVec2 windowPos, ImVec2 windowSize)
+bool Graphics::GUI::isWithinWindow(ImVec2 mousePos, ImVec2 windowPos, ImVec2 windowSize)
 {
 	
     return (mousePos.x >= windowPos.x 
@@ -116,7 +116,7 @@ bool Graphics::isWithinWindow(ImVec2 mousePos, ImVec2 windowPos, ImVec2 windowSi
             && mousePos.y < windowPos.y + windowSize.y);
 }
 
-bool Graphics::isWithinContentRegion(ImVec2 mousePos, ImVec2 contentRegionMin, ImVec2 contentRegionMax)
+bool Graphics::GUI::isWithinContentRegion(ImVec2 mousePos, ImVec2 contentRegionMin, ImVec2 contentRegionMax)
 {
 	return (mousePos.x >= contentRegionMin.x 
             && mousePos.x <= contentRegionMax.x 

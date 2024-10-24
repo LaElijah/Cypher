@@ -15,6 +15,12 @@ namespace Graphics
      * dont expect high performance out of my debug menu
      */
 
+    /**
+     * This class provides an interface for subclasses
+     * to inherit, providing GUI windows with specific 
+     * functionality to easily be renderable to the GUI.
+     *
+     */
     class GUIComponent 
     {
     	public: 

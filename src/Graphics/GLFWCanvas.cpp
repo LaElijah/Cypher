@@ -7,26 +7,26 @@
 #include <functional>
 
 
-Graphics::GLFWCanvas::GLFWCanvas(
-		std::pair<unsigned int, unsigned int> resolution,
-		std::shared_ptr<Graphics::Camera> camera,
-		std::shared_ptr<Graphics::GUI> gui,
-	       	unsigned int version) // TODO: Set an enum up for all available versions
-	        : Camera(camera), 
-		  GUI(gui)
+Graphics::GLFWCanvas::GLFWCanvas
+(
+    std::pair<unsigned int, unsigned int> resolution,
+    std::shared_ptr<Graphics::Camera> camera,
+    std::shared_ptr<Graphics::GUI> gui,
+    unsigned int version) // TODO: Set an enum up for all available versions
+    : Camera(camera), 
+      GUI(gui),
+      VERSION(version)
 {
-
-    VERSION = version;
     lastX = resolution.first / 2;
     lastY = resolution.second / 2; 
     Width = resolution.first;
     Height = resolution.second;
     
     startWindow(resolution.first, resolution.second);
-    
     initialize();
-
 }
+
+
 
 
 void Graphics::GLFWCanvas::updateDeltaTime()
@@ -37,17 +37,24 @@ void Graphics::GLFWCanvas::updateDeltaTime()
 }
 
 
+
+
 float Graphics::GLFWCanvas::getDeltaTime()
 {
     return deltaTime;
 }    
 
- 
+
+
+
 void Graphics::GLFWCanvas::setResolution(float width, float height)
 {
     Width = width;
     Height = height;	
 }
+
+
+
 
 void Graphics::GLFWCanvas::initialize()
 {
@@ -67,10 +74,14 @@ void Graphics::GLFWCanvas::initialize()
 }
 
 
+
+
 float Graphics::GLFWCanvas::getHeight()
 {
     return Height; 
 }
+
+
 
 
 float Graphics::GLFWCanvas::getWidth()
@@ -79,10 +90,14 @@ float Graphics::GLFWCanvas::getWidth()
 }
 
 
+
+
 GLFWwindow* Graphics::GLFWCanvas::getWindow() 
 {
     return m_Window;
 }
+
+
 
 
 float Graphics::GLFWCanvas::getLastX()
@@ -91,10 +106,14 @@ float Graphics::GLFWCanvas::getLastX()
 }
 
 
+
+
 float Graphics::GLFWCanvas::getLastY()
 {
     return lastY;
 }
+
+
 
 
 void Graphics::GLFWCanvas::setLastX(double X)
@@ -103,10 +122,14 @@ void Graphics::GLFWCanvas::setLastX(double X)
 }
 
 
+
+
 void Graphics::GLFWCanvas::setLastY(double Y)
 {
     lastY = Y;
 }
+
+
 
 
 void Graphics::GLFWCanvas::releaseMouse()
@@ -116,12 +139,16 @@ void Graphics::GLFWCanvas::releaseMouse()
 }
 
 
+
+
 void Graphics::GLFWCanvas::captureMouse()
 {	
     GLFWwindow* window = getWindow();
     glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPos(m_Window, lastX, lastY); 
 }	
+
+
 
 
 void Graphics::GLFWCanvas::startWindow(unsigned int& width, unsigned int& height) 
@@ -150,6 +177,8 @@ void Graphics::GLFWCanvas::startWindow(unsigned int& width, unsigned int& height
 }
 
 
+
+
 void Graphics::GLFWCanvas::loadGlad() 
 {
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -160,10 +189,14 @@ void Graphics::GLFWCanvas::loadGlad()
 }
 
 
+
+
 void Graphics::GLFWCanvas::resizeViewport(unsigned int width, unsigned height)
 {  
     glViewport(0, 0, width, height);
 }
+
+
 
 
 void Graphics::GLFWCanvas::mouseCallback(GLFWwindow *window, double xpos, double ypos)
@@ -171,6 +204,8 @@ void Graphics::GLFWCanvas::mouseCallback(GLFWwindow *window, double xpos, double
     static_cast<GLFWCanvas*>(glfwGetWindowUserPointer(window))
 	    ->mouseCallbackImpl(window, xpos, ypos);
 }
+
+
 
 
 void Graphics::GLFWCanvas::mouseCallbackImpl(GLFWwindow *window, double xpos, double ypos)
@@ -194,6 +229,9 @@ void Graphics::GLFWCanvas::mouseCallbackImpl(GLFWwindow *window, double xpos, do
     }    
 }
 
+
+
+
 void Graphics::GLFWCanvas::mouseButtonCallbackImpl(GLFWwindow* window, int button, int action, int mods)
 {
     ImGuiIO& io = ImGui::GetIO();
@@ -209,10 +247,15 @@ void Graphics::GLFWCanvas::mouseButtonCallbackImpl(GLFWwindow* window, int butto
 
 }
 
+
+
+
 void Graphics::GLFWCanvas::scrollCallbackImpl(GLFWwindow* window, double xoffset, double yoffset)
 {
 	Camera->processMouseScroll(yoffset);
 }
+
+
 
 
 void Graphics::GLFWCanvas::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
@@ -222,11 +265,15 @@ void Graphics::GLFWCanvas::mouseButtonCallback(GLFWwindow* window, int button, i
 }
 
 
+
+
 void Graphics::GLFWCanvas::scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
     static_cast<GLFWCanvas*>(glfwGetWindowUserPointer(window))
 	    ->scrollCallbackImpl(window, xoffset, yoffset);
 }
+
+
 
 
 void Graphics::GLFWCanvas::frameBufferSizeCallbackImpl(GLFWwindow* window, int width, int height)
@@ -241,5 +288,3 @@ void Graphics::GLFWCanvas::frameBufferSizeCallback(GLFWwindow* window, int width
     static_cast<GLFWCanvas*>(glfwGetWindowUserPointer(window))
 	    ->frameBufferSizeCallbackImpl(window, width, height);
 }
-
-

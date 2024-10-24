@@ -38,12 +38,14 @@ namespace Graphics
             Renderer(std::shared_ptr<Graphics::GLFWCanvas> canvas);
 
 	    template <typename T>
-            Renderer(
+            Renderer
+	    (
 		std::shared_ptr<Graphics::GLFWCanvas> canvas,
 		std::shared_ptr<Graphics::Camera> camera,
 		std::shared_ptr<Graphics::GUI> gui,
 		std::shared_ptr<Graphics::ResourceManager> resourceManager,
-		Graphics::RenderAPI<T>& api)
+		Graphics::RenderAPI<T>& api
+	    )
                 : Canvas(canvas),
 		  Camera(camera),
 		  GUI(gui), 
@@ -79,6 +81,7 @@ namespace Graphics
 	    template <typename T>	    
             void draw(Graphics::RenderAPI<T>& renderAPI)
             {
+                //for (std::shared_ptr<Graphics::Model> model : ResourceManager->getLoadedModels())
                 for (Graphics::Model* model : ResourceManager->getLoadedModels())
                 { 
 	            auto shader = renderAPI.getShader(model->getShaderName());

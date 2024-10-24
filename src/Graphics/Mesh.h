@@ -8,6 +8,12 @@
 
 namespace Graphics
 {
+    /**
+     * This class SHOULD BE REPRESENTED BY A STRUCT 
+     * LETS CHANGE IT LATER 
+     *
+     *
+     */
     class Mesh 
     {
         public: 

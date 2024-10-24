@@ -76,8 +76,8 @@ void Graphics::Renderer::processInput(GLFWwindow* window)
 
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !toggleWindowPressed) 
     {
-	   int width;
-	   int height;
+	int width;
+	int height;
 
         glfwGetWindowSize(window, &width, &height);
 

@@ -6,7 +6,7 @@
 
 namespace Graphics 
 {
-    struct ModelFile
+    struct ModelInfo
     {
         std::string path;
         std::string name;

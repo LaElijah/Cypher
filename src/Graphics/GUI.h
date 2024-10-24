@@ -11,16 +11,21 @@
 #include "Camera.h"
 #include "GUIComponent.h"
 
-namespace Graphics {
-
-
-     bool isWithinWindow(ImVec2 mousePos, ImVec2 windowPos, ImVec2 windowSize);
-     bool isWithinContentRegion(ImVec2 mousePos, ImVec2 contentRegionMin, ImVec2 contentRegionMax);
-
-
-
-
-
+namespace Graphics 
+{
+    /**
+     * This class provides GUI debgugging and 
+     * editor functionality to application.
+     *
+     * Planned Features: 
+     * - Editior to add objects to the scene and move 
+     *   them around
+     *
+     *
+     * Known Bugs: 
+     * - Issues with selecting and losing focus with when 
+     *   going in and out of camera mode.
+     */
     class GUI 
     {
 	public:
@@ -44,7 +49,15 @@ namespace Graphics {
 	    void addComponent(Graphics::GUIComponent*);
 	    void addEditorComponent(Graphics::GUIComponent*);
             void handleInputs();        	
-            void handleClick();        	
+            void handleClick();    
+
+
+
+            static bool isWithinWindow(ImVec2 mousePos, ImVec2 windowPos, ImVec2 windowSize);
+            static bool isWithinContentRegion(ImVec2 mousePos, ImVec2 contentRegionMin, ImVec2 contentRegionMax);
+
+
+
 	private:	   
 	    bool WINDOWED = true; 
 	    bool GUI_ENABLED = false;

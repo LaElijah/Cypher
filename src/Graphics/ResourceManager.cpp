@@ -12,7 +12,7 @@ std::map<std::string, Graphics::ShaderInfo>& Graphics::ResourceManager::getShade
     return m_LoadedShaderInfo;
 }
 
-void Graphics::ResourceManager::loadModelPaths(std::string modelDirectory)
+void Graphics::ResourceManager::loadModelInfo(std::string modelDirectory)
 {
     Graphics::FileReader fileReader(modelDirectory);
     std::vector<std::string> models = fileReader.getFiles();
@@ -20,20 +20,20 @@ void Graphics::ResourceManager::loadModelPaths(std::string modelDirectory)
     
     for (std::string model : models)
     {
-        Graphics::ModelFile modelFile;
+        Graphics::ModelInfo modelInfo;
 
 	workingModel = modelDirectory + "/" + model;
 	fileReader.setDirname(workingModel);
-	std::vector<std::string> modelFiles = fileReader.getFiles("gltf");
+	std::vector<std::string> modelInfoFound = fileReader.getFiles("gltf");
 
-	for (std::string filename : modelFiles)
+	for (std::string filename : modelInfoFound)
 	{
             auto [name, extension] = FileReader::splitFileExtension(filename);
-	    modelFile.name = name;
-	    modelFile.extension = extension;
-	    modelFile.path = std::string(workingModel + "/" + filename);
+	    modelInfo.name = name;
+	    modelInfo.extension = extension;
+	    modelInfo.path = std::string(workingModel + "/" + filename);
 
-	    ModelFiles.push_back(modelFile); 
+	    m_ModelInfo.push_back(modelInfo); 
 	}
     }
 }
@@ -76,22 +76,23 @@ void Graphics::ResourceManager::loadShaderInfo(bool single, std::string director
     }
 }
 
+//void Graphics::ResourceManager::loadModel(Graphics::Model&& model)
 void Graphics::ResourceManager::loadModel(Graphics::Model* model)
 {
-    loadedModels.push_back(model); 
+    //m_LoadedModels.push_back(std::shared_ptr<Graphics::Model>(&model)); 
+    m_LoadedModels.push_back(model); 
 }
 
 
+//std::vector<std::shared_ptr<Graphics::Model>>& Graphics::ResourceManager::getLoadedModels()
 std::vector<Graphics::Model*>& Graphics::ResourceManager::getLoadedModels()
 {
-    return loadedModels;
+    return m_LoadedModels;
 }
 
 void Graphics::ResourceManager::initialize()
 {
-    // TODO: Rename to ModelInfo    
-    loadModelPaths(); 
-    //loadShaderInfo();  
+    loadModelInfo(); 
     loadShaderInfo(true, "./data/Shaders/debug");  
 }
 

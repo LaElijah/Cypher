@@ -8,7 +8,8 @@
 #include "Camera.h"
 #include "GUI.h"
 
-namespace Graphics {
+namespace Graphics 
+{
 
     /**
      * This class provides window/context functionality
