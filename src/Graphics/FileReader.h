@@ -5,7 +5,8 @@
 #include <dirent.h>
 #include <vector>
 
-namespace Graphics {
+namespace Graphics 
+{
 
     /**
      * This class handles file I/O and provides file 
@@ -18,7 +19,8 @@ namespace Graphics {
      * - Folder to file differentation doesent work for all functions 
      *   must remove for more accurate testing seperately
      */
-    class FileReader {
+    class FileReader 
+    {
     
         public:
 	    FileReader(const char* directory);

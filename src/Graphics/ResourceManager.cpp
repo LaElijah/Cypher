@@ -1,5 +1,3 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <stdexcept>
 #include <iostream>
 #include "FileReader.h"
@@ -7,7 +5,6 @@
 #include "Shader.h"
 #include "Model.h"
 
-#include "../../external/imgui/imgui.h"
 
 
 std::map<std::string, Graphics::ShaderInfo>& Graphics::ResourceManager::getShaderInfo()

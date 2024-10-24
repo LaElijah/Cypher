@@ -7,8 +7,8 @@
 #include <vector> 
 
 
-namespace Graphics {
-
+namespace Graphics 
+{
     class Model 
     {
         public:
@@ -26,25 +26,34 @@ namespace Graphics {
             
             std::vector<Graphics::Mesh> meshes;
             std::vector<Graphics::Texture> texturesLoaded;
-            std::string shaderName = "debug";
+
+
+	    // TODO: RESOLVE AT LOAD TIME
+	    std::string shaderName = "debug";
             std::string directory;
 
             void loadModel(std::string path);
-            void processNode(
-			    aiNode *node, 
-			    const aiScene *scene, 
-			    const glm::mat4& parentTransform);
+            void processNode
+            (
+                aiNode *node, 
+                const aiScene *scene, 
+                const glm::mat4& parentTransform
+	    );
 
-            Graphics::Mesh processMesh(
-			    aiMesh *mesh, 
-			    const aiScene *scene, 
-			    const glm::mat4& transform);
+            Graphics::Mesh processMesh
+	    (
+                aiMesh *mesh, 
+                const aiScene *scene, 
+                const glm::mat4& transform
+	    );
 
-            std::vector<Graphics::Texture> loadMaterialTextures(
-			    aiMaterial *mat, 
-			    const aiScene* scene, 
-			    aiTextureType type, 
-			    std::string typeName);
+            std::vector<Graphics::Texture> loadMaterialTextures
+            (
+                aiMaterial *mat, 
+                const aiScene* scene, 
+                aiTextureType type, 
+                std::string typeName
+	    );
 
             unsigned int TextureFromFile(std::string path, std::string directory); 
             unsigned int TextureFromEmbedded(const aiScene* scene, int embeddedIndex);

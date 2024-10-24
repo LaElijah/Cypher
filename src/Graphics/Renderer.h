@@ -26,7 +26,8 @@
 // POTENTIAL NAME CYPHER;
 
 
-namespace Graphics {
+namespace Graphics 
+{
 
 
 

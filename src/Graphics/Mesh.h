@@ -6,15 +6,16 @@
 #include "Primitives.h"
 
 
-namespace Graphics{
-
-
+namespace Graphics
+{
     class Mesh 
     {
         public: 
-            Mesh(std::vector<Graphics::Vertex> vertices, 
-            std::vector<unsigned int> indices, 
-            std::vector<Texture> textures
+            Mesh
+            (
+	        std::vector<Graphics::Vertex> vertices, 
+                std::vector<unsigned int> indices, 
+                std::vector<Texture> textures
 	    );
 
             std::vector<Vertex>& getVertices();
@@ -26,9 +27,9 @@ namespace Graphics{
    
 
     	private:
-            std::vector<Vertex> Vertices;   
-            std::vector<unsigned int> Indices;
-            std::vector<Texture> Textures;
+            std::vector<Vertex> m_Vertices;   
+            std::vector<unsigned int> m_Indices;
+            std::vector<Texture> m_Textures;
 	    std::string ShaderName;
 
     };

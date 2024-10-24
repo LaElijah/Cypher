@@ -71,12 +71,15 @@ namespace Graphics {
 	    std::shared_ptr<Graphics::Camera> Camera;
 	    std::shared_ptr<Graphics::GUI> GUI;
 
-	    void mouseButtonCallbackImpl(GLFWwindow* window, int button, int action, int mods); 
 	    void mouseCallbackImpl(GLFWwindow *window, double xpos, double ypos);
+	    void mouseButtonCallbackImpl(GLFWwindow* window, int button, int action, int mods); 
+	    void scrollCallbackImpl(GLFWwindow *window, double xoffset, double yoffset);
+	    void frameBufferSizeCallbackImpl(GLFWwindow* window, int width, int height);
 	    
 	    static void mouseCallback(GLFWwindow *window, double xpos, double ypos);
 	    static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 	    static void scrollCallback(GLFWwindow *window, double xoffset, double yoffset);
+	    static void frameBufferSizeCallback(GLFWwindow* window, int width, int height);
             
     };
 }

@@ -1,20 +1,95 @@
 #ifndef RENDER_API_H
 #define RENDER_API_H
 
+#include <memory>
 #include <map>
 #include <vector>
 #include <string>
 #include "Primitives.h"
 #include "ResourceManager.h"
-#include <memory>
 #include "Shader.h"
 
 
 namespace Graphics
 {
+    
+    /**
+     * This class dispatches commands according to the interface
+     * it provides onto its instances subclass that its type 
+     * has (CRTP)
+     */ 
+    template <typename T>
+    class RenderAPI
+    {
+        public:
+	    void clear()
+	    {
+	        static_cast<T*>(this)->clearImpl(); 
+            }
+
+            void loadData
+            (
+                std::vector<Graphics::Vertex>& vertices, 
+                std::vector<unsigned int>& indices, 
+                std::string shaderName
+	    )
+	    { 
+                static_cast<T*>(this)
+		    ->loadDataImpl
+		    (
+		        vertices, 
+		        indices, 
+		        shaderName
+		    ); 
+	    }
+
+	    void loadTextures(std::vector<Graphics::Texture>& textures)
+	    {
+	        static_cast<T*>(this)
+		    ->loadTexturesImpl(textures); 
+	    }
+
+	    void drawElements(int count, bool unbind = false)
+	    {
+                static_cast<T*>(this)
+		    ->drawElementsImpl(count, unbind); 
+	    }
+
+	    std::shared_ptr<Graphics::OpenGLShader> getShader(std::string name)
+	    {
+                return static_cast<T*>(this)
+		    ->getShaderImpl(name); 
+	    }
+
+            void loadShader(Graphics::ShaderInfo& info)
+	    {
+                static_cast<T*>(this)
+		    ->loadShaderImpl(info);
+	    }
+
+            void loadShaders(std::map<std::string, Graphics::ShaderInfo>& infoArray )
+	    {
+                static_cast<T*>(this)
+		    ->loadShadersImpl(infoArray);
+	    }
+    };
 
 
-    struct RenderConfig {
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+    ////////  OPENGL API  //////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+    
+
+    /**
+     * This struct provides all the information necessary for 
+     * openGL to render at the basic level, containing
+     * buffer location ids, shader names, and a format 
+     * key for performance.
+     */
+    struct RenderConfig 
+    {
 	size_t format;
     	std::string shaderName;
     	unsigned int VAO;
@@ -23,93 +98,49 @@ namespace Graphics
     };
 
 
-    
-     
-    template <typename BaseAPI>
-    class RenderAPI
-    {
-        public:
-
-	    void clear()
-	    {
-	        static_cast<BaseAPI*>(this)->clearImpl(); 
-            }
-
-
-            void loadData(
-			    std::vector<Graphics::Vertex>& vertices, 
-			    std::vector<unsigned int>& indices, 
-			    std::string shaderName)
-	    { 
-                static_cast<BaseAPI*>(this)->loadDataImpl(vertices, indices, shaderName); 
-	    }
-
-	    void loadTextures(std::vector<Graphics::Texture>& textures)
-	    {
-	        static_cast<BaseAPI*>(this)->loadTexturesImpl(textures); 
-	    }
-
-
-	    void drawElements(int count, bool unbind = false)
-	    {
-                static_cast<BaseAPI*>(this)->drawElementsImpl(count, unbind); 
-	    }
-
-	    std::shared_ptr<Graphics::OpenGLShader> getShader(std::string name)
-	    {
-	    
-                return static_cast<BaseAPI*>(this)->getShaderImpl(name); 
-	    }
-
-            void loadShader(Graphics::ShaderInfo& info)
-	    {
-                static_cast<BaseAPI*>(this)->loadShaderImpl(info);
-	    }
-
-            void loadShaders(std::map<std::string, Graphics::ShaderInfo>& infoArray )
-	    {
-                static_cast<BaseAPI*>(this)->loadShadersImpl(infoArray);
-	    }
-
-
-	private: 	
-    
-    };
-
-
+    /**
+     * This class inherits and passes its type to its parent
+     * and provides direct graphics api control and management
+     * working with graphics primitives in general with 
+     * required implementations.
+     */
     class OpenGLRenderAPI : public RenderAPI<OpenGLRenderAPI>
     {
         public: 
 	    // Defined methods that align with render api implementation
+	    
             void clearImpl();
-
-	    void loadDataImpl(
-			    std::vector<Graphics::Vertex>& vertices, 
-			    std::vector<unsigned int>& indices, 
-			    std::string shaderName);
-            void loadTexturesImpl(std::vector<Graphics::Texture>& textures);
+	    void loadDataImpl
+            (
+                std::vector<Graphics::Vertex>& vertices, 
+                std::vector<unsigned int>& indices, 
+                std::string shaderName
+	    );
+	    void loadTexturesImpl(std::vector<Graphics::Texture>& textures);
 	    void drawElementsImpl(int count, bool unbind = true);
-	    std::shared_ptr<Graphics::OpenGLShader> getShaderImpl(std::string name);
-
-
             void loadShaderImpl(Graphics::ShaderInfo& info);
             void loadShadersImpl(std::map<std::string, Graphics::ShaderInfo>& infoData);
-
-        private:
-	    // Private methods needed to get render api implementation done
-            Graphics::RenderConfig& generateRenderConfig(
-			    size_t format, 
-			    std::string shaderName);
-            
-	    Graphics::RenderConfig& getRenderConfig(
-		size_t format, 
-		std::string shaderName);
-
-    	    std::map<std::string, Graphics::RenderConfig> m_RenderConfigs;
+	    std::shared_ptr<Graphics::OpenGLShader> getShaderImpl(std::string name);
+        
+	private:
     	    size_t CURRENT_FORMAT;
-	    std::string currentShader;
-
+    	    
+	    std::map<std::string, Graphics::RenderConfig> m_RenderConfigs;
 	    std::map<std::string, std::shared_ptr<Graphics::OpenGLShader>> m_Shaders;
+
+	    Graphics::RenderConfig& generateRenderConfig
+	    (
+                size_t format, 
+		std::string shaderName
+	    );
+            
+	    Graphics::RenderConfig& getRenderConfig
+            (
+		size_t format, 
+		std::string shaderName
+	    );
+
+            void resetFormat();
     };
 }
 

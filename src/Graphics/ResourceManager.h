@@ -9,7 +9,6 @@
 #include "Model.h"
 #include "Shader.h"
 
-#include "../../external/imgui/imgui.h"
 
 namespace Graphics { 
     class ResourceManager {

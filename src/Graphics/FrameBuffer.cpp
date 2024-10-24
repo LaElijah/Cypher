@@ -1,11 +1,11 @@
-#include "FrameBuffer.h"
 #include <iostream>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
-namespace Graphics {
+#include "FrameBuffer.h"
 
-FrameBuffer::FrameBuffer(float width, float height)
+
+Graphics::FrameBuffer::FrameBuffer(float width, float height)
 {
 	glGenFramebuffers(1, &fbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -30,19 +30,19 @@ FrameBuffer::FrameBuffer(float width, float height)
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
-FrameBuffer::~FrameBuffer()
+Graphics::FrameBuffer::~FrameBuffer()
 {
 	glDeleteFramebuffers(1, &fbo);
 	glDeleteTextures(1, &texture);
 	glDeleteRenderbuffers(1, &rbo);
 }
 
-unsigned int FrameBuffer::getFrameTexture()
+unsigned int Graphics::FrameBuffer::getFrameTexture()
 {
 	return texture;
 }
 
-void FrameBuffer::RescaleFrameBuffer()
+void Graphics::FrameBuffer::RescaleFrameBuffer()
 {
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
@@ -55,21 +55,20 @@ void FrameBuffer::RescaleFrameBuffer()
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 }
 
-void FrameBuffer::Bind() const
+void Graphics::FrameBuffer::Bind() const
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 }
 
-void FrameBuffer::Unbind() const
+void Graphics::FrameBuffer::Unbind() const
 {
 	
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void FrameBuffer::updateWindowSize(float w, float h)
+void Graphics::FrameBuffer::updateWindowSize(float w, float h)
 {
     width = w;
     height = h;
 }
 
-}

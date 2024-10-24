@@ -2,7 +2,6 @@
 #define SHADER_H
 
 #include <iostream>
-#include <glm/gtc/matrix_transform.hpp>
 #include <glm/glm.hpp>
 #include <set>
 #include <string>
@@ -12,7 +11,8 @@
 #include <unordered_map>
 #include <map>
 
-namespace Graphics {
+namespace Graphics 
+{
     
     enum SHADER_FILE_TYPE
     {

@@ -1,20 +1,15 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
-#include "Model.h"
 #include <assimp/Importer.hpp>
 #include <assimp/material.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <string>
 #include <iostream>
+#include <glm/gtc/matrix_transform.hpp>
 #include "../../external/STB_IMAGE/stb_image.h"
-#include "ResourceManager.h"
-#include <cstring>
-#include "Shader.h"
-
-
+#include "Model.h"
 
 glm::mat4 ConvertMatrixToGLMFormat(const aiMatrix4x4& from);
 

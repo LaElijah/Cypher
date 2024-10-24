@@ -1,7 +1,11 @@
 #include "GUIComponent.h"
+#include "../../external/imgui/imgui.h"
+#include "../../external/imgui/imgui_impl_opengl3.h"
+#include "../../external/imgui/imgui_impl_glfw.h"
+
 
 Graphics::GUIComponent::GUIComponent(std::string name)
-	: Name(name)
+: Name(name)
 {}
 
 std::string Graphics::GUIComponent::getName()
@@ -9,9 +13,8 @@ std::string Graphics::GUIComponent::getName()
     return Name;
 }
 
-Graphics::TestWindow::TestWindow(
-		std::string name) 
-	: GUIComponent(name)
+Graphics::TestWindow::TestWindow(std::string name) 
+: GUIComponent(name)
 {
     Name = name;
 }
@@ -30,22 +33,21 @@ void Graphics::TestWindow::handleInput()
 {
 }
 
-Graphics::SceneWindow::SceneWindow(
-		std::string name,
-		Graphics::FrameBuffer* sceneBuffer,
-		std::function<void(float, float)>& resizeFunction,
-		std::vector<std::function<void()>>& functionStorage) 
-        : resizeWindow(resizeFunction),
-	  postRenderFunctions(functionStorage),
-          GUIComponent(name)
+Graphics::SceneWindow::SceneWindow
+(
+    std::string name,
+    Graphics::FrameBuffer* sceneBuffer,
+    std::function<void(float, float)>& resizeFunction,
+    std::vector<std::function<void()>>& functionStorage
+) 
+: resizeWindow(resizeFunction),
+  postRenderFunctions(functionStorage),
+  GUIComponent(name)
 {
     Name = name; 
     SceneBuffer = sceneBuffer;
     resizeWindow = resizeFunction; 
     postRenderFunctions = functionStorage;
-
-       
-
 }
    
 void Graphics::SceneWindow::draw()

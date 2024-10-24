@@ -7,17 +7,6 @@
 #include <functional>
 
 
-
-
-void Graphics::framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{ 
-    //std::cout << width << " " << height << std::endl;
-    //glViewport(0, 0, width, height);
-}
-
-
-
-
 Graphics::GLFWCanvas::GLFWCanvas(
 		std::pair<unsigned int, unsigned int> resolution,
 		std::shared_ptr<Graphics::Camera> camera,
@@ -63,9 +52,9 @@ void Graphics::GLFWCanvas::setResolution(float width, float height)
 void Graphics::GLFWCanvas::initialize()
 {
     glfwMakeContextCurrent(m_Window);
-    glfwSetFramebufferSizeCallback(m_Window, framebuffer_size_callback); 
     glfwSetWindowUserPointer(m_Window, this);
 
+    glfwSetFramebufferSizeCallback(m_Window, frameBufferSizeCallback); 
     glfwSetCursorPosCallback(m_Window,  mouseCallback);
     glfwSetMouseButtonCallback(m_Window, mouseButtonCallback);
     glfwSetScrollCallback(m_Window, scrollCallback); 
@@ -219,21 +208,38 @@ void Graphics::GLFWCanvas::mouseButtonCallbackImpl(GLFWwindow* window, int butto
     } 
 
 }
+
+void Graphics::GLFWCanvas::scrollCallbackImpl(GLFWwindow* window, double xoffset, double yoffset)
+{
+	Camera->processMouseScroll(yoffset);
+}
+
+
 void Graphics::GLFWCanvas::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
     static_cast<GLFWCanvas*>(glfwGetWindowUserPointer(window))
 	    ->mouseButtonCallbackImpl(window, button, action, mods);
 }
 
-void Graphics::GLFWCanvas::scrollCallback(GLFWwindow *window, double xoffset, double yoffset)
+
+void Graphics::GLFWCanvas::scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
     static_cast<GLFWCanvas*>(glfwGetWindowUserPointer(window))
-	    ->Camera
-	    ->processMouseScroll(yoffset);
+	    ->scrollCallbackImpl(window, xoffset, yoffset);
 }
 
 
+void Graphics::GLFWCanvas::frameBufferSizeCallbackImpl(GLFWwindow* window, int width, int height)
+{ 
+    //std::cout << width << " " << height << std::endl;
+    //glViewport(0, 0, width, height);
+}
 
-
+void Graphics::GLFWCanvas::frameBufferSizeCallback(GLFWwindow* window, int width, int height)
+{
+    
+    static_cast<GLFWCanvas*>(glfwGetWindowUserPointer(window))
+	    ->frameBufferSizeCallbackImpl(window, width, height);
+}
 
 

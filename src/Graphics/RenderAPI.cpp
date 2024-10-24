@@ -1,9 +1,7 @@
-
 #include <glad/glad.h>
-#include "RenderAPI.h"
 #include <memory>
 #include <iostream>
-#include <GLFW/glfw3.h>
+#include "RenderAPI.h"
 
 
 std::shared_ptr<Graphics::OpenGLShader> Graphics::OpenGLRenderAPI::getShaderImpl(std::string name)
@@ -14,14 +12,22 @@ std::shared_ptr<Graphics::OpenGLShader> Graphics::OpenGLRenderAPI::getShaderImpl
 
 void Graphics::OpenGLRenderAPI::loadShaderImpl(Graphics::ShaderInfo& info)
 {
-    m_Shaders.emplace(info.name, std::shared_ptr<Graphics::OpenGLShader>(new Graphics::OpenGLShader(info)));	  
+    m_Shaders.emplace
+    (
+        info.name, 
+	std::shared_ptr<Graphics::OpenGLShader>
+	    (new Graphics::OpenGLShader(info))
+    );	  
 }
 
 
 void Graphics::OpenGLRenderAPI::loadShadersImpl(std::map<std::string, Graphics::ShaderInfo>& infoData)
 {
-    for (std::pair<std::string, Graphics::ShaderInfo> pair    
-        : infoData)
+    for 
+    (
+        std::pair<std::string, Graphics::ShaderInfo> pair 
+	: infoData 
+    )
     { 
         loadShaderImpl(pair.second); 
     }
@@ -67,9 +73,7 @@ void Graphics::OpenGLRenderAPI::loadTexturesImpl(std::vector<Graphics::Texture>&
         glBindTexture(GL_TEXTURE_2D, textures[i].id);
 
     }
-
     glActiveTexture(GL_TEXTURE0);
-
 }
 
 void Graphics::OpenGLRenderAPI::drawElementsImpl(int count, bool unbind)
@@ -77,7 +81,13 @@ void Graphics::OpenGLRenderAPI::drawElementsImpl(int count, bool unbind)
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
 
     if (unbind)
-        glBindVertexArray(0);
+	resetFormat();
+}
+
+void Graphics::OpenGLRenderAPI::resetFormat()
+{
+    glBindVertexArray(0);
+    CURRENT_FORMAT = -1;
 }
 
 void Graphics::OpenGLRenderAPI::clearImpl()
@@ -89,6 +99,7 @@ void Graphics::OpenGLRenderAPI::clearImpl()
 
 Graphics::RenderConfig& Graphics::OpenGLRenderAPI::generateRenderConfig(size_t format, std::string shaderName)
 {
+    std::cout << "GENERATING NEW RENDER CONFIG FOR: " << shaderName << std::endl;
     Graphics::RenderConfig config;
     
     config.format = format;
@@ -101,61 +112,62 @@ Graphics::RenderConfig& Graphics::OpenGLRenderAPI::generateRenderConfig(size_t f
 
     glBindBuffer(GL_ARRAY_BUFFER, config.VBO);
 
-    std::vector<Graphics::OpenGLVertexAttribute> attributes = m_Shaders[shaderName]->getFormat().second;
+    std::vector<Graphics::OpenGLVertexAttribute> attributes = m_Shaders[shaderName]
+	                                                          ->getFormat().second;
 
     for (int i = 0; i < attributes.size(); i++)
     {
         glEnableVertexAttribArray(i);
-        glVertexAttribPointer(
-			i, 
-			attributes[i].size, 
-			attributes[i].type, 
-			attributes[i].normalize, 
-			sizeof(Graphics::Vertex), 
-			(void*) attributes[i].offset);
+        glVertexAttribPointer
+        (
+            i, 
+            attributes[i].size, 
+            attributes[i].type, 
+            attributes[i].normalize, 
+            sizeof(Graphics::Vertex), 
+            // ONLY REINTERPRETING TO PASS TO API
+            reinterpret_cast<void*>(attributes[i].offset) 
+        );
     }
 
     m_RenderConfigs[shaderName] = std::move(config);
-
     return getRenderConfig(format, shaderName);
 }
 
 
-Graphics::RenderConfig& Graphics::OpenGLRenderAPI::getRenderConfig(
-		size_t format, 
-		std::string shaderName)
+Graphics::RenderConfig& Graphics::OpenGLRenderAPI::getRenderConfig
+(
+    size_t format, 
+    std::string shaderName
+)
 {
     if (m_RenderConfigs.count(shaderName)) 
-    {
 	return m_RenderConfigs[shaderName];
-    }
-    else 
-    {
-	std::cout << "GENERATING NEW RENDER CONFIG FOR: " << shaderName << std::endl;
+    else
         return generateRenderConfig(format, shaderName);
-    }
 }
 
 
 
-void Graphics::OpenGLRenderAPI::loadDataImpl(
-	                    std::vector<Graphics::Vertex>& vertices, 
-			    std::vector<unsigned int>& indices, 
-			    std::string shaderName)
+void Graphics::OpenGLRenderAPI::loadDataImpl
+(
+    std::vector<Graphics::Vertex>& vertices, 
+    std::vector<unsigned int>& indices, 
+    std::string shaderName
+)
 {
     size_t format = m_Shaders[shaderName]->getFormat().first;
     Graphics::RenderConfig& config = getRenderConfig(format, shaderName);
 
-    if (CURRENT_FORMAT != config.format)
+    if (CURRENT_FORMAT != config.format && CURRENT_FORMAT != -1)
     {
 	std::cout << "BINDING NEW VAO" << std::endl;
         glBindVertexArray(config.VAO);
         glBindBuffer(GL_ARRAY_BUFFER, config.VBO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, config.EBO);
 	CURRENT_FORMAT = config.format;
     }
      
     glBufferData(GL_ARRAY_BUFFER, sizeof(Graphics::Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, config.EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_STATIC_DRAW);
- 
 }

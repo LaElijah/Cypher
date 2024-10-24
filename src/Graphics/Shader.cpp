@@ -1,13 +1,13 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include "Shader.h"
 #include <string>
 #include <math.h>
 #include <glm/gtc/type_ptr.hpp>
-#include "RenderAPI.h"
 #include <regex>
 
+#include "RenderAPI.h"
+#include "Shader.h"
 
 void Graphics::ShaderInfo::validateShaderSupport(const std::vector<std::string>& files)
 {

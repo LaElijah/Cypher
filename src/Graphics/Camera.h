@@ -3,7 +3,8 @@
 
 #include <glm/glm.hpp>
 
-namespace Graphics {
+namespace Graphics 
+{
     // In progress, for now, delegates keyboard direction control 
     enum Direction 
     {
@@ -51,7 +52,6 @@ namespace Graphics {
 	    void enableCamera(); 
 	    bool getCameraStatus();
 	  
-
 	    void setAspectRatio(float ratio);
 
         private:
@@ -77,7 +77,6 @@ namespace Graphics {
 	     
 	    glm::vec3 Direction; 
             glm::vec3 CameraFront;
-
 
 	    float Velocity;
             float AspectRatio; 
