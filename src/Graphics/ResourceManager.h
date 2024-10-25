@@ -26,8 +26,9 @@ namespace Graphics
             void initialize(); 
 	    void loadModelInfo(std::string modelDirectory = "./data/Models");
 	    void loadShaderInfo(bool single = false, std::string directory = "./data/Shaders"); 
-            void loadModel(Graphics::Model* model);
-            std::vector<Graphics::Model*>& getLoadedModels();
+            void loadModel(std::string& path);
+            void loadModel(const char* path);
+            std::vector<std::shared_ptr<Graphics::Model>>& getLoadedModels();
 	    std::map<std::string, Graphics::ShaderInfo>& getShaderInfo();
 
 
@@ -35,7 +36,7 @@ namespace Graphics
 	    std::map<std::string, Graphics::Texture> loadedTextures; 
 	    std::map<std::string, Graphics::ShaderInfo> m_LoadedShaderInfo;
 
-	    std::vector<Graphics::Model*> m_LoadedModels;
+	    std::vector<std::shared_ptr<Graphics::Model>> m_LoadedModels;
     	    std::vector<Graphics::ModelInfo> m_ModelInfo;
     };
 }

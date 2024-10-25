@@ -81,8 +81,7 @@ namespace Graphics
 	    template <typename T>	    
             void draw(Graphics::RenderAPI<T>& renderAPI)
             {
-                //for (std::shared_ptr<Graphics::Model> model : ResourceManager->getLoadedModels())
-                for (Graphics::Model* model : ResourceManager->getLoadedModels())
+                for (std::shared_ptr<Graphics::Model> model : ResourceManager->getLoadedModels())
                 { 
 	            auto shader = renderAPI.getShader(model->getShaderName());
                     shader->use();
@@ -108,8 +107,7 @@ namespace Graphics
             {
 		// Initialize
                 GLFWwindow *window = Canvas->getWindow();
-                ResourceManager->loadModel(new Graphics::Model(
-					"/home/laelijah/Gengine/data/Models/room/scene.gltf"));
+                ResourceManager->loadModel("/home/laelijah/Gengine/data/Models/room/scene.gltf");
             
                 ImGuiIO& io = GUI->getIO();
                 Graphics::FrameBuffer* sceneBuffer = new Graphics::FrameBuffer(1920, 1080);

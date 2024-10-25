@@ -76,16 +76,19 @@ void Graphics::ResourceManager::loadShaderInfo(bool single, std::string director
     }
 }
 
-//void Graphics::ResourceManager::loadModel(Graphics::Model&& model)
-void Graphics::ResourceManager::loadModel(Graphics::Model* model)
+void Graphics::ResourceManager::loadModel(const char* path)
 {
-    //m_LoadedModels.push_back(std::shared_ptr<Graphics::Model>(&model)); 
-    m_LoadedModels.push_back(model); 
+    m_LoadedModels.push_back(std::shared_ptr<Graphics::Model>(new Graphics::Model(path))); 
 }
 
 
-//std::vector<std::shared_ptr<Graphics::Model>>& Graphics::ResourceManager::getLoadedModels()
-std::vector<Graphics::Model*>& Graphics::ResourceManager::getLoadedModels()
+void Graphics::ResourceManager::loadModel(std::string& path)
+{
+    m_LoadedModels.push_back(std::shared_ptr<Graphics::Model>(new Graphics::Model(path))); 
+}
+
+
+std::vector<std::shared_ptr<Graphics::Model>>& Graphics::ResourceManager::getLoadedModels()
 {
     return m_LoadedModels;
 }
