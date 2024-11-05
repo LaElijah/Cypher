@@ -1,4 +1,4 @@
-#include <glad/glad.h>
+#include "../../external/GLAD/glad.h"
 #include <memory>
 #include <iostream>
 #include "RenderAPI.h"
@@ -76,9 +76,27 @@ void Graphics::OpenGLRenderAPI::loadTexturesImpl(std::vector<Graphics::Texture>&
     glActiveTexture(GL_TEXTURE0);
 }
 
-void Graphics::OpenGLRenderAPI::drawElementsImpl(int count, bool unbind)
+//void Graphics::OpenGLRenderAPI::drawElementsImpl(int count, bool unbind)
+void Graphics::OpenGLRenderAPI::drawElementsImpl(int callNums, bool unbind)
 {
-    glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
+    glMultiDrawElementsIndirect(
+		    GL_TRIANGLES,
+		    GL_UNSIGNED_INT,
+		    nullptr,
+		    callNums,
+		    0);      
+    
+    
+    // "Index" of the buffer or essentialy where to
+			                       // start reading indexes for the specified count amount
+			                       // so each mesh has an indices count and i can 
+			                       // calculate the offset easily by keeping 
+			                       // track of what byte im storing on
+			                       // per mesh data
+				               ///////////////
+				               // primcount = mesh count
+
+    //glDrawElements(GL_POINTS, count, GL_UNSIGNED_INT, 0);
 
     if (unbind)
 	resetFormat();
@@ -109,6 +127,9 @@ Graphics::RenderConfig& Graphics::OpenGLRenderAPI::generateRenderConfig(size_t f
 
     glGenBuffers(1, &config.VBO);
     glGenBuffers(1, &config.EBO); 
+    glGenBuffers(1, &config.IBO); 
+    glGenBuffers(1, &config.SSBO); 
+   
 
     glBindBuffer(GL_ARRAY_BUFFER, config.VBO);
 
@@ -148,11 +169,12 @@ Graphics::RenderConfig& Graphics::OpenGLRenderAPI::getRenderConfig
 }
 
 
-
+/*
 void Graphics::OpenGLRenderAPI::loadDataImpl
 (
     std::vector<Graphics::Vertex>& vertices, 
     std::vector<unsigned int>& indices, 
+    std::vector<Graphics::ElementDrawCall>& drawCalls,
     std::string shaderName
 )
 {
@@ -161,13 +183,120 @@ void Graphics::OpenGLRenderAPI::loadDataImpl
 
     if (CURRENT_FORMAT != config.format && CURRENT_FORMAT != -1)
     {
-	std::cout << "BINDING NEW VAO" << std::endl;
+        std::cout << "BINDING NEW VAO" << std::endl;
         glBindVertexArray(config.VAO);
         glBindBuffer(GL_ARRAY_BUFFER, config.VBO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, config.EBO);
-	CURRENT_FORMAT = config.format;
+        glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.IBO);
+
+            
+        CURRENT_FORMAT = config.format;
     }
-     
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Graphics::Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_STATIC_DRAW);
+
+    // This is where the issue occurs, it will operate normally
+    // if I only call this once, but once there are draw calls 
+    // written I cant call it again or else my rendering issue occurs
+    // even if I were to call glBindBuffer every frame
+    glBufferData
+    (
+        GL_DRAW_INDIRECT_BUFFER, 
+        sizeof(ElementDrawCall) * drawCalls.size(), 
+        drawCalls.data(), 
+        GL_DYNAMIC_DRAW
+    );
+
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Graphics::Vertex) * vertices.size(), &vertices[0], GL_DYNAMIC_DRAW);
+
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_DYNAMIC_DRAW);
+ 
 }
+
+*/
+
+int even = 1;
+bool done = false; 
+int count = 1;
+void Graphics::OpenGLRenderAPI::loadDataImpl
+(
+    std::vector<Graphics::Vertex>& vertices, 
+    std::vector<unsigned int>& indices, 
+    std::vector<Graphics::ElementDrawCall>& drawCalls,
+    std::string shaderName
+)
+{
+	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_COMMAND_BARRIER_BIT);
+    size_t format = m_Shaders[shaderName]->getFormat().first;
+    Graphics::RenderConfig& config = getRenderConfig(format, shaderName);
+
+    if (CURRENT_FORMAT != config.format && CURRENT_FORMAT != -1)
+    {
+	std::cout << "BINDING NEW VAO" << std::endl;
+        glBindVertexArray(config.VAO);
+ 
+       	glBindBuffer(GL_ARRAY_BUFFER, config.VBO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, config.EBO);
+
+        glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.SSBO);
+        glBufferData
+	    (
+	        GL_DRAW_INDIRECT_BUFFER, 
+	        sizeof(ElementDrawCall) * drawCalls.size(), 
+	        drawCalls.data(), 
+	        GL_DYNAMIC_DRAW
+	    );
+
+glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.IBO);
+	 
+
+       	glBufferData
+	    (
+	        GL_DRAW_INDIRECT_BUFFER, 
+	        sizeof(ElementDrawCall) * drawCalls.size(), 
+	        drawCalls.data(), 
+	        GL_DYNAMIC_DRAW
+	    );
+
+        CURRENT_FORMAT = config.format;
+    }
+    else 
+    {
+        glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.SSBO);
+    }
+
+        glBufferSubData
+	(
+	    GL_DRAW_INDIRECT_BUFFER, 
+	    0, 
+	    sizeof(ElementDrawCall) * drawCalls.size(), 
+	    drawCalls.data() 
+	);
+
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Graphics::Vertex) * vertices.size(), &vertices[0], GL_DYNAMIC_DRAW);
+	
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_DYNAMIC_DRAW);
+
+    std::vector<GLsizei> counts;
+    std::vector<const void*> indicesOffsets;
+    std::vector<GLint> baseVertices;
+    // Fill the arrays with data from drawCalls
+    for (const auto& drawCall : drawCalls) {
+        counts.push_back(drawCall.count);
+        indicesOffsets.push_back(reinterpret_cast<const void*>(drawCall.firstIndex * sizeof(unsigned int)));
+        baseVertices.push_back(drawCall.baseVertex);
+    }
+
+    // Call glMultiDrawElementsBaseVertex
+    // Note: the mode should be the same for all draw calls
+    glMultiDrawElementsBaseVertex(
+        GL_TRIANGLES,                   // Primitive type (must be the same for all)
+        counts.data(),             // Pointer to the counts array
+        GL_UNSIGNED_INT,           // Type of indices (assuming GLuint here)
+	indicesOffsets.data(),     // Pointer to the offsets array
+        drawCalls.size(),          // Number of draw calls
+        baseVertices.data()        // Pointer to the base vertex array
+    );
+}
+     
+    

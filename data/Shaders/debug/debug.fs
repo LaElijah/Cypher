@@ -3,6 +3,7 @@ out vec4 FragColor;
 
 in vec2 TexCoords;
 in vec3 Test;
+in float Tester;
 
 uniform sampler2D texture_diffuse1;
 uniform sampler2D texture_specular1;
@@ -30,5 +31,6 @@ void main()
 
     TestEnd = Test * 3;
 
-    FragColor = fragResult;
+    FragColor.rgb = Test;
+    FragColor.a = 1.0f;
 }

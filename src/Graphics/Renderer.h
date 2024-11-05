@@ -2,7 +2,6 @@
 #define RENDERER_H
 
 
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Camera.h"
 #include "ResourceManager.h"
@@ -20,12 +19,15 @@
 #include "GUIComponent.h"
 #include "FrameBuffer.h"
 #include <functional>
+#include "../../external/GLAD/glad.h"
 
 
 
 // POTENTIAL NAME CYPHER;
 
-
+#include <cstdlib>
+#include <ctime>
+#include <thread>
 namespace Graphics 
 {
 
@@ -68,29 +70,164 @@ namespace Graphics
 	    void shutdown();
 
 
-
-
-
-
-
+	    int count = 4;
 
 
        
             // API Dependent functions
-            
+                        template <typename T>           
+            void draw(Graphics::RenderAPI<T>& renderAPI)
+            {
+                auto shader = renderAPI.getShader("debug");
+                shader->use();
+                           
+                for 
+                (
+                    std::shared_ptr<Graphics::Model> model 
+                    : ResourceManager->getLoadedModels()
+                )
+                { 
+
+                    modelMatrix = model->getModelMatrix();
+                    shader->setUniform("view", Camera->getViewMatrix());
+                    shader->setUniform("projection", Camera->getProjectionMatrix());
+
+                    for (Graphics::Mesh& mesh : model->getMeshes())
+                    {
+                 
+                        Graphics::ElementDrawCall call;
+                        shaderName = mesh.getShaderName();
+
+                        if (!done)
+                        {
+                            vertexData.insert
+                            (
+                                vertexData.end(), 
+                                mesh.getVertices().begin(), 
+                                mesh.getVertices().end()
+                            ); 
+
+                            indexData.insert
+                            (
+                                indexData.end(), 
+                                mesh.getIndices().begin(), 
+                                mesh.getIndices().end()
+                            );
+
+                        call.count = mesh.getIndices().size();
+                        call.instanceCount = 1;
+                        call.firstIndex = currentBaseIndex;
+                        call.baseVertex = currentBaseVertex;
+                        call.baseInstance = instanceIndex;
+
+                        currentBaseIndex += mesh.getIndices().size();
+                        currentBaseVertex += mesh.getVertices().size();
+                        instanceIndex++;
+
+                        drawCalls.push_back(std::move(call));
+                        }
+                    }
+                }
+
+
+                shader->setUniform("model", modelMatrix); 
+// Later, before updating the buffer
+                renderAPI.loadData
+                (
+                    vertexData, 
+                    indexData,
+                    drawCalls,
+                    "debug"
+                );
+   
+                    
+
+                //renderAPI.drawElements(drawCalls.size());
+
+                done = true;
+            }
+			/*
 	    template <typename T>	    
             void draw(Graphics::RenderAPI<T>& renderAPI)
             {
-                for (std::shared_ptr<Graphics::Model> model : ResourceManager->getLoadedModels())
-                { 
-	            auto shader = renderAPI.getShader(model->getShaderName());
+		vertexData.clear();
+		indexData.clear();
+		drawCalls.clear();
+
+    	    	    auto shader = renderAPI.getShader("debug");
                     shader->use();
-                    shader->setUniform("model", model->getModelMatrix());      
+                    
+                    
+		for 
+		(
+	            std::shared_ptr<Graphics::Model> model 
+		    : ResourceManager->getLoadedModels()
+		)
+                { 
+
+		    modelMatrix = model->getModelMatrix();
                     shader->setUniform("view", Camera->getViewMatrix());
                     shader->setUniform("projection", Camera->getProjectionMatrix());
-                    
 
-                    for (Graphics::Mesh& mesh : model->getMeshes())
+		    for (Graphics::Mesh& mesh : model->getMeshes())
+		    {
+		 
+			Graphics::ElementDrawCall call;
+		        shaderName = mesh.getShaderName();
+
+			if (!done)
+			{
+			    vertexData.insert
+			    (
+			        vertexData.end(), 
+			        mesh.getVertices().begin(), 
+			        mesh.getVertices().end()
+			    ); 
+
+		            indexData.insert
+			    (
+			        indexData.end(), 
+			        mesh.getIndices().begin(), 
+			        mesh.getIndices().end()
+			    );
+
+		        call.count = mesh.getIndices().size();	
+			call.instanceCount = 1;
+			call.firstIndex = currentBaseIndex;
+			call.baseVertex = currentBaseVertex;
+			call.baseInstance = instanceIndex;
+	
+		        currentBaseIndex += mesh.getIndices().size();	
+			currentBaseVertex += mesh.getVertices().size();
+			instanceIndex++;
+			
+			drawCalls.push_back(std::move(call));
+			}
+		    }
+                }
+
+		        renderAPI.loadData
+		        (
+		            vertexData, 
+			    indexData,
+			    drawCalls,
+			    "debug"
+		        );
+
+		    
+
+
+		    
+	  
+		    shader->setUniform("model", modelMatrix); 
+		    
+		    renderAPI.drawElements(drawCalls.size());
+            }a
+    */
+                   /* 
+		   
+		    for (Graphics::Mesh& mesh : model->getMeshes())
+
                     {
             	        renderAPI.loadData(mesh.getVertices(), mesh.getIndices(), model->getShaderName()); 
                         // Move to implementation in api 
@@ -99,9 +236,9 @@ namespace Graphics
 	   		renderAPI.loadTextures(mesh.getTextures());
             	        renderAPI.drawElements(mesh.getIndices().size());	
             	    }
-                }
-            }
- 
+
+		    */
+	
 	    template <typename T>
             void run(Graphics::RenderAPI<T>& renderAPI)
             {
@@ -130,7 +267,48 @@ namespace Graphics
                 GUI->addEditorComponent(new Graphics::TestWindow(std::string("Test")));
                 GUI->addComponent(new Graphics::TestWindow(std::string("WOAAH")));
 		// Initialize End
-                
+                               // Render loop
+                while (!glfwWindowShouldClose(window)) 
+                {   
+                    if (true) 
+                    {
+                        processInput(window);
+                    }
+
+                    //renderAPI.clear(); 
+
+                    // For drawing to scene window
+                    // within gui
+                    if (GUI->isWindowed())
+                    {
+                        sceneBuffer->Bind();  
+                        renderAPI.clear(); 
+                    } 
+
+                    renderAPI.clear(); 
+                    draw(renderAPI); 
+                    
+		    if (GUI->isWindowed())
+                        sceneBuffer->Unbind();      
+
+                    GUI->drawGUI();
+
+                    glfwPollEvents();
+                    
+		    glfwSwapBuffers(window);
+		    
+                   
+
+                    // Handle post render duties
+                    while (PostRenderFunctions.size() > 0)
+                    {
+                        PostRenderFunctions.back()();
+                        PostRenderFunctions.pop_back(); 
+                    }
+                    
+                    Canvas->updateDeltaTime();      
+                }
+		/*
 	        // Render loop	
                 while (!glfwWindowShouldClose(window)) 
                 {   
@@ -138,31 +316,26 @@ namespace Graphics
                     {
                         processInput(window);
                     }
-            
-                    if (GUI->isWindowed())
-            	    {	
-            	        sceneBuffer->Bind();  
-            	        
-		        renderAPI.clear(); 
-            	        draw(renderAPI); 
-                        
-		        sceneBuffer->Unbind(); 	    
-            	        
-		        GUI->drawGUI();
-                    }
 
-            	    else 
-            	    {	
-            	        draw(renderAPI);  
-            	        GUI->drawGUI();
-            	    }
-            
-            	    glfwPollEvents();
+	            renderAPI.clear(); 
+
+	            if (GUI->isWindowed())
+		    {
+                        sceneBuffer->Bind();  
+		        renderAPI.clear(); 
+		    } 
+		    draw(renderAPI); 
+		    if (GUI->isWindowed())
+		        sceneBuffer->Unbind(); 	    
+
+		    GUI->drawGUI();
+		    glfwPollEvents();
+
             	    glfwSwapBuffers(window);
-                    
+            	        
+                   
+		    done = true; 
 		    // Clear default frame buffer 	
-            	    renderAPI.clear();
-            
             	    // Handle post render duties
             	    while (PostRenderFunctions.size() > 0)
             	    {
@@ -171,7 +344,8 @@ namespace Graphics
             	    }
                     
 		    Canvas->updateDeltaTime();	    
-                }
+                }a
+		*/
                 
 		GUI->shutdown(); 
                 glfwTerminate(); 
@@ -190,6 +364,25 @@ namespace Graphics
             std::vector<std::function<void()>> PostRenderFunctions;
 	    
             void processInput(GLFWwindow *window);
+    		std::vector<Graphics::Vertex> vertexData;
+    		std::vector<unsigned int> indexData;
+		std::vector<int> counts;
+		
+		std::vector<const void *> indices;
+		std::vector<int> baseVertices; // Current vertex offset per mesh
+               
+	       	unsigned int currentBaseIndex = 0;
+	       	int currentBaseVertex = 0;
+	       	unsigned int instanceIndex = 0;
+
+	    	    std::vector<Graphics::ElementDrawCall> drawCalls;
+	
+		std::string shaderName;
+	        glm::mat4 modelMatrix;	
+		bool done = false;
+
+
+	
 
     };
 }

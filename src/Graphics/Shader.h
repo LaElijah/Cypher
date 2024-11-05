@@ -17,7 +17,8 @@ namespace Graphics
     enum SHADER_FILE_TYPE
     {
         VERTEX,
-        FRAGMENT
+        FRAGMENT,
+	COMPUTE
     };
     
     struct ShaderFileData 

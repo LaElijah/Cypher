@@ -72,7 +72,6 @@ void Graphics::GUI::drawGUI()
           ImGui_ImplOpenGL3_NewFrame();
           ImGui_ImplGlfw_NewFrame();
           ImGui::NewFrame();
-
 	  // Seperate into full screen components vs 
 	  // editor components
           if (WINDOWED)
@@ -83,7 +82,6 @@ void Graphics::GUI::drawGUI()
 	          // Add if focused handle input 
 	      }
           }
-	  
 	  if (GUI_ENABLED && !WINDOWED)
 	  {
 
@@ -93,12 +91,10 @@ void Graphics::GUI::drawGUI()
 	          // Add if focused handle input 
 	      }
 	  }
-
 	  ImGui::Render();
           ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-
-	  handleInputs();
+	  //handleInputs();
 
 
 

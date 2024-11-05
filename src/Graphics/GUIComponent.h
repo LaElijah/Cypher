@@ -40,8 +40,8 @@ namespace Graphics
     {
         public: 
             TestWindow(std::string name);
-	    void draw();
-	    void handleInput();
+	    void draw() override;
+	    void handleInput() override;
 
 	
     };
@@ -57,8 +57,8 @@ namespace Graphics
 		std::vector<std::function<void()>>& functionStorage
 	    );
             
-            void draw();
-            void handleInput();
+            void draw() override;
+            void handleInput() override;
     
         private:
             Graphics::FrameBuffer* SceneBuffer;

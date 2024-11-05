@@ -6,6 +6,8 @@
 
 namespace Graphics 
 {
+    typedef unsigned int Entity;
+
     struct ModelInfo
     {
         std::string path;

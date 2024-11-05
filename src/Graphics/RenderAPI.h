@@ -13,6 +13,20 @@
 namespace Graphics
 {
     
+
+
+
+	    struct ElementDrawCall
+	    {
+	        unsigned int count;
+	        unsigned int instanceCount;
+	        unsigned int firstIndex;
+	        unsigned int baseVertex;
+	        unsigned int baseInstance;
+	        	
+	    };
+
+
     /**
      * This class dispatches commands according to the interface
      * it provides onto its instances subclass that its type 
@@ -31,6 +45,7 @@ namespace Graphics
             (
                 std::vector<Graphics::Vertex>& vertices, 
                 std::vector<unsigned int>& indices, 
+		std::vector<ElementDrawCall>& drawCalls,
                 std::string shaderName
 	    )
 	    { 
@@ -39,6 +54,7 @@ namespace Graphics
 		    (
 		        vertices, 
 		        indices, 
+			drawCalls,
 		        shaderName
 		    ); 
 	    }
@@ -49,10 +65,11 @@ namespace Graphics
 		    ->loadTexturesImpl(textures); 
 	    }
 
-	    void drawElements(int count, bool unbind = false)
+	    //void drawElements(int count, bool unbind = false)
+            void drawElements(int callNums, bool unbind = false)
 	    {
                 static_cast<T*>(this)
-		    ->drawElementsImpl(count, unbind); 
+		    ->drawElementsImpl(callNums, unbind); 
 	    }
 
 	    std::shared_ptr<Graphics::OpenGLShader> getShader(std::string name)
@@ -95,6 +112,8 @@ namespace Graphics
     	unsigned int VAO;
     	unsigned int VBO; 
     	unsigned int EBO;     
+    	unsigned int IBO;     
+	unsigned int SSBO;
     };
 
 
@@ -114,14 +133,16 @@ namespace Graphics
             (
                 std::vector<Graphics::Vertex>& vertices, 
                 std::vector<unsigned int>& indices, 
+		std::vector<Graphics::ElementDrawCall>& drawCalls,
                 std::string shaderName
 	    );
 	    void loadTexturesImpl(std::vector<Graphics::Texture>& textures);
-	    void drawElementsImpl(int count, bool unbind = true);
+	    //void drawElementsImpl(int count, bool unbind = true);
             void loadShaderImpl(Graphics::ShaderInfo& info);
             void loadShadersImpl(std::map<std::string, Graphics::ShaderInfo>& infoData);
 	    std::shared_ptr<Graphics::OpenGLShader> getShaderImpl(std::string name);
         
+            void drawElementsImpl(int callNums, bool unbind);
 	private:
     	    size_t CURRENT_FORMAT;
     	    

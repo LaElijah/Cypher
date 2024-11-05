@@ -156,7 +156,8 @@ std::map<size_t, std::vector<Graphics::OpenGLVertexAttribute>> Graphics::OpenGLS
 const std::unordered_map<std::string, Graphics::SHADER_FILE_TYPE> Graphics::ShaderInfo::extensionEnums = 
 {
     {"vs", Graphics::SHADER_FILE_TYPE::VERTEX},
-    {"fs", Graphics::SHADER_FILE_TYPE::FRAGMENT}
+    {"fs", Graphics::SHADER_FILE_TYPE::FRAGMENT},
+    {"cs", Graphics::SHADER_FILE_TYPE::COMPUTE}
 };
 
 std::pair<size_t, std::vector<Graphics::OpenGLVertexAttribute>> Graphics::OpenGLShader::getFormat()

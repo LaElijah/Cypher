@@ -35,6 +35,9 @@ void Graphics::Model::loadModel(std::string path)
 
     directory = path.substr(0, path.find_last_of('/'));
 
+
+
+    // Parent root node of model
     processNode(scene->mRootNode, scene, glm::mat4(1.0f));
 }
 
@@ -46,12 +49,16 @@ void Graphics::Model::processNode(aiNode *node, const aiScene *scene, const glm:
     glm::mat4 nodeTransform = ConvertMatrixToGLMFormat(node->mTransformation);
     glm::mat4 globalTransform = parentTransform * nodeTransform;
 
+    // Pack child nodes ( meshes ) in this parent node
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
+	// Process mesh loads in the 
+	// primitive data of the given node
         meshes.push_back(processMesh(mesh, scene, globalTransform)); 
     }
 
+    // Move onto the children of this node
     for (unsigned int i = 0; i < node->mNumChildren; i++)
     {
         processNode(node->mChildren[i], scene, globalTransform);

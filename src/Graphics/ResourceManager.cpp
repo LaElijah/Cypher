@@ -84,7 +84,8 @@ void Graphics::ResourceManager::loadModel(const char* path)
 
 void Graphics::ResourceManager::loadModel(std::string& path)
 {
-    m_LoadedModels.push_back(std::shared_ptr<Graphics::Model>(new Graphics::Model(path))); 
+    m_LoadedModels.push_back(std::make_shared<Graphics::Model>(path)); 
+    //m_LoadedModels.push_back(std::shared_ptr<Graphics::Model>(new Graphics::Model(path))); 
 }
 
 
