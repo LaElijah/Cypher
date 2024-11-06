@@ -225,7 +225,6 @@ void Graphics::OpenGLRenderAPI::loadDataImpl
     std::string shaderName
 )
 {
-	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_COMMAND_BARRIER_BIT);
     size_t format = m_Shaders[shaderName]->getFormat().first;
     Graphics::RenderConfig& config = getRenderConfig(format, shaderName);
 
@@ -237,18 +236,8 @@ void Graphics::OpenGLRenderAPI::loadDataImpl
        	glBindBuffer(GL_ARRAY_BUFFER, config.VBO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, config.EBO);
 
-        glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.SSBO);
-        glBufferData
-	    (
-	        GL_DRAW_INDIRECT_BUFFER, 
-	        sizeof(ElementDrawCall) * drawCalls.size(), 
-	        drawCalls.data(), 
-	        GL_DYNAMIC_DRAW
-	    );
-
-glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.IBO);
+	glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.IBO);
 	 
-
        	glBufferData
 	    (
 	        GL_DRAW_INDIRECT_BUFFER, 
@@ -258,10 +247,6 @@ glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.IBO);
 	    );
 
         CURRENT_FORMAT = config.format;
-    }
-    else 
-    {
-        glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.SSBO);
     }
 
         glBufferSubData
@@ -277,26 +262,25 @@ glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.IBO);
 	
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_DYNAMIC_DRAW);
 
+    /*
     std::vector<GLsizei> counts;
     std::vector<const void*> indicesOffsets;
     std::vector<GLint> baseVertices;
-    // Fill the arrays with data from drawCalls
     for (const auto& drawCall : drawCalls) {
         counts.push_back(drawCall.count);
         indicesOffsets.push_back(reinterpret_cast<const void*>(drawCall.firstIndex * sizeof(unsigned int)));
         baseVertices.push_back(drawCall.baseVertex);
     }
 
-    // Call glMultiDrawElementsBaseVertex
-    // Note: the mode should be the same for all draw calls
     glMultiDrawElementsBaseVertex(
-        GL_TRIANGLES,                   // Primitive type (must be the same for all)
-        counts.data(),             // Pointer to the counts array
-        GL_UNSIGNED_INT,           // Type of indices (assuming GLuint here)
-	indicesOffsets.data(),     // Pointer to the offsets array
-        drawCalls.size(),          // Number of draw calls
-        baseVertices.data()        // Pointer to the base vertex array
+        GL_TRIANGLES,              
+	counts.data(),             
+        GL_UNSIGNED_INT,           
+	indicesOffsets.data(),     
+        drawCalls.size(),          
+        baseVertices.data()        
     );
+    */
 }
      
     

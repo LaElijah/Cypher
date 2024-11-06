@@ -142,7 +142,7 @@ namespace Graphics
    
                     
 
-                //renderAPI.drawElements(drawCalls.size());
+                renderAPI.drawElements(drawCalls.size());
 
                 done = true;
             }
