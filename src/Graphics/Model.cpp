@@ -1,4 +1,4 @@
-
+/*
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <assimp/Importer.hpp>
@@ -10,6 +10,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "../../external/STB_IMAGE/stb_image.h"
 #include "Model.h"
+
 
 glm::mat4 ConvertMatrixToGLMFormat(const aiMatrix4x4& from);
 
@@ -25,9 +26,19 @@ Graphics::Model::Model(std::string path)
 void Graphics::Model::loadModel(std::string path)
 {
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate || aiProcess_PreTransformVertices);
+    const aiScene* scene = importer.ReadFile
+	                   (
+			       path, 
+			       aiProcess_Triangulate 
+			       //|| aiProcess_PreTransformVertices
+			   );
   
-    if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+    if
+    (
+          !scene 
+          || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE 
+	  || !scene->mRootNode
+    )
     {
         std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
         return;
@@ -35,12 +46,9 @@ void Graphics::Model::loadModel(std::string path)
 
     directory = path.substr(0, path.find_last_of('/'));
 
-
-
     // Parent root node of model
     processNode(scene->mRootNode, scene, glm::mat4(1.0f));
 }
-
 
 
 
@@ -176,7 +184,8 @@ std::vector<Graphics::Texture> Graphics::Model::loadMaterialTextures(aiMaterial 
  
             texture.type = typeName;
             texture.path = str.C_Str();
-                        
+	    texture.directory = this->directory;
+	   
             textures.push_back(texture);           
             texturesLoaded.push_back(texture);  
         }  
@@ -234,10 +243,9 @@ unsigned int Graphics::Model::TextureFromEmbedded(const aiScene* scene, int embe
 
 unsigned int Graphics::Model::TextureFromFile(std::string path, std::string directory)
 {
-
-    //std::cout << "LOADING FILE TEXTURE" << std::endl;
     std::string filename = std::string(path);
     filename = directory + '/' + filename;
+    
     unsigned int textureID; 
     glGenTextures(1, &textureID);
     
@@ -322,4 +330,4 @@ glm::mat4 ConvertMatrixToGLMFormat(const aiMatrix4x4& from)
     return to;
 }
 
-
+*/

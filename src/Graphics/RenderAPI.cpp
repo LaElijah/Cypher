@@ -3,11 +3,17 @@
 #include <iostream>
 #include "RenderAPI.h"
 
+#include "../../external/STB_IMAGE/stb_image.h"
+
+
+
 
 std::shared_ptr<Graphics::OpenGLShader> Graphics::OpenGLRenderAPI::getShaderImpl(std::string name)
 {
     return (m_Shaders[name]);
 }
+
+
 
 
 void Graphics::OpenGLRenderAPI::loadShaderImpl(Graphics::ShaderInfo& info)
@@ -21,6 +27,8 @@ void Graphics::OpenGLRenderAPI::loadShaderImpl(Graphics::ShaderInfo& info)
 }
 
 
+
+
 void Graphics::OpenGLRenderAPI::loadShadersImpl(std::map<std::string, Graphics::ShaderInfo>& infoData)
 {
     for 
@@ -32,6 +40,7 @@ void Graphics::OpenGLRenderAPI::loadShadersImpl(std::map<std::string, Graphics::
         loadShaderImpl(pair.second); 
     }
 }
+
 
 
 
@@ -70,37 +79,32 @@ void Graphics::OpenGLRenderAPI::loadTexturesImpl(std::vector<Graphics::Texture>&
 
 
         //shader.setInt(("material." + name + number).c_str(), i);
-        glBindTexture(GL_TEXTURE_2D, textures[i].id);
+        //glBindTexture(GL_TEXTURE_2D, textures[i].id);
 
     }
     glActiveTexture(GL_TEXTURE0);
 }
 
-//void Graphics::OpenGLRenderAPI::drawElementsImpl(int count, bool unbind)
+
+
+
 void Graphics::OpenGLRenderAPI::drawElementsImpl(int callNums, bool unbind)
 {
-    glMultiDrawElementsIndirect(
-		    GL_TRIANGLES,
-		    GL_UNSIGNED_INT,
-		    nullptr,
-		    callNums,
-		    0);      
-    
-    
-    // "Index" of the buffer or essentialy where to
-			                       // start reading indexes for the specified count amount
-			                       // so each mesh has an indices count and i can 
-			                       // calculate the offset easily by keeping 
-			                       // track of what byte im storing on
-			                       // per mesh data
-				               ///////////////
-				               // primcount = mesh count
-
-    //glDrawElements(GL_POINTS, count, GL_UNSIGNED_INT, 0);
+    glMultiDrawElementsIndirect
+    (
+        GL_TRIANGLES,
+	GL_UNSIGNED_INT,
+	nullptr,
+	callNums,
+	0
+    );      
 
     if (unbind)
 	resetFormat();
 }
+
+
+
 
 void Graphics::OpenGLRenderAPI::resetFormat()
 {
@@ -108,12 +112,18 @@ void Graphics::OpenGLRenderAPI::resetFormat()
     CURRENT_FORMAT = -1;
 }
 
+
+
+
 void Graphics::OpenGLRenderAPI::clearImpl()
 {
     // Move implememntation to api 
     glClearColor(0, 0.01f, 0.01f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
+
+
+
 
 Graphics::RenderConfig& Graphics::OpenGLRenderAPI::generateRenderConfig(size_t format, std::string shaderName)
 {
@@ -127,7 +137,8 @@ Graphics::RenderConfig& Graphics::OpenGLRenderAPI::generateRenderConfig(size_t f
 
     glGenBuffers(1, &config.VBO);
     glGenBuffers(1, &config.EBO); 
-    glGenBuffers(1, &config.IBO); 
+    glGenBuffers(1, &config.IBO[0]); 
+    glGenBuffers(1, &config.IBO[1]); 
     glGenBuffers(1, &config.SSBO); 
    
 
@@ -156,6 +167,8 @@ Graphics::RenderConfig& Graphics::OpenGLRenderAPI::generateRenderConfig(size_t f
 }
 
 
+
+
 Graphics::RenderConfig& Graphics::OpenGLRenderAPI::getRenderConfig
 (
     size_t format, 
@@ -169,64 +182,45 @@ Graphics::RenderConfig& Graphics::OpenGLRenderAPI::getRenderConfig
 }
 
 
-/*
-void Graphics::OpenGLRenderAPI::loadDataImpl
-(
-    std::vector<Graphics::Vertex>& vertices, 
-    std::vector<unsigned int>& indices, 
-    std::vector<Graphics::ElementDrawCall>& drawCalls,
-    std::string shaderName
-)
+
+
+bool original = true;
+void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch& batch)
 {
-    size_t format = m_Shaders[shaderName]->getFormat().first;
-    Graphics::RenderConfig& config = getRenderConfig(format, shaderName);
+    size_t format = m_Shaders[batch.shader]->getFormat().first;
+    Graphics::RenderConfig& config = getRenderConfig(format, batch.shader);
 
-    if (CURRENT_FORMAT != config.format && CURRENT_FORMAT != -1)
+
+
+    std::vector<Graphics::ElementDrawCall> drawCalls;
+
+    unsigned int currentBaseIndex = 0;
+    unsigned int currentBaseVertex = 0;
+    unsigned int instanceIndex = 0;
+
+
+    for (int i = 0; i < batch.counts.size(); i++)
     {
-        std::cout << "BINDING NEW VAO" << std::endl;
-        glBindVertexArray(config.VAO);
-        glBindBuffer(GL_ARRAY_BUFFER, config.VBO);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, config.EBO);
-        glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.IBO);
+	Graphics::ElementDrawCall drawCall;
+    
+    	drawCall.count = batch.indexCounts[i]; 
+        drawCall.instanceCount = 1; 
+        drawCall.firstIndex = currentBaseIndex; 
+        drawCall.baseVertex = currentBaseVertex; 
+        drawCall.baseInstance = instanceIndex;
 
-            
-        CURRENT_FORMAT = config.format;
+        currentBaseIndex += batch.indexCounts[i];	
+        currentBaseVertex += batch.counts[i];	
+
+	instanceIndex++;
+
+	drawCalls.push_back(std::move(drawCall));
     }
 
-    // This is where the issue occurs, it will operate normally
-    // if I only call this once, but once there are draw calls 
-    // written I cant call it again or else my rendering issue occurs
-    // even if I were to call glBindBuffer every frame
-    glBufferData
-    (
-        GL_DRAW_INDIRECT_BUFFER, 
-        sizeof(ElementDrawCall) * drawCalls.size(), 
-        drawCalls.data(), 
-        GL_DYNAMIC_DRAW
-    );
+			    //std::cout << "BATCH VERTEX SIZE: " << std::endl;
 
 
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Graphics::Vertex) * vertices.size(), &vertices[0], GL_DYNAMIC_DRAW);
 
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_DYNAMIC_DRAW);
- 
-}
-
-*/
-
-int even = 1;
-bool done = false; 
-int count = 1;
-void Graphics::OpenGLRenderAPI::loadDataImpl
-(
-    std::vector<Graphics::Vertex>& vertices, 
-    std::vector<unsigned int>& indices, 
-    std::vector<Graphics::ElementDrawCall>& drawCalls,
-    std::string shaderName
-)
-{
-    size_t format = m_Shaders[shaderName]->getFormat().first;
-    Graphics::RenderConfig& config = getRenderConfig(format, shaderName);
 
     if (CURRENT_FORMAT != config.format && CURRENT_FORMAT != -1)
     {
@@ -236,8 +230,8 @@ void Graphics::OpenGLRenderAPI::loadDataImpl
        	glBindBuffer(GL_ARRAY_BUFFER, config.VBO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, config.EBO);
 
-	glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.IBO);
-	 
+	glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.IBO[0]);
+	
        	glBufferData
 	    (
 	        GL_DRAW_INDIRECT_BUFFER, 
@@ -246,8 +240,40 @@ void Graphics::OpenGLRenderAPI::loadDataImpl
 	        GL_DYNAMIC_DRAW
 	    );
 
-        CURRENT_FORMAT = config.format;
+
+	glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.IBO[1]);
+	
+       	glBufferData
+	    (
+	        GL_DRAW_INDIRECT_BUFFER, 
+	        sizeof(ElementDrawCall) * drawCalls.size(), 
+	        drawCalls.data(), 
+	        GL_DYNAMIC_DRAW
+	    );
+
+
+        glBufferData
+	(
+            GL_ARRAY_BUFFER, 
+            sizeof(Graphics::Vertex) * batch.vertexData.size(), 
+            &batch.vertexData[0], 
+            GL_DYNAMIC_DRAW
+	);
+            
+        glBufferData
+        (
+	    GL_ELEMENT_ARRAY_BUFFER, 
+	    sizeof(unsigned int) * batch.indexData.size(), 
+	    &batch.indexData[0], 
+	    GL_DYNAMIC_DRAW
+        );
+
+         CURRENT_FORMAT = config.format;
     }
+
+    if (original)
+    { 
+	glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.IBO[0]);
 
         glBufferSubData
 	(
@@ -257,30 +283,94 @@ void Graphics::OpenGLRenderAPI::loadDataImpl
 	    drawCalls.data() 
 	);
 
+    }
+    else 
+    {
+	glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.IBO[1]);
 
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Graphics::Vertex) * vertices.size(), &vertices[0], GL_DYNAMIC_DRAW);
-	
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_DYNAMIC_DRAW);
+        glBufferSubData
+	(
+	    GL_DRAW_INDIRECT_BUFFER, 
+	    0, 
+	    sizeof(ElementDrawCall) * drawCalls.size(), 
+	    drawCalls.data() 
+	);
 
-    /*
-    std::vector<GLsizei> counts;
-    std::vector<const void*> indicesOffsets;
-    std::vector<GLint> baseVertices;
-    for (const auto& drawCall : drawCalls) {
-        counts.push_back(drawCall.count);
-        indicesOffsets.push_back(reinterpret_cast<const void*>(drawCall.firstIndex * sizeof(unsigned int)));
-        baseVertices.push_back(drawCall.baseVertex);
     }
 
-    glMultiDrawElementsBaseVertex(
-        GL_TRIANGLES,              
-	counts.data(),             
-        GL_UNSIGNED_INT,           
-	indicesOffsets.data(),     
-        drawCalls.size(),          
-        baseVertices.data()        
-    );
-    */
-}
-     
+    original = !original;
+      
     
+    glBufferSubData
+    (
+        GL_ARRAY_BUFFER, 
+        0,
+        sizeof(Graphics::Vertex) * batch.vertexData.size()
+        , &batch.vertexData[0]
+    );
+	
+    glBufferSubData
+    (
+        GL_ELEMENT_ARRAY_BUFFER, 
+        0,
+        sizeof(unsigned int) * batch.indexData.size(), 
+        &batch.indexData[0]
+    );
+}    
+
+
+unsigned int Graphics::OpenGLRenderAPI::loadTextureImpl(Graphics::Texture& texture)
+{
+    if (true)
+    {
+        //return loadFileTexture(texture); //TODO:
+	return 0;
+    }
+}
+
+
+unsigned int Graphics::OpenGLRenderAPI::loadFileTexture(Graphics::Texture& texture)
+{
+    std::string filename = std::string(texture.path);
+    filename = texture.directory + '/' + filename;
+    
+    unsigned int textureID; 
+    glGenTextures(1, &textureID);
+    
+    stbi_set_flip_vertically_on_load(true);
+    int width, height, nrComponents;   
+    unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+      
+    if (data)
+    {
+        GLenum format;
+        if (nrComponents == 1)
+            format = GL_RED;
+        else if (nrComponents == 3)
+            format = GL_RGB;
+        else if (nrComponents == 4)
+            format = GL_RGBA;
+
+        glBindTexture(GL_TEXTURE_2D, textureID);  
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);    
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        
+	stbi_image_free(data);
+    }
+     
+    else
+    {
+          std::cout << "Texture failed to load at path: " << texture.path << std::endl;
+          stbi_image_free(data);
+    }
+ 
+    return textureID;
+
+
+
+}

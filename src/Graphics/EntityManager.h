@@ -2,16 +2,16 @@
 #define ENTITY_MANAGER_H
 
 #include "Primitives.h"
-
+#include <set>
 
 namespace Graphics
 {
     class EntityManager
     {
         public:
-	    Entity createEntity()
+	    Graphics::Entity createEntity();
 
-	    bool removeEntity(Entity entity)
+	    bool removeEntity(Entity entity);
 
 	private: 
 	    Entity HEAD_ENTITY = 0;

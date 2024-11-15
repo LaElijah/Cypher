@@ -7,7 +7,6 @@
 #include <memory>
 #include <iostream>
 #include "Primitives.h"
-#include "Model.h"
 #include "Shader.h"
 
 
@@ -36,8 +35,8 @@ namespace Graphics
 	    std::map<std::string, Graphics::Texture> loadedTextures; 
 	    std::map<std::string, Graphics::ShaderInfo> m_LoadedShaderInfo;
 
-	    std::vector<std::shared_ptr<Graphics::Model>> m_LoadedModels;
     	    std::vector<Graphics::ModelInfo> m_ModelInfo;
+	    
     };
 }
 

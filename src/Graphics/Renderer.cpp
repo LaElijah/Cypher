@@ -4,8 +4,6 @@
 #include "FileReader.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
-#include "Model.h"
-#include "Mesh.h"
 #include "../../external/imgui/imgui.h"
 #include "../../external/imgui/imgui_impl_opengl3.h"
 #include "../../external/imgui/imgui_impl_glfw.h"

@@ -5,14 +5,13 @@
 #include <GLFW/glfw3.h>
 #include "Camera.h"
 #include "ResourceManager.h"
+#include "SystemManager.h"
 #include "GLFWCanvas.h"
 #include "Shader.h"
 #include "GUI.h"
 #include "RenderAPI.h"
 #include <memory>
 #include "ResourceManager.h"
-#include "Model.h"
-#include "Mesh.h"
 #include "../../external/imgui/imgui.h"
 #include "../../external/imgui/imgui_impl_opengl3.h"
 #include "../../external/imgui/imgui_impl_glfw.h"
@@ -70,17 +69,13 @@ namespace Graphics
 	    void shutdown();
 
 
-	    int count = 4;
-
-
        
             // API Dependent functions
-                        template <typename T>           
+            template <typename T>           
             void draw(Graphics::RenderAPI<T>& renderAPI)
             {
-                auto shader = renderAPI.getShader("debug");
-                shader->use();
-                           
+            
+ /*
                 for 
                 (
                     std::shared_ptr<Graphics::Model> model 
@@ -89,9 +84,7 @@ namespace Graphics
                 { 
 
                     modelMatrix = model->getModelMatrix();
-                    shader->setUniform("view", Camera->getViewMatrix());
-                    shader->setUniform("projection", Camera->getProjectionMatrix());
-
+		}
                     for (Graphics::Mesh& mesh : model->getMeshes())
                     {
                  
@@ -114,137 +107,54 @@ namespace Graphics
                                 mesh.getIndices().end()
                             );
 
-                        call.count = mesh.getIndices().size();
-                        call.instanceCount = 1;
-                        call.firstIndex = currentBaseIndex;
-                        call.baseVertex = currentBaseVertex;
-                        call.baseInstance = instanceIndex;
+                            call.count = mesh.getIndices().size();
+                            call.instanceCount = 1;
+                            call.firstIndex = currentBaseIndex;
+                            call.baseVertex = currentBaseVertex;
+                            call.baseInstance = instanceIndex;
 
-                        currentBaseIndex += mesh.getIndices().size();
-                        currentBaseVertex += mesh.getVertices().size();
-                        instanceIndex++;
+                            currentBaseIndex += mesh.getIndices().size();
+                            currentBaseVertex += mesh.getVertices().size();
+                            instanceIndex++;
 
-                        drawCalls.push_back(std::move(call));
+                            drawCalls.push_back(std::move(call));
                         }
                     }
                 }
 
-
-                shader->setUniform("model", modelMatrix); 
-// Later, before updating the buffer
-                renderAPI.loadData
-                (
-                    vertexData, 
-                    indexData,
-                    drawCalls,
-                    "debug"
-                );
-   
-                    
-
-                renderAPI.drawElements(drawCalls.size());
-
-                done = true;
-            }
-			/*
-	    template <typename T>	    
-            void draw(Graphics::RenderAPI<T>& renderAPI)
-            {
-		vertexData.clear();
-		indexData.clear();
-		drawCalls.clear();
-
-    	    	    auto shader = renderAPI.getShader("debug");
+*/
+	        for (Graphics::RenderBatch& batch : batches)
+		{
+		
+                    auto shader = renderAPI.getShader(batch.shader);
                     shader->use();
-                    
-                    
-		for 
-		(
-	            std::shared_ptr<Graphics::Model> model 
-		    : ResourceManager->getLoadedModels()
-		)
-                { 
-
-		    modelMatrix = model->getModelMatrix();
+                     
+                    shader->setUniform("model", glm::mat4(1.0f)); 
                     shader->setUniform("view", Camera->getViewMatrix());
                     shader->setUniform("projection", Camera->getProjectionMatrix());
-
-		    for (Graphics::Mesh& mesh : model->getMeshes())
-		    {
-		 
-			Graphics::ElementDrawCall call;
-		        shaderName = mesh.getShaderName();
-
-			if (!done)
-			{
-			    vertexData.insert
-			    (
-			        vertexData.end(), 
-			        mesh.getVertices().begin(), 
-			        mesh.getVertices().end()
-			    ); 
-
-		            indexData.insert
-			    (
-			        indexData.end(), 
-			        mesh.getIndices().begin(), 
-			        mesh.getIndices().end()
-			    );
-
-		        call.count = mesh.getIndices().size();	
-			call.instanceCount = 1;
-			call.firstIndex = currentBaseIndex;
-			call.baseVertex = currentBaseVertex;
-			call.baseInstance = instanceIndex;
-	
-		        currentBaseIndex += mesh.getIndices().size();	
-			currentBaseVertex += mesh.getVertices().size();
-			instanceIndex++;
-			
-			drawCalls.push_back(std::move(call));
-			}
-		    }
-                }
-
-		        renderAPI.loadData
-		        (
-		            vertexData, 
-			    indexData,
-			    drawCalls,
-			    "debug"
-		        );
-
-		    
-
-
-		    
-	  
-		    shader->setUniform("model", modelMatrix); 
-		    
-		    renderAPI.drawElements(drawCalls.size());
-            }a
-    */
-                   /* 
-		   
-		    for (Graphics::Mesh& mesh : model->getMeshes())
-
-                    {
-            	        renderAPI.loadData(mesh.getVertices(), mesh.getIndices(), model->getShaderName()); 
-                        // Move to implementation in api 
-	   		//ResourceManager->loadTextures(mesh.getTextures());
+                      
+	            renderAPI.loadData(batch);
+                    renderAPI.drawElements(batch.counts.size());
             
-	   		renderAPI.loadTextures(mesh.getTextures());
-            	        renderAPI.drawElements(mesh.getIndices().size());	
-            	    }
+		}
+	    }
 
-		    */
-	
+
+
+
 	    template <typename T>
             void run(Graphics::RenderAPI<T>& renderAPI)
             {
 		// Initialize
-                GLFWwindow *window = Canvas->getWindow();
-                ResourceManager->loadModel("/home/laelijah/Gengine/data/Models/room/scene.gltf");
+                GLFWwindow* window = Canvas->getWindow();
+                //ResourceManager->loadModel("/home/laelijah/Gengine/data/Models/room/scene.gltf");
+
+	        Graphics::ModelInfo info;
+	 
+	        info.path = "/home/laelijah/Gengine/data/Models/room/scene.gltf";
+		Graphics::Entity entity = SystemManager.createModel(info);
+
+		
             
                 ImGuiIO& io = GUI->getIO();
                 Graphics::FrameBuffer* sceneBuffer = new Graphics::FrameBuffer(1920, 1080);
@@ -267,23 +177,27 @@ namespace Graphics
                 GUI->addEditorComponent(new Graphics::TestWindow(std::string("Test")));
                 GUI->addComponent(new Graphics::TestWindow(std::string("WOAAH")));
 		// Initialize End
-                               // Render loop
-                while (!glfwWindowShouldClose(window)) 
-                {   
+                
+	
+
+
+		while (!glfwWindowShouldClose(window)) 
+                {
+
+	            SystemManager.update();
+		    SystemManager.getRenderBatches(batches);
+
                     if (true) 
                     {
                         processInput(window);
                     }
 
-                    //renderAPI.clear(); 
+                    renderAPI.clear(); 
 
                     // For drawing to scene window
                     // within gui
                     if (GUI->isWindowed())
-                    {
                         sceneBuffer->Bind();  
-                        renderAPI.clear(); 
-                    } 
 
                     renderAPI.clear(); 
                     draw(renderAPI); 
@@ -294,10 +208,8 @@ namespace Graphics
                     GUI->drawGUI();
 
                     glfwPollEvents();
-                    
 		    glfwSwapBuffers(window);
 		    
-                   
 
                     // Handle post render duties
                     while (PostRenderFunctions.size() > 0)
@@ -308,45 +220,7 @@ namespace Graphics
                     
                     Canvas->updateDeltaTime();      
                 }
-		/*
-	        // Render loop	
-                while (!glfwWindowShouldClose(window)) 
-                {   
-                    if (true)
-                    {
-                        processInput(window);
-                    }
 
-	            renderAPI.clear(); 
-
-	            if (GUI->isWindowed())
-		    {
-                        sceneBuffer->Bind();  
-		        renderAPI.clear(); 
-		    } 
-		    draw(renderAPI); 
-		    if (GUI->isWindowed())
-		        sceneBuffer->Unbind(); 	    
-
-		    GUI->drawGUI();
-		    glfwPollEvents();
-
-            	    glfwSwapBuffers(window);
-            	        
-                   
-		    done = true; 
-		    // Clear default frame buffer 	
-            	    // Handle post render duties
-            	    while (PostRenderFunctions.size() > 0)
-            	    {
-            	        PostRenderFunctions.back()();
-            	        PostRenderFunctions.pop_back(); 
-            	    }
-                    
-		    Canvas->updateDeltaTime();	    
-                }a
-		*/
-                
 		GUI->shutdown(); 
                 glfwTerminate(); 
             }
@@ -360,10 +234,19 @@ namespace Graphics
 	    std::shared_ptr<Graphics::Camera> Camera;
 	    std::shared_ptr<Graphics::GLFWCanvas> Canvas;
 	    std::shared_ptr<Graphics::ResourceManager> ResourceManager;
+	    Graphics::SystemManager SystemManager;
 
             std::vector<std::function<void()>> PostRenderFunctions;
 	    
             void processInput(GLFWwindow *window);
+
+	    std::vector<Graphics::RenderBatch> batches;
+
+
+
+
+
+
     		std::vector<Graphics::Vertex> vertexData;
     		std::vector<unsigned int> indexData;
 		std::vector<int> counts;
@@ -374,8 +257,8 @@ namespace Graphics
 	       	unsigned int currentBaseIndex = 0;
 	       	int currentBaseVertex = 0;
 	       	unsigned int instanceIndex = 0;
-
-	    	    std::vector<Graphics::ElementDrawCall> drawCalls;
+	    
+		std::vector<Graphics::ElementDrawCall> drawCalls;
 	
 		std::string shaderName;
 	        glm::mat4 modelMatrix;	

@@ -3,7 +3,6 @@
 #include "FileReader.h"
 #include "ResourceManager.h"
 #include "Shader.h"
-#include "Model.h"
 
 
 
@@ -76,6 +75,7 @@ void Graphics::ResourceManager::loadShaderInfo(bool single, std::string director
     }
 }
 
+/*
 void Graphics::ResourceManager::loadModel(const char* path)
 {
     m_LoadedModels.push_back(std::shared_ptr<Graphics::Model>(new Graphics::Model(path))); 
@@ -88,11 +88,13 @@ void Graphics::ResourceManager::loadModel(std::string& path)
     //m_LoadedModels.push_back(std::shared_ptr<Graphics::Model>(new Graphics::Model(path))); 
 }
 
-
 std::vector<std::shared_ptr<Graphics::Model>>& Graphics::ResourceManager::getLoadedModels()
 {
     return m_LoadedModels;
 }
+
+*/
+
 
 void Graphics::ResourceManager::initialize()
 {

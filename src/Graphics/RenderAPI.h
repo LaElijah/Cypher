@@ -12,19 +12,16 @@
 
 namespace Graphics
 {
-    
 
-
-
-	    struct ElementDrawCall
-	    {
-	        unsigned int count;
-	        unsigned int instanceCount;
-	        unsigned int firstIndex;
-	        unsigned int baseVertex;
-	        unsigned int baseInstance;
-	        	
-	    };
+   
+    struct ElementDrawCall
+    {
+       unsigned int count;
+       unsigned int instanceCount;
+       unsigned int firstIndex;
+       unsigned int baseVertex;
+       unsigned int baseInstance;
+    };
 
 
     /**
@@ -41,22 +38,9 @@ namespace Graphics
 	        static_cast<T*>(this)->clearImpl(); 
             }
 
-            void loadData
-            (
-                std::vector<Graphics::Vertex>& vertices, 
-                std::vector<unsigned int>& indices, 
-		std::vector<ElementDrawCall>& drawCalls,
-                std::string shaderName
-	    )
+            void loadData(Graphics::RenderBatch& batch)
 	    { 
-                static_cast<T*>(this)
-		    ->loadDataImpl
-		    (
-		        vertices, 
-		        indices, 
-			drawCalls,
-		        shaderName
-		    ); 
+                static_cast<T*>(this)->loadDataImpl(batch);
 	    }
 
 	    void loadTextures(std::vector<Graphics::Texture>& textures)
@@ -66,10 +50,10 @@ namespace Graphics
 	    }
 
 	    //void drawElements(int count, bool unbind = false)
-            void drawElements(int callNums, bool unbind = false)
+            void drawElements(int numCalls, bool unbind = false)
 	    {
                 static_cast<T*>(this)
-		    ->drawElementsImpl(callNums, unbind); 
+		    ->drawElementsImpl(numCalls, unbind); 
 	    }
 
 	    std::shared_ptr<Graphics::OpenGLShader> getShader(std::string name)
@@ -97,8 +81,7 @@ namespace Graphics
     ////////  OPENGL API  //////////////////////////////////////////
     ////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////
-    
-
+   
     /**
      * This struct provides all the information necessary for 
      * openGL to render at the basic level, containing
@@ -112,7 +95,7 @@ namespace Graphics
     	unsigned int VAO;
     	unsigned int VBO; 
     	unsigned int EBO;     
-    	unsigned int IBO;     
+    	unsigned int IBO[2];     
 	unsigned int SSBO;
     };
 
@@ -127,22 +110,21 @@ namespace Graphics
     {
         public: 
 	    // Defined methods that align with render api implementation
-	    
             void clearImpl();
-	    void loadDataImpl
-            (
-                std::vector<Graphics::Vertex>& vertices, 
-                std::vector<unsigned int>& indices, 
-		std::vector<Graphics::ElementDrawCall>& drawCalls,
-                std::string shaderName
-	    );
+	    void loadDataImpl(Graphics::RenderBatch& batch);
+
+
+	    unsigned int loadTextureImpl(Graphics::Texture& info);
+
+	    // TODO: rename to bindTexturesImpl
 	    void loadTexturesImpl(std::vector<Graphics::Texture>& textures);
-	    //void drawElementsImpl(int count, bool unbind = true);
+            void drawElementsImpl(int numCalls, bool unbind);
             void loadShaderImpl(Graphics::ShaderInfo& info);
             void loadShadersImpl(std::map<std::string, Graphics::ShaderInfo>& infoData);
 	    std::shared_ptr<Graphics::OpenGLShader> getShaderImpl(std::string name);
+
+            unsigned int loadFileTexture(Graphics::Texture& texture);
         
-            void drawElementsImpl(int callNums, bool unbind);
 	private:
     	    size_t CURRENT_FORMAT;
     	    

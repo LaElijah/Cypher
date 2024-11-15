@@ -18,13 +18,15 @@ set(SOURCES
   ${SRC_DIR}/Graphics/Shader.cpp  
   ${SRC_DIR}/Graphics/FileReader.cpp
   ${SRC_DIR}/Graphics/ResourceManager.cpp 
-  ${SRC_DIR}/Graphics/Mesh.cpp 
-  ${SRC_DIR}/Graphics/Model.cpp
   ${SRC_DIR}/Graphics/Renderer.cpp
   ${SRC_DIR}/Graphics/GUI.cpp
   ${SRC_DIR}/Graphics/FrameBuffer.cpp
   ${SRC_DIR}/Graphics/GUIComponent.cpp
   ${SRC_DIR}/Graphics/RenderAPI.cpp
+  ${SRC_DIR}/Graphics/ComponentManager.cpp
+  ${SRC_DIR}/Graphics/EntityManager.cpp
+  ${SRC_DIR}/Graphics/SystemManager.cpp
+  ${SRC_DIR}/Graphics/ModelLoader.cpp
   ${SRC_DIR}/Core/index.cpp
   ${SRC_DIR}/Core/Application.cpp
   ${EXTERNAL_DIR}/GLAD/glad.c
