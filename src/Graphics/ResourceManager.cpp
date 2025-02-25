@@ -27,9 +27,11 @@ void Graphics::ResourceManager::loadModelInfo(std::string modelDirectory)
 
 	for (std::string filename : modelInfoFound)
 	{
-            auto [name, extension] = FileReader::splitFileExtension(filename);
-	    modelInfo.name = name;
-	    modelInfo.extension = extension;
+        std::pair<std::string, std::string> fileInfo = FileReader::splitFileExtension(filename);
+
+
+	    modelInfo.name = fileInfo.first;
+	    modelInfo.extension = fileInfo.second;
 	    modelInfo.path = std::string(workingModel + "/" + filename);
 
 	    m_ModelInfo.push_back(modelInfo); 

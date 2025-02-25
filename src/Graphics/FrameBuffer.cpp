@@ -1,5 +1,5 @@
 #include <iostream>
-#include <glad/glad.h>
+#include "../../external/GLAD/glad.h"
 #include <glm/glm.hpp>
 
 #include "FrameBuffer.h"

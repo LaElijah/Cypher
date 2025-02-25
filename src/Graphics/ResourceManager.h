@@ -32,7 +32,7 @@ namespace Graphics
 
 
 	private:
-	    std::map<std::string, Graphics::Texture> loadedTextures; 
+	    std::map<std::string, Graphics::TextureInfo> loadedTextures; 
 	    std::map<std::string, Graphics::ShaderInfo> m_LoadedShaderInfo;
 
     	    std::vector<Graphics::ModelInfo> m_ModelInfo;

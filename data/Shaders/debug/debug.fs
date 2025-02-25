@@ -1,36 +1,30 @@
-#version 330 core
-out vec4 FragColor;
+#version 460 core
+#extension GL_ARB_bindless_texture : require
 
+
+out vec4 FragColor;
+flat in uint draw;
 in vec2 TexCoords;
 in vec3 Test;
 in float Tester;
+
+layout(binding = 0, std430) buffer textureBuffer
+{
+    sampler2D textures[];
+};
+
+
 
 uniform sampler2D texture_diffuse1;
 uniform sampler2D texture_specular1;
 
 
+vec4 diffuse1 = texture(textures[draw], TexCoords); 
 
-vec4 diffuse1 = texture(texture_diffuse1, TexCoords); 
-vec4 specular1 = texture(texture_specular1, TexCoords); 
 
-vec4 fragResult = diffuse1;
 vec3 TestEnd = Test;
 
 void main()
 { 
-
-    if (diffuse1.x >= 0)
-    {
-        fragResult = fragResult * diffuse1;
-    }
-
-    if (specular1.x >= 0)
-    {
-        fragResult = fragResult * specular1;
-    }
-
-    TestEnd = Test * 3;
-
-    FragColor.rgb = Test;
-    FragColor.a = 1.0f;
+    FragColor = diffuse1;
 }

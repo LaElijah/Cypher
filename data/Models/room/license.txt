@@ -1,11 +1,8 @@
 Model Information:
-* title:	Modern Homes Small Bedroom Asset Package
-* source:	https://sketchfab.com/3d-models/modern-homes-small-bedroom-asset-package-5d529160c62347fbb6e792e621a18413
-* author:	Aligned Games (https://sketchfab.com/Johannesnienaber)
+* title:	Shipwreck turned into hideout
+* source:	https://sketchfab.com/3d-models/shipwreck-turned-into-hideout-7a04de41ba9544d08364997ecd74b217
+* author:	Conrad Justin (https://sketchfab.com/ConradJustin)
 
 Model License:
-* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
-* requirements:	Author must be credited. Commercial use is allowed.
-
-If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
-This work is based on "Modern Homes Small Bedroom Asset Package" (https://sketchfab.com/3d-models/modern-homes-small-bedroom-asset-package-5d529160c62347fbb6e792e621a18413) by Aligned Games (https://sketchfab.com/Johannesnienaber) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works

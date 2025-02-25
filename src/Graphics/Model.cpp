@@ -1,5 +1,5 @@
 /*
-#include <glad/glad.h>
+#include "../../external/GLAD/glad.h"
 #include <GLFW/glfw3.h>
 #include <assimp/Importer.hpp>
 #include <assimp/material.h>
@@ -80,7 +80,7 @@ Graphics::Mesh Graphics::Model::processMesh(aiMesh *mesh, const aiScene *scene, 
 {
     std::vector<Graphics::Vertex> vertices;
     std::vector<unsigned int> indices;
-    std::vector<Graphics::Texture> textures;
+    std::vector<Graphics::TextureInfo> textures;
 
 
     for(unsigned int i = 0; i < mesh->mNumVertices; i++)
@@ -130,7 +130,7 @@ Graphics::Mesh Graphics::Model::processMesh(aiMesh *mesh, const aiScene *scene, 
 
     aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
 
-    std::vector<Graphics::Texture> diffuseMaps = loadMaterialTextures(
+    std::vector<Graphics::TextureInfo> diffuseMaps = loadMaterialTextures(
         material, 
         scene,
         aiTextureType_DIFFUSE, 
@@ -150,9 +150,9 @@ Graphics::Mesh Graphics::Model::processMesh(aiMesh *mesh, const aiScene *scene, 
     return Mesh(vertices, indices, textures);
 }
 
-std::vector<Graphics::Texture> Graphics::Model::loadMaterialTextures(aiMaterial *mat, const aiScene* scene, aiTextureType type, std::string typeName)
+std::vector<Graphics::TextureInfo> Graphics::Model::loadMaterialTextures(aiMaterial *mat, const aiScene* scene, aiTextureType type, std::string typeName)
 {
-    std::vector<Graphics::Texture> textures;
+    std::vector<Graphics::TextureInfo> textures;
 
     for(unsigned int i = 0; i < mat->GetTextureCount(type); i++)
     {    
@@ -174,7 +174,7 @@ std::vector<Graphics::Texture> Graphics::Model::loadMaterialTextures(aiMaterial 
     // If not already found in loaded textures, 
         if(!skip)
         {      
-            Graphics::Texture texture;
+            Graphics::TextureInfo texture;
 
             // Check here for embedded or not and emply the right texture load function
             if (str.length > 0 && str.data[0] == '*') // If embedded

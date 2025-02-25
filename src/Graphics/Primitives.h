@@ -1,17 +1,14 @@
 #ifndef PRIMITIVES_H
 #define PRIMITIVES_H
 
-
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
+#include <map> 
 
-namespace Graphics 
+namespace Graphics
 {
     typedef unsigned int Entity;
-
-
-
 
     struct ModelInfo
     {
@@ -20,83 +17,63 @@ namespace Graphics
         std::string extension;
     };
 
-
-
-
-    struct Texture
+    struct TextureInfo
     {
-      std::string type;
-      std::string path;
-      std::string directory;
+        std::string type;
+        std::string path;
+        std::string directory;
     };
- 
-
-
 
     struct Vertex
     {
-      glm::vec3 Position;
-      glm::vec3 Normal;
-      glm::vec2 TexCoords;
+        glm::vec3 Position;
+        glm::vec3 Normal;
+        glm::vec2 TexCoords;
     };
 
-
-
-
-    struct Mesh 
+    struct Mesh
     {
-        Mesh
-        (
-	    std::vector<Graphics::Vertex> vertices, 
-            std::vector<unsigned int> indices, 
-            std::vector<Texture> textures,
-	    std::string shader
-	) : 
-	    vertices(vertices), 
-            indices(indices), 
-	    textures(textures), 
-	    shader(shader)
-	    {}
+        Mesh(
+            std::vector<Graphics::Vertex> vertices,
+            std::vector<unsigned int> indices,
+            std::vector<TextureInfo> textureInfo,
+            std::string shader) : vertices(vertices),
+                                  indices(indices),
+                                  textureInfo(textureInfo),
+                                  shader(shader)
+        {
+        }
 
-        std::vector<Vertex> vertices;   
+        std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
-        std::vector<Texture> textures;
-	std::string shader;
+        std::vector<TextureInfo> textureInfo;
+        std::string shader;
     };
 
-
-
-
-    struct Model 
+    struct Model
     {
-	Model() {};
+        Model() {};
 
-	Model
-	(
-            std::vector<Graphics::Mesh>& meshes,
-	    Graphics::ModelInfo& info
-	) : meshes(meshes), info(info)
-	{}
+        Model(
+            std::vector<Graphics::Mesh> &meshes,
+            Graphics::ModelInfo &info) : meshes(meshes), info(info)
+        {
+        }
 
         std::vector<Graphics::Mesh> meshes;
-	Graphics::ModelInfo info;
+        Graphics::ModelInfo info;
     };
-
 
     struct RenderBatch
     {
         std::vector<Graphics::Vertex> vertexData;
-	std::vector<unsigned int> indexData;
-	std::vector<unsigned int> counts;
-	std::vector<unsigned int> indexCounts;
-	std::vector<std::pair<unsigned int, unsigned int>> textureCells;
-    	std::string shader;
+        std::vector<unsigned int> indexData;
+        std::vector<unsigned int> counts;
+        std::vector<unsigned int> indexCounts;
+        std::map<std::string, std::vector<Graphics::TextureInfo>> textureInfo;
+        std::string shader;
     };
-  
+
 }
-
-
-
-
 
 #endif

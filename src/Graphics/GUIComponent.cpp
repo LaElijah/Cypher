@@ -1,8 +1,8 @@
 #include "GUIComponent.h"
 #include "../../external/imgui/imgui.h"
-#include "../../external/imgui/imgui_impl_opengl3.h"
-#include "../../external/imgui/imgui_impl_glfw.h"
-
+#include "../../external/imgui/backends/imgui_impl_opengl3.h"
+#include "../../external/imgui/backends/imgui_impl_glfw.h"
+#include <cstdint>
 
 Graphics::GUIComponent::GUIComponent(std::string name)
 : Name(name)

@@ -9,7 +9,7 @@ Graphics::Mesh::Mesh
 (
     std::vector<Graphics::Vertex> 
     vertices, std::vector<unsigned int> indices, 
-    std::vector<Graphics::Texture> textures
+    std::vector<Graphics::TextureInfo> textures
 )
 {
     m_Vertices = vertices; 
@@ -36,7 +36,7 @@ std::vector<unsigned int>& Graphics::Mesh::getIndices()
 
 
 
-std::vector<Graphics::Texture>& Graphics::Mesh::getTextures()
+std::vector<Graphics::TextureInfo>& Graphics::Mesh::getTextures()
 {
     return m_Textures;
 }
