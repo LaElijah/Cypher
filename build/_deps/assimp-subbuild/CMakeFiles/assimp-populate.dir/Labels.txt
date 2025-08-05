@@ -1,0 +1,14 @@
+# Target labels
+ assimp-populate
+# Source files and their labels
+C:/Users/Games/Documents/c++/Cypher/build/_deps/assimp-subbuild/CMakeFiles/assimp-populate
+C:/Users/Games/Documents/c++/Cypher/build/_deps/assimp-subbuild/CMakeFiles/assimp-populate.rule
+C:/Users/Games/Documents/c++/Cypher/build/_deps/assimp-subbuild/CMakeFiles/assimp-populate-complete.rule
+C:/Users/Games/Documents/c++/Cypher/build/_deps/assimp-subbuild/assimp-populate-prefix/src/assimp-populate-stamp/assimp-populate-build.rule
+C:/Users/Games/Documents/c++/Cypher/build/_deps/assimp-subbuild/assimp-populate-prefix/src/assimp-populate-stamp/assimp-populate-configure.rule
+C:/Users/Games/Documents/c++/Cypher/build/_deps/assimp-subbuild/assimp-populate-prefix/src/assimp-populate-stamp/assimp-populate-download.rule
+C:/Users/Games/Documents/c++/Cypher/build/_deps/assimp-subbuild/assimp-populate-prefix/src/assimp-populate-stamp/assimp-populate-install.rule
+C:/Users/Games/Documents/c++/Cypher/build/_deps/assimp-subbuild/assimp-populate-prefix/src/assimp-populate-stamp/assimp-populate-mkdir.rule
+C:/Users/Games/Documents/c++/Cypher/build/_deps/assimp-subbuild/assimp-populate-prefix/src/assimp-populate-stamp/assimp-populate-patch.rule
+C:/Users/Games/Documents/c++/Cypher/build/_deps/assimp-subbuild/assimp-populate-prefix/src/assimp-populate-stamp/assimp-populate-test.rule
+C:/Users/Games/Documents/c++/Cypher/build/_deps/assimp-subbuild/assimp-populate-prefix/src/assimp-populate-stamp/assimp-populate-update.rule

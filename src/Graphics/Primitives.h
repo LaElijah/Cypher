@@ -5,9 +5,18 @@
 #include <string>
 #include <vector>
 #include <map> 
+#include <bitset> 
+
+const unsigned int MAX_COMPONENT_SIZE = 256;
+
 
 namespace Graphics
 {
+
+
+
+    typedef std::bitset<MAX_COMPONENT_SIZE> OBJECT_ID;
+
     typedef unsigned int Entity;
 
     struct ModelInfo
@@ -73,6 +82,19 @@ namespace Graphics
         std::map<std::string, std::vector<Graphics::TextureInfo>> textureInfo;
         std::string shader;
     };
+
+        struct Component
+    {
+    };
+
+    struct RenderComponent : public Component
+    {
+        RenderComponent() {};
+
+        RenderComponent(Graphics::Model model) : model(model) {};
+        Graphics::Model model;
+    };
+
 
 }
 

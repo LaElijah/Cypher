@@ -58,7 +58,7 @@ set(
     ${SRC_DIR}/Graphics/FrameBuffer.cpp
     ${SRC_DIR}/Graphics/GUIComponent.cpp
     ${SRC_DIR}/Graphics/RenderAPI.cpp
-    ${SRC_DIR}/Graphics/ComponentManager.cpp
+
     ${SRC_DIR}/Graphics/EntityManager.cpp
     ${SRC_DIR}/Graphics/SystemManager.cpp
     ${SRC_DIR}/Graphics/ModelLoader.cpp

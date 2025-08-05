@@ -1,0 +1,3 @@
+C:/Users/Games/Documents/c++/Cypher/build/_deps/assimp-subbuild/CMakeFiles/assimp-populate.dir
+C:/Users/Games/Documents/c++/Cypher/build/_deps/assimp-subbuild/CMakeFiles/edit_cache.dir
+C:/Users/Games/Documents/c++/Cypher/build/_deps/assimp-subbuild/CMakeFiles/rebuild_cache.dir

@@ -5,7 +5,7 @@
 #include "ComponentManager.h"
 #include "Primitives.h"
 #include <map>
-
+#include <optional>
 #include "ModelLoader.h"
 
 namespace Graphics
@@ -20,7 +20,7 @@ namespace Graphics
 		}
 
 	protected:
-		static Graphics::ComponentManager componentManager;
+		static inline Graphics::ComponentManager componentManager;
 	};
 
 	class RenderSystem : public System<RenderSystem>
@@ -41,8 +41,16 @@ namespace Graphics
 			if (!done)
 			{
 
-				for (RenderComponent component : componentManager.getAll<RenderComponent>())
+				auto it = componentManager.getAllContaining<RenderComponent>();
+
+				while (it.next())
 				{
+					std::optional<RenderComponent> isComponent = it.get();
+
+					if (!isComponent.has_value())
+					    continue;
+
+					RenderComponent component = isComponent.value();
 					// Prior to handling, sort by shader then organize each shader group by texture
 					
 					for (Graphics::Mesh mesh : component.model.meshes)
