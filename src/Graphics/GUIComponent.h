@@ -5,6 +5,7 @@
 #include <functional>
 #include <string>
 #include "FrameBuffer.h"
+#include "FileReader.h"
 
 // abstract class
 
@@ -61,7 +62,7 @@ namespace Graphics
 
         private:
             std::string Directory;
-	    Graphics::FileReader FILE_READER;
+	        Graphics::FileReader FILE_READER;
     };
 
 

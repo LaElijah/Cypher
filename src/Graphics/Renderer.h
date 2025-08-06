@@ -139,7 +139,7 @@ namespace Graphics
 
             Graphics::ModelInfo info;
 
-            info.path = "/Users/Games/Documents/c++/Gengine/data/Models/room/scene.gltf";
+            info.path = "/Users/Games/Documents/c++/Cypher/data/Models/room/scene.gltf";
             Graphics::Entity entity = SystemManager.createModel(info);
 
             ImGuiIO &io = GUI->getIO();
@@ -160,7 +160,7 @@ namespace Graphics
                     PostRenderFunctions));
 
             GUI->addEditorComponent(new Graphics::TestWindow(std::string("Test")));
-            GUI->addEditorComponent(new Graphics::ModelWindow(std::string("MODELS"), std::string("TEST")));
+            GUI->addEditorComponent(new Graphics::ModelWindow(std::string("MODELS"), std::string("/Users/Games/Documents/c++/Cypher/data/Models")));
             GUI->addComponent(new Graphics::TestWindow(std::string("WOAAH")));
             // Initialize End
 

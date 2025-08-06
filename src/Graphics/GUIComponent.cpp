@@ -39,11 +39,12 @@ Graphics::ModelWindow::ModelWindow
     std::string name,
     std::string directory
 )
-: GUIComponent(name)
+: GUIComponent(name),
+  FILE_READER(directory)
 {
     Name = name;
     Directory = directory;
-    FILE_READER = Graphics::FileReader(directory);
+
 };
 
 
@@ -55,7 +56,7 @@ void Graphics::ModelWindow::draw()
     if (ImGui::CollapsingHeader("Loaded Models"))
     {
 	for (std::string file : files)
-	    ImGui::Text(file);
+	    ImGui::Text(file.c_str());
     }
     ImGui::End();   
 }
