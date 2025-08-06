@@ -20,26 +20,34 @@ namespace Graphics
 	class GLFWCanvas
 	{
 	public:
-		GLFWCanvas(
+		GLFWCanvas
+		(
 			std::pair<unsigned int, unsigned int> resolution,
 			std::shared_ptr<Graphics::Camera> camera,
 			std::shared_ptr<Graphics::GUI> gui,
-			unsigned int version = 3);
-
-		void captureMouse();
-		void releaseMouse();
-		float getWidth();
-		float getHeight();
-
+			unsigned int version = 3
+		);
+		// Canvas mouse data
 		float getLastX();
 		float getLastY();
-		void setLastX(double X);
-		void setLastY(double Y);
+		void setLastMousePosition(double X, double Y);
+		bool isMousePosition = false;
+
+
+		// Canvas mouse settings
+		void captureMouse();
+		void releaseMouse();
+
 
 		// Canvas Settings
 
+		// Canvas Resolution Data
+		float getWidth();
+		float getHeight();
+
+
 		void resizeViewport(unsigned int width, unsigned int height);
-		std::pair<unsigned int, unsigned int> getResolution();
+		//std::pair<unsigned int, unsigned int> getResolution();
 		void setResolution(float width, float height);
 		void updateDeltaTime();
 		float getDeltaTime();

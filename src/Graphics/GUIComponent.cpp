@@ -33,6 +33,31 @@ void Graphics::TestWindow::handleInput()
 {
 }
 
+Graphics::ModelWindow::ModelWindow
+(
+    std::string name,
+    std::string directory
+)
+: GUIComponent(name)
+{
+    Name = name;
+    Directory = directory;
+
+};
+
+
+void Graphics::ModelWindow::draw()
+{
+    ImGui::Begin(Name.c_str());
+    ImGui::Text("HII");
+    ImGui::End();   
+}
+
+void Graphics::ModelWindow::handleInput()
+{
+
+}
+
 Graphics::SceneWindow::SceneWindow
 (
     std::string name,
@@ -88,3 +113,12 @@ void Graphics::SceneWindow::handleInput()
     // Add here the click and drag function
     // and other functions to make outside the gui
 }
+
+
+
+
+
+
+
+
+

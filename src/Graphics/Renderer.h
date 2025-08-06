@@ -160,6 +160,7 @@ namespace Graphics
                     PostRenderFunctions));
 
             GUI->addEditorComponent(new Graphics::TestWindow(std::string("Test")));
+            GUI->addEditorComponent(new Graphics::ModelWindow(std::string("MODELS"), std::string("TEST")));
             GUI->addComponent(new Graphics::TestWindow(std::string("WOAAH")));
             // Initialize End
 

@@ -6,7 +6,8 @@
 #include "GLFWCanvas.h"
 #include <functional>
 
-Graphics::GLFWCanvas::GLFWCanvas(
+Graphics::GLFWCanvas::GLFWCanvas
+(
     std::pair<unsigned int, unsigned int> resolution,
     std::shared_ptr<Graphics::Camera> camera,
     std::shared_ptr<Graphics::GUI> gui,
@@ -82,13 +83,9 @@ float Graphics::GLFWCanvas::getLastY()
     return lastY;
 }
 
-void Graphics::GLFWCanvas::setLastX(double X)
+void Graphics::GLFWCanvas::setLastMousePosition(double X, double Y)
 {
     lastX = X;
-}
-
-void Graphics::GLFWCanvas::setLastY(double Y)
-{
     lastY = Y;
 }
 
@@ -127,6 +124,96 @@ void Graphics::GLFWCanvas::startWindow(unsigned int &width, unsigned int &height
     }
 
     glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
+void Graphics::GLFWCanvas::loadGlad()
+{
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        throw std::runtime_error("GLAD ERROR");
+    }
+
+    int flags;
+    glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
+    if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
+    {
+        // initialize debug output
+        glEnable(GL_DEBUG_OUTPUT);
+        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+        // glDebugMessageCallback(glDebugOutput, nullptr);
+        glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+    }
+}
+
+void Graphics::GLFWCanvas::resizeViewport(unsigned int width, unsigned int height)
+{
+    glViewport(0, 0, width, height);
+}
+
+void Graphics::GLFWCanvas::mouseCallback(GLFWwindow *window, double xpos, double ypos)
+{
+    static_cast<GLFWCanvas *>(glfwGetWindowUserPointer(window))
+        ->mouseCallbackImpl(window, xpos, ypos);
+}
+
+void Graphics::GLFWCanvas::mouseCallbackImpl(GLFWwindow *window, double xpos, double ypos)
+{
+    if (!isMousePosition)
+    {
+        setLastMousePosition(xpos, ypos); 
+        isMousePosition = true;
+    }
+
+    if (Camera->getCameraStatus())
+    {
+        Camera->processMousePosition(xpos - getLastX(), getLastY() - ypos);
+        setLastMousePosition(xpos, ypos);
+    }
+    // else
+    //{}
+    // glfwSetCursorPos(getWindow(), getLastX(), getLastY());
+}
+
+void Graphics::GLFWCanvas::mouseButtonCallbackImpl(GLFWwindow *window, int button, int action, int mods)
+{
+    if (
+        button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && !ImGui::GetIO().WantCaptureMouse && !GUI->isWindowed())
+    {
+        captureMouse();
+        GUI->disable();
+        Camera->enableCamera();
+    }
+}
+
+void Graphics::GLFWCanvas::scrollCallbackImpl(GLFWwindow *window, double xoffset, double yoffset)
+{
+    Camera->processMouseScroll(yoffset);
+}
+
+void Graphics::GLFWCanvas::mouseButtonCallback(GLFWwindow *window, int button, int action, int mods)
+{
+    static_cast<GLFWCanvas *>(glfwGetWindowUserPointer(window))
+        ->mouseButtonCallbackImpl(window, button, action, mods);
+}
+
+void Graphics::GLFWCanvas::scrollCallback(GLFWwindow *window, double xoffset, double yoffset)
+{
+    static_cast<GLFWCanvas *>(glfwGetWindowUserPointer(window))
+        ->scrollCallbackImpl(window, xoffset, yoffset);
+}
+
+void Graphics::GLFWCanvas::frameBufferSizeCallbackImpl(GLFWwindow *window, int width, int height)
+{
+    // std::cout << width << " " << height << std::endl;
+    // glViewport(0, 0, width, height);
+}
+
+void Graphics::GLFWCanvas::frameBufferSizeCallback(GLFWwindow *window, int width, int height)
+{
+
+    static_cast<GLFWCanvas *>(glfwGetWindowUserPointer(window))
+        ->frameBufferSizeCallbackImpl(window, width, height);
 }
 
 void APIENTRY glDebugOutput(GLenum source,
@@ -216,97 +303,4 @@ void APIENTRY glDebugOutput(GLenum source,
     }
     std::cout << std::endl;
     std::cout << std::endl;
-}
-
-void Graphics::GLFWCanvas::loadGlad()
-{
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        throw std::runtime_error("GLAD ERROR");
-    }
-
-    int flags;
-    glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
-    if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
-    {
-        // initialize debug output
-        glEnable(GL_DEBUG_OUTPUT);
-        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-        //glDebugMessageCallback(glDebugOutput, nullptr);
-        glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
-    }
-}
-
-void Graphics::GLFWCanvas::resizeViewport(unsigned int width, unsigned height)
-{
-    glViewport(0, 0, width, height);
-}
-
-void Graphics::GLFWCanvas::mouseCallback(GLFWwindow *window, double xpos, double ypos)
-{
-    static_cast<GLFWCanvas *>(glfwGetWindowUserPointer(window))
-        ->mouseCallbackImpl(window, xpos, ypos);
-}
-
-void Graphics::GLFWCanvas::mouseCallbackImpl(GLFWwindow *window, double xpos, double ypos)
-{
-    if (Camera->isFirstMouse())
-    {
-        setLastX(xpos);
-        setLastY(ypos);
-        Camera->startMouse();
-    }
-
-    if (Camera->getCameraStatus())
-    {
-        Camera->processMousePosition(xpos - getLastX(), getLastY() - ypos);
-        setLastX(xpos);
-        setLastY(ypos);
-    }
-    else
-    {
-        glfwSetCursorPos(getWindow(), getLastX(), getLastY());
-    }
-}
-
-void Graphics::GLFWCanvas::mouseButtonCallbackImpl(GLFWwindow *window, int button, int action, int mods)
-{
-    ImGuiIO &io = ImGui::GetIO();
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && !io.WantCaptureMouse && !GUI->isWindowed())
-    {
-        captureMouse();
-        GUI->disable();
-        Camera->enableCamera();
-    }
-}
-
-void Graphics::GLFWCanvas::scrollCallbackImpl(GLFWwindow *window, double xoffset, double yoffset)
-{
-    Camera->processMouseScroll(yoffset);
-}
-
-void Graphics::GLFWCanvas::mouseButtonCallback(GLFWwindow *window, int button, int action, int mods)
-{
-    static_cast<GLFWCanvas *>(glfwGetWindowUserPointer(window))
-        ->mouseButtonCallbackImpl(window, button, action, mods);
-}
-
-void Graphics::GLFWCanvas::scrollCallback(GLFWwindow *window, double xoffset, double yoffset)
-{
-    static_cast<GLFWCanvas *>(glfwGetWindowUserPointer(window))
-        ->scrollCallbackImpl(window, xoffset, yoffset);
-}
-
-void Graphics::GLFWCanvas::frameBufferSizeCallbackImpl(GLFWwindow *window, int width, int height)
-{
-    // std::cout << width << " " << height << std::endl;
-    // glViewport(0, 0, width, height);
-}
-
-void Graphics::GLFWCanvas::frameBufferSizeCallback(GLFWwindow *window, int width, int height)
-{
-
-    static_cast<GLFWCanvas *>(glfwGetWindowUserPointer(window))
-        ->frameBufferSizeCallbackImpl(window, width, height);
 }

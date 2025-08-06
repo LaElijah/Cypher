@@ -46,6 +46,24 @@ namespace Graphics
 	
     };
 
+    class ModelWindow : public GUIComponent 
+    {
+        public: 
+            ModelWindow
+            (
+                std::string name,
+                std::string directory
+            );
+
+	    void draw() override;
+	    void handleInput() override;
+
+
+        private:
+            std::string Directory;
+    };
+
+
     class SceneWindow : public GUIComponent 
     {
 	public: 
