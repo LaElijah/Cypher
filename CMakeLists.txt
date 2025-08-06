@@ -15,6 +15,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 
 FetchContent_Declare(
+    imgui
+    GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    GIT_TAG docking
+)
+
+FetchContent_Declare(
     dirent
     GIT_REPOSITORY https://github.com/tronkko/dirent.git
     GIT_TAG master
@@ -75,32 +81,33 @@ set(
     STB_IMAGE_SOURCE_FILES
     ${EXTERNAL_DIR}/STB_IMAGE/stb_image.cpp
 )
-      
-set(
-    IMGUI_SOURCE_FILES
-    ${EXTERNAL_DIR}/imgui/imconfig.h
-    ${EXTERNAL_DIR}/imgui/imgui.cpp
-    ${EXTERNAL_DIR}/imgui/imgui_demo.cpp
-    ${EXTERNAL_DIR}/imgui/imgui_draw.cpp
-    ${EXTERNAL_DIR}/imgui/imgui.h 
-    ${EXTERNAL_DIR}/imgui/imgui_internal.h
-    ${EXTERNAL_DIR}/imgui/imgui_tables.cpp
-    ${EXTERNAL_DIR}/imgui/imgui_widgets.cpp
-    ${EXTERNAL_DIR}/imgui/imstb_rectpack.h
-    ${EXTERNAL_DIR}/imgui/imstb_textedit.h
-    ${EXTERNAL_DIR}/imgui/imstb_truetype.h
-    ${EXTERNAL_DIR}/imgui/backends/imgui_impl_glfw.cpp
-    ${EXTERNAL_DIR}/imgui/backends/imgui_impl_glfw.h
-    ${EXTERNAL_DIR}/imgui/backends/imgui_impl_opengl3.cpp
-    ${EXTERNAL_DIR}/imgui/backends/imgui_impl_opengl3.h
-    ${EXTERNAL_DIR}/imgui/backends/imgui_impl_opengl3_loader.h 
-    ${EXTERNAL_DIR}/imgui/misc/cpp/imgui_stdlib.cpp
-    ${EXTERNAL_DIR}/imgui/misc/cpp/imgui_stdlib.h
-)
+     
+##set(
+##    IMGUI_SOURCE_FILES
+##    ${EXTERNAL_DIR}/imgui/imconfig.h
+##    ${EXTERNAL_DIR}/imgui/imgui.cpp
+##    ${EXTERNAL_DIR}/imgui/imgui_demo.cpp
+##    ${EXTERNAL_DIR}/imgui/imgui_draw.cpp
+##    ${EXTERNAL_DIR}/imgui/imgui.h 
+##    ${EXTERNAL_DIR}/imgui/imgui_internal.h
+##    ${EXTERNAL_DIR}/imgui/imgui_tables.cpp
+##    ${EXTERNAL_DIR}/imgui/imgui_widgets.cpp
+##    ${EXTERNAL_DIR}/imgui/imstb_rectpack.h
+##    ${EXTERNAL_DIR}/imgui/imstb_textedit.h
+##    ${EXTERNAL_DIR}/imgui/imstb_truetype.h
+##    ${EXTERNAL_DIR}/imgui/backends/imgui_impl_glfw.cpp
+##    ${EXTERNAL_DIR}/imgui/backends/imgui_impl_glfw.h
+##    ${EXTERNAL_DIR}/imgui/backends/imgui_impl_opengl3.cpp
+##    ${EXTERNAL_DIR}/imgui/backends/imgui_impl_opengl3.h
+##    ${EXTERNAL_DIR}/imgui/backends/imgui_impl_opengl3_loader.h 
+##    ${EXTERNAL_DIR}/imgui/misc/cpp/imgui_stdlib.cpp
+##    ${EXTERNAL_DIR}/imgui/misc/cpp/imgui_stdlib.h
+##)
 
 FetchContent_MakeAvailable(glm)
 FetchContent_MakeAvailable(glfw)
 FetchContent_MakeAvailable(assimp)
+FetchContent_MakeAvailable(imgui)
 
 
 add_executable(
@@ -108,9 +115,10 @@ add_executable(
     ${SOURCE_FILES}
     ${GLAD_SOURCE_FILES}
     ${STB_IMAGE_SOURCE_FILES}
-    ${IMGUI_SOURCE_FILES}
+    #    ${IMGUI_SOURCE_FILES}
 )
 
 target_link_libraries(Cypher assimp)
 target_link_libraries(Cypher glfw)
+target_link_libraries(Cypher imgui)
 target_link_libraries(Cypher glm)
