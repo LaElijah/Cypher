@@ -4,6 +4,7 @@
 #include "../../external/imgui/backends/imgui_impl_glfw.h"
 #include <cstdint>
 
+
 Graphics::GUIComponent::GUIComponent(std::string name)
 : Name(name)
 {}
@@ -42,14 +43,20 @@ Graphics::ModelWindow::ModelWindow
 {
     Name = name;
     Directory = directory;
-
+    FILE_READER = Graphics::FileReader(directory);
 };
 
 
 void Graphics::ModelWindow::draw()
 {
+    std::vector<std::string> files = FILE_READER.getFiles(); 
     ImGui::Begin(Name.c_str());
-    ImGui::Text("HII");
+
+    if (ImGui::CollapsingHeader("Loaded Models"))
+    {
+	for (std::string file : files)
+	    ImGui::Text(file);
+    }
     ImGui::End();   
 }
 

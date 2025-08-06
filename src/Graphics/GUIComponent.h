@@ -61,6 +61,7 @@ namespace Graphics
 
         private:
             std::string Directory;
+	    Graphics::FileReader FILE_READER;
     };
 
 

@@ -47,10 +47,12 @@ void Graphics::FileReader::setDirname(std::string directory)
     this->dirname = directory;
 }
 
-DIR *Graphics::FileReader::getDirectory()
+// TODO: Rename to getDirectoryObject
+DIR* Graphics::FileReader::getDirectory()
 {
     DIR *dir = opendir((getDirname()).c_str());
 
+    // If no directory at this location was found 
     if (dir == NULL)
     {
         throw std::runtime_error(std::string("ERROR: FAILED TO LOAD DIRECTORY ") + getDirname());
@@ -59,6 +61,7 @@ DIR *Graphics::FileReader::getDirectory()
     return dir;
 }
 
+// TODO: Rename to findDirectoryObject
 DIR *Graphics::FileReader::getDirectory(std::string dirname)
 {
     DIR *dir = opendir(dirname.c_str());
@@ -79,7 +82,7 @@ struct dirent *Graphics::FileReader::getEntry()
     try
     {
         DIR *dir = getDirectory();
-        struct dirent *entity = readdir(dir);
+        struct dirent* entity = readdir(dir);
         return entity;
     }
 
