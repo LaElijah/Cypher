@@ -1,1 +1,0 @@
-  -L"C:/Users/Games/Documents/c++/Cypher/build/_deps/assimp-build"  -L/lib  ../lib/libassimpd.a ../contrib/zlib/libzlibstaticd.a -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lwinpthread -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 

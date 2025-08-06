@@ -1,1 +1,0 @@
- "_deps/assimp-build/lib/libassimpd.a" "_deps/glfw-build/src/libglfw3d.a" "_deps/glm-build/glm/libglmd.a" "_deps/assimp-build/contrib/zlib/libzlibstaticd.a" -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lwinpthread -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 
