@@ -16,5 +16,7 @@ Graphics::Entity Graphics::SystemManager::createModel(Graphics::ModelInfo &info)
 void Graphics::RenderSystem::loadModel(Graphics::Entity entity, Graphics::ModelInfo &info)
 {
     Graphics::RenderComponent component = Graphics::RenderComponent(modelLoader.load(info));
+
+    RenderBatches[info.DEFAULT_SHADER].alertChange();
     componentManager.add<RenderComponent>(entity, component);
 }

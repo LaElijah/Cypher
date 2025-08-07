@@ -25,89 +25,79 @@ namespace Graphics
 
 	class RenderSystem : public System<RenderSystem>
 	{
-	public:
-		void updateImpl(std::map<std::string, Graphics::RenderBatch> &RenderBatches)
+	    public:
+		void updateImpl
+		(
+		    std::map
+		        <
+			    std::string, 
+			    Graphics::RenderBatch
+			> &RenderBatches
+		)
 		{
-			/*
-						 RenderComponent component;
-						 component.x = "HI";
-							 componentManager.add<RenderComponent>(0, component);
+			
+		    // TODO: INDEX BATCHES IN AN ARRAY BY SHADER NAME
 
-						 auto test = componentManager.get<RenderComponent>(0); // Get a reference
-							 std::cout << test.x << std::endl;
-		 */
-			// TODO: INDEX BATCHES IN AN ARRAY BY SHADER NAME
-
-			auto it = componentManager.getAllContaining<RenderComponent>();
+		    auto it = componentManager
+		        .getAllContaining<RenderComponent>();
 
 
-			for (std::pair<std::string, Graphics::RenderBatch> pair : RenderBatches)
-			{
+		    for (std::pair<std::string, Graphics::RenderBatch>& pair : RenderBatches)
+		    {
+		        // Handle what happens when a buffer is changed
+			pair.second.reset(); 
+		    }
 
 
-			}
+		    while (it.next())
+		    {
+		    	std::optional<RenderComponent> isComponent = it.get();
+
+		    	if (!isComponent.has_value())
+		    		continue;
+
+		    	RenderComponent component = isComponent.value();
+		    	// Prior to handling, sort by shader then 
+			// organize each shader group by texture
+
+		    	bool shaderFound;
+		    	for (Graphics::Mesh mesh : component.model.meshes)
+		    	{
+		    		if (RenderBatches
+				    .find(mesh.shader) == RenderBatches.end() && !shaderFound)
+		    		{
+		    		    RenderBatches
+				        .emplace
+					(
+					    mesh.shader, 
+					    Graphics::RenderBatch()
+					);
+
+		    		    shaderFound = true;
+		    		}
+
+		    		Graphics::RenderBatch& batch = RenderBatches[mesh.shader];
+
+		    		if (!batch.isChanged())
+		    		    continue;
+
+		    		batch.insert(mesh);
+		    		shaderCounts[mesh.shader]++;
+		    	}
+		    }
 
 
 
+		    for 
+		    (
+		        std::pair
+		        <std::string, unsigned int>& pair 
+		        : shaderCounts
+		    )
+		        pair.second.finish();
 
 
-			while (it.next())
-			{
 
-				
-				std::optional<RenderComponent> isComponent = it.get();
-
-				if (!isComponent.has_value())
-					continue;
-
-				RenderComponent component = isComponent.value();
-				// Prior to handling, sort by shader then organize each shader group by texture
-
-				bool shaderFound;
-				for (Graphics::Mesh mesh : component.model.meshes)
-				{
-					if (batch.isChanged == false)
-
-					if (RenderBatches.find(mesh.shader) == RenderBatches.end() && !shaderFound)
-					{
-					    RenderBatches.emplace(mesh.shader, Graphics::RenderBatch());
-						shaderFound = true;
-					}
-
-					Graphics::RenderBatch& batch = RenderBatches[mesh.shader];
-
-					/*
-					if (workingShader != mesh.shader)
-					{
-						workingShader = mesh.shader;
-					}
-
-					*/
-
-					//batch.reset();
-
-					batch.vertexData.insert(
-						batch.vertexData.end(),
-						mesh.vertices.begin(),
-						mesh.vertices.end());
-
-					batch.indexData.insert(
-						batch.indexData.end(),
-						mesh.indices.begin(),
-						mesh.indices.end());
-
-					batch.counts.push_back(mesh.vertices.size());
-					batch.indexCounts.push_back(mesh.indices.size());
-					batch.textureInfo["diffuse"]
-						.insert(
-							batch.textureInfo["diffuse"].end(),
-							mesh.textureInfo.begin(),
-							mesh.textureInfo.end());
-
-					batch.shader = mesh.shader;
-					shaderCounts[mesh.shader]++;
-				}
-			}
 
 		}	
 			

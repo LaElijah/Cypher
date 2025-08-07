@@ -24,6 +24,7 @@ namespace Graphics
         std::string path;
         std::string name;
         std::string extension;
+	std::string DEFAULT_SHADER = "debug";
     };
 
     struct TextureInfo
@@ -81,7 +82,12 @@ namespace Graphics
         std::vector<unsigned int> indexCounts;
         std::map<std::string, std::vector<Graphics::TextureInfo>> textureInfo;
         std::string shader;
-
+       
+        	
+	bool isChanged()
+	{
+            return CHANGED;	
+	}
         void reset()
         {
             vertexData.clear();
@@ -91,6 +97,53 @@ namespace Graphics
             textureInfo.clear();
 
         }
+
+	void finish()
+	{
+            CHANGED = false;	
+	}
+
+
+	void alertChange()
+	{
+            CHANGED = true;	
+	}
+
+	void insert(Graphic::Mesh& mesh)
+	{
+	    vertexData.insert
+	    (
+	        vertexData.end(),
+		mesh.vertices.begin(),
+		mesh.vertices.end()
+	    );
+
+	    indexData.insert
+	    (
+                indexData.end(),
+		mesh.indices.begin(),
+		mesh.indices.end()
+	    );
+
+	    counts.push_back(mesh.vertices.size());
+	    indexCounts.push_back(mesh.indices.size());
+					
+	    textureInfo["diffuse"]
+	        .insert
+		(
+		    textureInfo["diffuse"].end(),
+		    mesh.textureInfo.begin(),
+		    mesh.textureInfo.end()
+		);
+
+	    batch.shader = mesh.shader;
+	}
+
+
+
+
+	    private:
+	        bool CHANGED = true;
     };
 
         struct Component
