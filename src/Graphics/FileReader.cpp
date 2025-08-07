@@ -129,7 +129,7 @@ std::vector<std::string> Graphics::FileReader::getFolders()
         std::string fullPath = getDirname() + "/" + entry->d_name;
         if (stat(fullPath.c_str(), &entry_stat) != 0)
         {
-            std::cout << "FOLDER FOUND: " + std::string(entry->d_name) << std::endl;
+            //std::cout << "FOLDER FOUND: " + std::string(entry->d_name) << std::endl;
             isEntries = true;
             folders.push_back(std::string(entry->d_name));
             entry = readdir(dir);
@@ -138,7 +138,7 @@ std::vector<std::string> Graphics::FileReader::getFolders()
 
     if (entry == NULL && isEntries)
     {
-        std::cout << "FOLDERS PRINTED" << std::endl;
+        //std::cout << "FOLDERS PRINTED" << std::endl;
     }
 
     else if (entry == NULL && !isEntries)
@@ -166,7 +166,7 @@ std::vector<std::string> Graphics::FileReader::getFiles()
 
         if (entityName != "." && entityName != "..")
         {
-            std::cout << "FILE FOUND: " + std::string(entry->d_name) << " >IS REL: " << (entityName != "." && entityName != "..") << std::endl;
+            //std::cout << "FILE FOUND: " + std::string(entry->d_name) << " >IS REL: " << (entityName != "." && entityName != "..") << std::endl;
 
             isEntries = true;
             files.push_back(entityName);
@@ -177,7 +177,7 @@ std::vector<std::string> Graphics::FileReader::getFiles()
 
     if (entry == NULL && isEntries)
     {
-        std::cout << "FILES PRINTED" << std::endl;
+        //std::cout << "FILES PRINTED" << std::endl;
     }
 
     else if (entry == NULL && !isEntries)
@@ -207,7 +207,7 @@ std::string Graphics::FileReader::getFile()
 
         if (entityName != "." && entityName != "..")
         {
-            std::cout << "FILE FOUND: " + std::string(entry->d_name) << " >IS REL: " << (entityName != "." && entityName != "..") << std::endl;
+            //std::cout << "FILE FOUND: " + std::string(entry->d_name) << " >IS REL: " << (entityName != "." && entityName != "..") << std::endl;
 
             isEntries = true;
             file.push_back(entityName);
@@ -218,12 +218,12 @@ std::string Graphics::FileReader::getFile()
 
     if (entry == NULL && isEntries)
     {
-        std::cout << "FILE PRINTED" << std::endl;
+        //std::cout << "FILE PRINTED" << std::endl;
     }
 
     else if (entry == NULL && !isEntries)
     {
-        std::cout << "NO FILE FOUND" << std::endl;
+        //std::cout << "NO FILE FOUND" << std::endl;
     }
 
     return file.front();
@@ -255,7 +255,7 @@ std::string Graphics::FileReader::getFile(std::string extension)
             if (fileExtension == extension)
             {
 
-                std::cout << "FILE FOUND: " + std::string(entry->d_name) << " >IS REL: " << (entityName != "." && entityName != "..") << std::endl;
+                //std::cout << "FILE FOUND: " + std::string(entry->d_name) << " >IS REL: " << (entityName != "." && entityName != "..") << std::endl;
 
                 isEntries = true;
                 file.push_back(entityName);
@@ -267,7 +267,7 @@ std::string Graphics::FileReader::getFile(std::string extension)
 
     if (isEntries)
     {
-        std::cout << "FILE PRINTED" << std::endl;
+        //std::cout << "FILE PRINTED" << std::endl;
     }
 
     else if (!isEntries)
@@ -301,7 +301,7 @@ std::vector<std::string> Graphics::FileReader::getFiles(std::string extension)
 
         if (entityName != "." && entityName != ".." && fileExtension == extension)
         {
-            std::cout << "FILE FOUND: " + std::string(entry->d_name) << " >IS REL: " << (entityName != "." && entityName != "..") << std::endl;
+            //std::cout << "FILE FOUND: " + std::string(entry->d_name) << " >IS REL: " << (entityName != "." && entityName != "..") << std::endl;
 
             isEntries = true;
             files.push_back(entityName);
@@ -312,7 +312,7 @@ std::vector<std::string> Graphics::FileReader::getFiles(std::string extension)
 
     if (entry == NULL && isEntries)
     {
-        std::cout << "FILES PRINTED" << std::endl;
+        //std::cout << "FILES PRINTED" << std::endl;
     }
 
     else if (entry == NULL && !isEntries)

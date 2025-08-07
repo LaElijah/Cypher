@@ -37,10 +37,12 @@ void Graphics::TestWindow::handleInput()
 Graphics::ModelWindow::ModelWindow
 (
     std::string name,
-    std::string directory
+    std::string directory,
+    std::function<void(const char* string)> addModel
 )
 : GUIComponent(name),
-  FILE_READER(directory)
+  FILE_READER(directory),
+  ADD_MODEL(addModel)
 {
     Name = name;
     Directory = directory;
@@ -56,7 +58,11 @@ void Graphics::ModelWindow::draw()
     if (ImGui::CollapsingHeader("Loaded Models"))
     {
 	for (std::string file : files)
-	    ImGui::Text(file.c_str());
+	    if(ImGui::Button(file.c_str()))
+        {
+            std::cout << "CLICK" << std::endl;
+            ADD_MODEL((Directory + "/" + file + "/scene.gltf").c_str());
+        }
     }
     ImGui::End();   
 }

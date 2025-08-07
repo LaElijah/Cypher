@@ -38,11 +38,13 @@ namespace Graphics
             std::shared_ptr<Graphics::GLFWCanvas> canvas,
             std::shared_ptr<Graphics::Camera> camera,
             std::shared_ptr<Graphics::GUI> gui,
+            std::shared_ptr<Graphics::SystemManager> systemManager, 
             std::shared_ptr<Graphics::ResourceManager> resourceManager,
             Graphics::RenderAPI<T> &api)
             : Canvas(canvas),
               Camera(camera),
               GUI(gui),
+              SystemManager(systemManager),
               ResourceManager(resourceManager)
         {
 
@@ -137,11 +139,20 @@ namespace Graphics
             GLFWwindow *window = Canvas->getWindow();
             // ResourceManager->loadModel("/home/laelijah/Gengine/data/Models/room/scene.gltf");
 
-            Graphics::ModelInfo info;
+           //Graphics::ModelInfo info;
 
-            info.path = "/Users/Games/Documents/c++/Cypher/data/Models/room/scene.gltf";
-            Graphics::Entity entity = SystemManager.createModel(info);
+           //std::cout << "LOAD" << std::endl;
+           //info.path = "/Users/Games/Documents/c++/Cypher/data/Models/mic/scene.gltf";
+           //Graphics::Entity entity = SystemManager->createModel(info);
 
+            std::function<void(const char* string)> addModel = 
+                [this](const char* string)
+                {
+                    std::cout << "ADD MODEL " << string << std::endl;
+                    Graphics::ModelInfo info;
+                    info.path = string;
+                    Graphics::Entity entity = SystemManager->createModel(info);
+                };
             ImGuiIO &io = GUI->getIO();
             Graphics::FrameBuffer *sceneBuffer = new Graphics::FrameBuffer(1920, 1080);
 
@@ -160,15 +171,23 @@ namespace Graphics
                     PostRenderFunctions));
 
             GUI->addEditorComponent(new Graphics::TestWindow(std::string("Test")));
-            GUI->addEditorComponent(new Graphics::ModelWindow(std::string("MODELS"), std::string("/Users/Games/Documents/c++/Cypher/data/Models")));
+           GUI->addEditorComponent
+               (new Graphics::ModelWindow
+                   (
+                       std::string("MODELS"), 
+                       std::string("/Users/Games/Documents/c++/Cypher/data/Models"), 
+                       addModel
+                   )
+               );
             GUI->addComponent(new Graphics::TestWindow(std::string("WOAAH")));
             // Initialize End
 
             while (!glfwWindowShouldClose(window))
             {
 
-                SystemManager.update();
-                SystemManager.getRenderBatches(batches);
+                SystemManager->update();
+                SystemManager->getRenderBatches(batches);
+
 
                 if (true)
                 {
@@ -215,7 +234,7 @@ namespace Graphics
         std::shared_ptr<Graphics::Camera> Camera;
         std::shared_ptr<Graphics::GLFWCanvas> Canvas;
         std::shared_ptr<Graphics::ResourceManager> ResourceManager;
-        Graphics::SystemManager SystemManager;
+        std::shared_ptr<Graphics::SystemManager> SystemManager;
 
         std::vector<std::function<void()>> PostRenderFunctions;
 

@@ -53,7 +53,8 @@ namespace Graphics
             ModelWindow
             (
                 std::string name,
-                std::string directory
+                std::string directory,
+                std::function<void(const char* string)> addModel
             );
 
 	    void draw() override;
@@ -63,6 +64,7 @@ namespace Graphics
         private:
             std::string Directory;
 	        Graphics::FileReader FILE_READER;
+            std::function<void(const char* string)> ADD_MODEL;
     };
 
 
