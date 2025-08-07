@@ -18,3 +18,4 @@ Cypher.exe
 libCypher.dll.a
 cmake_install.cmake
 Makefile
+.vscode
