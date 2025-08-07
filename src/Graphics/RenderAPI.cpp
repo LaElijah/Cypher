@@ -146,7 +146,6 @@ std::vector<uint64_t> Graphics::OpenGLRenderAPI::loadTextureHandles(std::vector<
         for (unsigned int handle : handles)
         {
             id++; 
-            std::cout << "HANDLE NUM " << id << ": " << handle << std::endl;
         } 
 
 
@@ -181,7 +180,7 @@ unsigned int Graphics::OpenGLRenderAPI::loadTextureData(Graphics::TextureInfo &i
 
     stbi_set_flip_vertically_on_load(true);
     int width, height, nrComponents;
-    std::cout << filename << std::endl;
+    //std::cout << filename << std::endl;
     unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
     if (data)
     {

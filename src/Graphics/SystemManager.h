@@ -42,10 +42,10 @@ namespace Graphics
 		        .getAllContaining<RenderComponent>();
 
 
-		    for (std::pair<std::string, Graphics::RenderBatch>& pair : RenderBatches)
+		    for (std::pair<std::string, Graphics::RenderBatch> pair : RenderBatches)
 		    {
 		        // Handle what happens when a buffer is changed
-			pair.second.reset(); 
+			    pair.second.reset(); 
 		    }
 
 
@@ -60,11 +60,11 @@ namespace Graphics
 		    	// Prior to handling, sort by shader then 
 			// organize each shader group by texture
 
-		    	bool shaderFound;
+
+			    std::cout << "MODEL NAME: " << component.model.info.path << std::endl;
 		    	for (Graphics::Mesh mesh : component.model.meshes)
 		    	{
-		    		if (RenderBatches
-				    .find(mesh.shader) == RenderBatches.end() && !shaderFound)
+		    		if (RenderBatches.find(mesh.shader) == RenderBatches.end() )
 		    		{
 		    		    RenderBatches
 				        .emplace
@@ -72,8 +72,6 @@ namespace Graphics
 					    mesh.shader, 
 					    Graphics::RenderBatch()
 					);
-
-		    		    shaderFound = true;
 		    		}
 
 		    		Graphics::RenderBatch& batch = RenderBatches[mesh.shader];
@@ -91,10 +89,10 @@ namespace Graphics
 		    for 
 		    (
 		        std::pair
-		        <std::string, unsigned int>& pair 
+		        <std::string, unsigned int> pair 
 		        : shaderCounts
 		    )
-		        pair.second.finish();
+		        RenderBatches[pair.first].finish();
 
 
 

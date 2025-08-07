@@ -7,16 +7,19 @@ void Graphics::SystemManager::update()
 
 Graphics::Entity Graphics::SystemManager::createModel(Graphics::ModelInfo &info)
 {
+
     Graphics::Entity entity = entityManager.createEntity();
     renderSystem.loadModel(entity, info);
-
+    m_RenderBatches[info.DEFAULT_SHADER].alertChange();
     return entity;
 }
 
 void Graphics::RenderSystem::loadModel(Graphics::Entity entity, Graphics::ModelInfo &info)
 {
-    Graphics::RenderComponent component = Graphics::RenderComponent(modelLoader.load(info));
-
-    RenderBatches[info.DEFAULT_SHADER].alertChange();
-    componentManager.add<RenderComponent>(entity, component);
+    componentManager
+        .add<RenderComponent>
+        (
+            entity, 
+            Graphics::RenderComponent(modelLoader.load(info))
+        );
 }

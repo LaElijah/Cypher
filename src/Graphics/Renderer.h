@@ -68,54 +68,6 @@ namespace Graphics
         void draw(Graphics::RenderAPI<T> &renderAPI)
         {
 
-            /*
-                           for
-                           (
-                               std::shared_ptr<Graphics::Model> model
-                               : ResourceManager->getLoadedModels()
-                           )
-                           {
-
-                               modelMatrix = model->getModelMatrix();
-                   }
-                               for (Graphics::Mesh& mesh : model->getMeshes())
-                               {
-
-                                   Graphics::ElementDrawCall call;
-                                   shaderName = mesh.getShaderName();
-
-                                   if (!done)
-                                   {
-                                       vertexData.insert
-                                       (
-                                           vertexData.end(),
-                                           mesh.getVertices().begin(),
-                                           mesh.getVertices().end()
-                                       );
-
-                                       indexData.insert
-                                       (
-                                           indexData.end(),
-                                           mesh.getIndices().begin(),
-                                           mesh.getIndices().end()
-                                       );
-
-                                       call.count = mesh.getIndices().size();
-                                       call.instanceCount = 1;
-                                       call.firstIndex = currentBaseIndex;
-                                       call.baseVertex = currentBaseVertex;
-                                       call.baseInstance = instanceIndex;
-
-                                       currentBaseIndex += mesh.getIndices().size();
-                                       currentBaseVertex += mesh.getVertices().size();
-                                       instanceIndex++;
-
-                                       drawCalls.push_back(std::move(call));
-                                   }
-                               }
-                           }
-
-           */
             for (Graphics::RenderBatch &batch : batches)
             {
 
@@ -128,7 +80,7 @@ namespace Graphics
 
                 renderAPI.loadData(batch);
                 renderAPI.drawElements(batch.counts.size());
-                // renderAPI.flush(batch);
+                //renderAPI.flush(batch);
             }
         }
 
@@ -137,13 +89,6 @@ namespace Graphics
         {
             // Initialize
             GLFWwindow *window = Canvas->getWindow();
-            // ResourceManager->loadModel("/home/laelijah/Gengine/data/Models/room/scene.gltf");
-
-           //Graphics::ModelInfo info;
-
-           //std::cout << "LOAD" << std::endl;
-           //info.path = "/Users/Games/Documents/c++/Cypher/data/Models/mic/scene.gltf";
-           //Graphics::Entity entity = SystemManager->createModel(info);
 
             std::function<void(const char* string)> addModel = 
                 [this](const char* string)
@@ -152,6 +97,7 @@ namespace Graphics
                     Graphics::ModelInfo info;
                     info.path = string;
                     Graphics::Entity entity = SystemManager->createModel(info);
+
                 };
             ImGuiIO &io = GUI->getIO();
             Graphics::FrameBuffer *sceneBuffer = new Graphics::FrameBuffer(1920, 1080);
@@ -170,7 +116,7 @@ namespace Graphics
                     resizeFunction,
                     PostRenderFunctions));
 
-            GUI->addEditorComponent(new Graphics::TestWindow(std::string("Test")));
+
            GUI->addEditorComponent
                (new Graphics::ModelWindow
                    (

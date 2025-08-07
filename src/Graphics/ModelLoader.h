@@ -32,6 +32,10 @@ namespace Graphics
     public:
         Graphics::Model loadImpl(Graphics::ModelInfo &info)
         {
+
+            std::cout << "LOADING MODEL AT: " <<info.path << std::endl;
+
+
             Assimp::Importer importer;
             const aiScene *scene = importer.ReadFile(
                 info.path,
@@ -51,7 +55,7 @@ namespace Graphics
             // Parent root node of model
             std::vector<Graphics::Mesh> meshes;
 
-            processNode(scene->mRootNode, scene, glm::mat4(1.0f), meshes, directory, shaders);
+            processNode(scene->mRootNode, scene, glm::mat4(1.0f), meshes, directory, info.DEFAULT_SHADER);
 
             return Model(meshes, info);
         }
@@ -67,7 +71,7 @@ namespace Graphics
             const glm::mat4 &parentTransform,
             std::vector<Graphics::Mesh> &meshes,
             std::string &directory,
-            std::unordered_map<std::string, bool>& shaders)
+            std::string& defaultShader)
         {
 
             // TODO:
@@ -81,14 +85,13 @@ namespace Graphics
                 // Process mesh loads in the
                 // primitive data of the given node
                 aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-                meshes.push_back(processMesh(mesh, scene, globalTransform, directory, shaders));
+                meshes.push_back(processMesh(mesh, scene, globalTransform, directory, defaultShader));
             }
 
             // Move onto the children of this node
             for (unsigned int i = 0; i < node->mNumChildren; i++)
             {
-
-                processNode(node->mChildren[i], scene, globalTransform, meshes, directory, shaders);
+                processNode(node->mChildren[i], scene, globalTransform, meshes, directory, defaultShader);
             }
         }
 
@@ -97,7 +100,7 @@ namespace Graphics
             const aiScene *scene,
             const glm::mat4 &transform,
             std::string &directory,
-            std::set<std::string>& shaders)
+            std::string &defaultShader)
         {
 
             std::vector<Graphics::Vertex> vertices;
@@ -169,8 +172,9 @@ namespace Graphics
 
                   textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
              */
-            shaders.emplace("debug", true);
-            return Mesh(vertices, indices, textureInfo, "debug");
+
+
+            return Mesh(vertices, indices, textureInfo, defaultShader);
         }
 
         std::vector<Graphics::TextureInfo> getTextureInfo(

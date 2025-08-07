@@ -4,16 +4,13 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
-#include <map> 
-#include <bitset> 
+#include <map>
+#include <bitset>
 
 const unsigned int MAX_COMPONENT_SIZE = 256;
 
-
 namespace Graphics
 {
-
-
 
     typedef std::bitset<MAX_COMPONENT_SIZE> OBJECT_ID;
 
@@ -24,7 +21,7 @@ namespace Graphics
         std::string path;
         std::string name;
         std::string extension;
-	std::string DEFAULT_SHADER = "debug";
+        std::string DEFAULT_SHADER = "debug";
     };
 
     struct TextureInfo
@@ -82,12 +79,11 @@ namespace Graphics
         std::vector<unsigned int> indexCounts;
         std::map<std::string, std::vector<Graphics::TextureInfo>> textureInfo;
         std::string shader;
-       
-        	
-	bool isChanged()
-	{
-            return CHANGED;	
-	}
+
+        bool isChanged()
+        {
+            return CHANGED;
+        }
         void reset()
         {
             vertexData.clear();
@@ -95,58 +91,47 @@ namespace Graphics
             counts.clear();
             indexCounts.clear();
             textureInfo.clear();
-
         }
 
-	void finish()
-	{
-            CHANGED = false;	
-	}
+        void finish()
+        {
+            CHANGED = false;
+        }
 
+        void alertChange()
+        {
+            CHANGED = true;
+        }
 
-	void alertChange()
-	{
-            CHANGED = true;	
-	}
+        void insert(Graphics::Mesh &mesh)
+        {
+            vertexData.insert(
+                vertexData.end(),
+                mesh.vertices.begin(),
+                mesh.vertices.end());
 
-	void insert(Graphic::Mesh& mesh)
-	{
-	    vertexData.insert
-	    (
-	        vertexData.end(),
-		mesh.vertices.begin(),
-		mesh.vertices.end()
-	    );
-
-	    indexData.insert
-	    (
+            indexData.insert(
                 indexData.end(),
-		mesh.indices.begin(),
-		mesh.indices.end()
-	    );
+                mesh.indices.begin(),
+                mesh.indices.end());
 
-	    counts.push_back(mesh.vertices.size());
-	    indexCounts.push_back(mesh.indices.size());
-					
-	    textureInfo["diffuse"]
-	        .insert
-		(
-		    textureInfo["diffuse"].end(),
-		    mesh.textureInfo.begin(),
-		    mesh.textureInfo.end()
-		);
+            counts.push_back(mesh.vertices.size());
+            indexCounts.push_back(mesh.indices.size());
 
-	    batch.shader = mesh.shader;
-	}
+            textureInfo["diffuse"]
+                .insert(
+                    textureInfo["diffuse"].end(),
+                    mesh.textureInfo.begin(),
+                    mesh.textureInfo.end());
 
+            shader = mesh.shader;
+        }
 
-
-
-	    private:
-	        bool CHANGED = true;
+    private:
+        bool CHANGED = true;
     };
 
-        struct Component
+    struct Component
     {
     };
 
@@ -157,7 +142,6 @@ namespace Graphics
         RenderComponent(Graphics::Model model) : model(model) {};
         Graphics::Model model;
     };
-
 
 }
 

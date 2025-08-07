@@ -4,6 +4,7 @@
 #include <optional>
 #include <memory>
 #include <vector>
+#include <iostream> 
 
 namespace Graphics
 {
@@ -55,6 +56,7 @@ namespace Graphics
 
         bool next()
         {
+
             if (SIZE == 0)
                 return false;
 
