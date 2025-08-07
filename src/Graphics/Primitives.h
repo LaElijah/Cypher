@@ -81,6 +81,16 @@ namespace Graphics
         std::vector<unsigned int> indexCounts;
         std::map<std::string, std::vector<Graphics::TextureInfo>> textureInfo;
         std::string shader;
+
+        void reset()
+        {
+            vertexData.clear();
+            indexData.clear();
+            counts.clear();
+            indexCounts.clear();
+            textureInfo.clear();
+
+        }
     };
 
         struct Component

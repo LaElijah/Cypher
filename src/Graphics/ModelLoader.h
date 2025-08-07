@@ -51,7 +51,7 @@ namespace Graphics
             // Parent root node of model
             std::vector<Graphics::Mesh> meshes;
 
-            processNode(scene->mRootNode, scene, glm::mat4(1.0f), meshes, directory);
+            processNode(scene->mRootNode, scene, glm::mat4(1.0f), meshes, directory, shaders);
 
             return Model(meshes, info);
         }
@@ -66,7 +66,8 @@ namespace Graphics
             const aiScene *scene,
             const glm::mat4 &parentTransform,
             std::vector<Graphics::Mesh> &meshes,
-            std::string &directory)
+            std::string &directory,
+            std::unordered_map<std::string, bool>& shaders)
         {
 
             // TODO:
@@ -80,14 +81,14 @@ namespace Graphics
                 // Process mesh loads in the
                 // primitive data of the given node
                 aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-                meshes.push_back(processMesh(mesh, scene, globalTransform, directory));
+                meshes.push_back(processMesh(mesh, scene, globalTransform, directory, shaders));
             }
 
             // Move onto the children of this node
             for (unsigned int i = 0; i < node->mNumChildren; i++)
             {
 
-                processNode(node->mChildren[i], scene, globalTransform, meshes, directory);
+                processNode(node->mChildren[i], scene, globalTransform, meshes, directory, shaders);
             }
         }
 
@@ -95,7 +96,8 @@ namespace Graphics
             aiMesh *mesh,
             const aiScene *scene,
             const glm::mat4 &transform,
-            std::string &directory)
+            std::string &directory,
+            std::set<std::string>& shaders)
         {
 
             std::vector<Graphics::Vertex> vertices;
@@ -167,6 +169,7 @@ namespace Graphics
 
                   textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
              */
+            shaders.emplace("debug", true);
             return Mesh(vertices, indices, textureInfo, "debug");
         }
 

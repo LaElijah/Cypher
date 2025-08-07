@@ -3,6 +3,7 @@
 #include "../Graphics/GLFWCanvas.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/RenderAPI.h"
+#include "../Graphics/SystemManager.h" 
 #include "Application.h"
 
 
@@ -17,7 +18,9 @@ void Core::GLFWApplication::startImpl()
     Graphics::OpenGLRenderAPI api = Graphics::OpenGLRenderAPI(); 
     std::shared_ptr<Graphics::Camera> Camera = std::shared_ptr<Graphics::Camera>(new Graphics::Camera(resolution));
     std::shared_ptr<Graphics::GUI> GUI = std::shared_ptr<Graphics::GUI>(new Graphics::GUI());
-
+    std::shared_ptr<Graphics::SystemManager> SystemManager = std::shared_ptr<Graphics::SystemManager>(new Graphics::SystemManager());
+    std::shared_ptr<Graphics::ResourceManager> ResourceManager = std::shared_ptr<Graphics::ResourceManager>(new Graphics::ResourceManager());
+    
     std::shared_ptr<Graphics::GLFWCanvas> Canvas = std::shared_ptr<Graphics::GLFWCanvas>
     (
         new Graphics::GLFWCanvas
@@ -34,7 +37,8 @@ void Core::GLFWApplication::startImpl()
         Canvas,
         Camera,
         GUI,
-        std::shared_ptr<Graphics::ResourceManager>(new Graphics::ResourceManager()),
+        SystemManager,
+        ResourceManager,
         api
     );
 }
