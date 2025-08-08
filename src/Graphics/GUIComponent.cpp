@@ -62,6 +62,7 @@ void Graphics::ModelWindow::draw()
         {
             std::cout << "CLICK" << std::endl;
             ADD_MODEL((Directory + "/" + file + "/scene.gltf").c_str());
+
         }
     }
     ImGui::End();   

@@ -72,7 +72,9 @@ namespace Graphics
             {
 
                 auto shader = renderAPI.getShader(batch.shader);
+
                 shader->use();
+
 
                 shader->setUniform("model", glm::mat4(1.0f));
                 shader->setUniform("view", Camera->getViewMatrix());

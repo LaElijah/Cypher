@@ -78,6 +78,7 @@ namespace Graphics
             glm::mat4 nodeTransform = ConvertMatrixToGLMFormatt(node->mTransformation);
             glm::mat4 globalTransform = parentTransform * nodeTransform;
 
+
             // Pack child nodes ( meshes ) in this parent node
             for (unsigned int i = 0; i < node->mNumMeshes; i++)
             {
@@ -93,6 +94,8 @@ namespace Graphics
             {
                 processNode(node->mChildren[i], scene, globalTransform, meshes, directory, defaultShader);
             }
+
+
         }
 
         Graphics::Mesh processMesh(

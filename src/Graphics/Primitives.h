@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 #include <bitset>
+#include <iostream>
 
 const unsigned int MAX_COMPONENT_SIZE = 256;
 
@@ -95,16 +96,20 @@ namespace Graphics
 
         void finish()
         {
+
             CHANGED = false;
         }
 
         void alertChange()
         {
+            std::cout << "ALERT" << std::endl;
             CHANGED = true;
         }
 
         void insert(Graphics::Mesh &mesh)
         {
+            std::cout << mesh.textureInfo.back().directory << std::endl;
+            std::cout << mesh.textureInfo.back().path << std::endl;
             vertexData.insert(
                 vertexData.end(),
                 mesh.vertices.begin(),

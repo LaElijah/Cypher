@@ -61,7 +61,7 @@ namespace Graphics
 			// organize each shader group by texture
 
 
-			    std::cout << "MODEL NAME: " << component.model.info.path << std::endl;
+
 		    	for (Graphics::Mesh mesh : component.model.meshes)
 		    	{
 		    		if (RenderBatches.find(mesh.shader) == RenderBatches.end() )
@@ -80,6 +80,7 @@ namespace Graphics
 		    		    continue;
 
 		    		batch.insert(mesh);
+					std::cout << "SHADER: " << shaderCounts[mesh.shader] << std::endl;
 		    		shaderCounts[mesh.shader]++;
 		    	}
 		    }

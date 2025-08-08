@@ -22,7 +22,8 @@ namespace Graphics
             if (SIZE == 0)
                 return false;
 
-            if (INDEX < SIZE)
+
+            if (INDEX < SIZE - 1)
                 return true;
             else
                 return false;
@@ -31,11 +32,14 @@ namespace Graphics
         T get()
         {
             T it = std::static_pointer_cast<std::vector<T>>(m_DATA)
-                       ->at(((INDEX == 1) && (SIZE = 1)) ? INDEX - 1 : INDEX);
+                       ->at(INDEX);
+
+
 
             if (next())
                 INDEX = INDEX + 1;
 
+                //std::cout << it.model.info.path << " INDEX: " << INDEX << std::endl;
             return it;
         }
 

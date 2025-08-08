@@ -7,7 +7,7 @@
 
 std::shared_ptr<Graphics::OpenGLShader> Graphics::OpenGLRenderAPI::getShaderImpl(std::string name)
 {
-    return (m_Shaders[name]);
+    return (m_Shaders.at(name));
 }
 
 void Graphics::OpenGLRenderAPI::loadShaderImpl(Graphics::ShaderInfo &info)
