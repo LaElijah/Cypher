@@ -1,16 +1,25 @@
 #ifndef ARCHETYPE_H
 #define ARCHETYPE_H
 
+// #include <iostream>
+
+// #include <any>
+
 #include "ObjectInfo.h"
 #include "Container.h"
-// #include <iostream>
 #include <typeindex>
-// #include <any>
 #include <unordered_map>
 #include "Primitives.h"
 
 namespace Graphics
 {
+	/**
+	 * The archetype class provides table like storage 
+	 * for each supported type with entity relationships.
+	 * Storage is kept contiguous and tightly packed.
+	 * 
+	 * 
+	 */
     class Archetype
     {
         public:
@@ -26,7 +35,7 @@ namespace Graphics
             }
     
             ////////////////////////////////////////////////////////////
-    	////////////////////////// EXTERNAL ////////////////////////
+    	    ////////////////////////// EXTERNAL ////////////////////////
             ////////////////////////////////////////////////////////////
     	
     
@@ -78,7 +87,7 @@ namespace Graphics
     
     
             ////////////////////////////////////////////////////////////
-    	////////////////////////// INTERNAL ////////////////////////
+    	    ////////////////////////// INTERNAL ////////////////////////
             ////////////////////////////////////////////////////////////
     
     
