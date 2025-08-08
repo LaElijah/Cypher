@@ -122,6 +122,7 @@ namespace Graphics
         void loadTexturesImpl(std::vector<Graphics::TextureInfo> &textures);
         void drawElementsImpl(int numCalls, bool unbind);
         void loadShaderImpl(Graphics::ShaderInfo &info);
+        void replaceShaderImpl(Graphics::ShaderInfo &info);
         void loadShadersImpl(std::map<std::string, Graphics::ShaderInfo> &infoData);
         std::shared_ptr<Graphics::OpenGLShader> getShaderImpl(std::string name);
         int flushImpl(Graphics::RenderBatch &batch);

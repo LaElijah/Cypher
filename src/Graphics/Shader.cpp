@@ -168,6 +168,7 @@ std::pair<size_t, std::vector<Graphics::OpenGLVertexAttribute>> Graphics::OpenGL
 Graphics::OpenGLShader::OpenGLShader(Graphics::ShaderInfo& infoData)
 	: Shader<OpenGLShader>(infoData)
 {
+    std::cout << "IN SHADER.cpp 171 shader info: " << infoData.name << std::endl;
     ID = glCreateProgram();
 
     std::regex attributeRegex(R"(layout\s*\(location\s*=\s*(\d+)\)\s*in\s+(\w+)\s+(\w+);)");

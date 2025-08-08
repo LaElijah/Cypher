@@ -71,6 +71,7 @@ namespace Graphics
             for (Graphics::RenderBatch &batch : batches)
             {
 
+		std::cout << "BATCH: " << batch.shader << std::endl;
                 auto shader = renderAPI.getShader(batch.shader);
 
                 shader->use();

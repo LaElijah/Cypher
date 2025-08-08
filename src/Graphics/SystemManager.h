@@ -45,6 +45,8 @@ namespace Graphics
 		    for (std::pair<std::string, Graphics::RenderBatch> pair : RenderBatches)
 		    {
 		        // Handle what happens when a buffer is changed
+
+			if (pair.second.isChanged())
 			    pair.second.reset(); 
 		    }
 

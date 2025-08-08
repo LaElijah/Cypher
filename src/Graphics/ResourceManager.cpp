@@ -100,6 +100,7 @@ std::vector<std::shared_ptr<Graphics::Model>>& Graphics::ResourceManager::getLoa
 
 void Graphics::ResourceManager::initialize()
 {
+    std::cout << "RESOURCE MANAGER: " << "ONLY LOADING DEBUG IN INIT" << std::endl;
     loadModelInfo(); 
     loadShaderInfo(true, "./data/Shaders/debug");  
 }
