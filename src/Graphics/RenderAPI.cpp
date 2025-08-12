@@ -97,18 +97,17 @@ void Graphics::OpenGLRenderAPI::clearImpl()
 bool print = true;
 std::vector<uint64_t> Graphics::OpenGLRenderAPI::loadTextureHandles(std::vector<Graphics::TextureInfo> &textureInfo)
 {
-    //std::cout << "Working" << std::endl;
-    // TODO: Add support for any texture type
+    // std::cout << "Working" << std::endl;
+    //  TODO: Add support for any texture type
     std::vector<uint64_t> handles;
     for (Graphics::TextureInfo info : textureInfo)
     {
 
-        //std::cout << "Working loop" << std::endl;
+        // std::cout << "Working loop" << std::endl;
         unsigned int id = loadTextureData(info);
 
-
         // Retrieve the texture handle after we finish creating the texture
-      
+
         uint64_t handle;
         auto it = loadedTextureHandles.find(id);
 
@@ -116,7 +115,6 @@ std::vector<uint64_t> Graphics::OpenGLRenderAPI::loadTextureHandles(std::vector<
             handle = glGetTextureHandleARB(id);
         else
             handle = it->second;
-
 
         if (handle == 0)
         {
@@ -132,25 +130,21 @@ std::vector<uint64_t> Graphics::OpenGLRenderAPI::loadTextureHandles(std::vector<
         if (residentHandles.find(handle) == residentHandles.end())
         {
             glMakeTextureHandleResidentARB(handle);
-           
-        } 
+        }
         handles.push_back(handle);
-        
 
-        //std::cout << "Done working loop" << std::endl;
+        // std::cout << "Done working loop" << std::endl;
     }
-
 
     int id = 0;
     if (print)
         for (unsigned int handle : handles)
         {
-            id++; 
-        } 
-
+            id++;
+        }
 
     print = false;
-    //std::cout << "Returning: " << handles.size() << " handles" << std::endl;
+    // std::cout << "Returning: " << handles.size() << " handles" << std::endl;
     return handles;
 }
 
@@ -170,7 +164,7 @@ unsigned int Graphics::OpenGLRenderAPI::loadTextureData(Graphics::TextureInfo &i
     // TODO: Add support for embedded textures
     if (loadedTextureData.find(info.path) != loadedTextureData.end())
     {
-        //std::cout << loadedTextureData.size() << std::endl;
+        // std::cout << loadedTextureData.size() << std::endl;
         return loadedTextureData[info.path];
     }
     std::string filename = info.directory + '/' + info.path;
@@ -180,7 +174,7 @@ unsigned int Graphics::OpenGLRenderAPI::loadTextureData(Graphics::TextureInfo &i
 
     stbi_set_flip_vertically_on_load(true);
     int width, height, nrComponents;
-    //std::cout << filename << std::endl;
+    // std::cout << filename << std::endl;
     unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
     if (data)
     {
@@ -211,7 +205,7 @@ unsigned int Graphics::OpenGLRenderAPI::loadTextureData(Graphics::TextureInfo &i
     }
 
     loadedTextureData.emplace(info.path, textureID);
-    //std::cout << "STORED" << std::endl;
+    // std::cout << "STORED" << std::endl;
     return textureID;
 }
 
@@ -296,8 +290,6 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
 
     // std::cout << "BATCH VERTEX SIZE: " << std::endl;
 
-    if (CURRENT_FORMAT != config.format && CURRENT_FORMAT != -1)
-    {
         std::cout << "BINDING NEW VAO" << std::endl;
         glBindVertexArray(config.VAO);
 
@@ -333,8 +325,7 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
             &batch.indexData[0],
             GL_DYNAMIC_DRAW);
 
-
-        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, config.SSBO );
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, config.SSBO);
 
         glBufferData(
             GL_SHADER_STORAGE_BUFFER,
@@ -342,22 +333,8 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
             loadTextureHandles(batch.textureInfo.at("diffuse")).data(),
             GL_DYNAMIC_DRAW);
 
-            std::cout << sizeof(GLuint64) << std::endl;
+        CURRENT_FORMAT = config.format;
 
-
-
-            CURRENT_FORMAT = config.format;
-    
-    }
-
-    
-/*
-    glBufferSubData(
-        GL_SHADER_STORAGE_BUFFER,
-        0,
-        sizeof(unsigned int) * batch.textureInfo["diffuse"].size(),
-        loadTextureHandles(batch.textureInfo.at("diffuse")).data());
-*/
     if (original)
     {
         glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.IBO[0]);
@@ -381,16 +358,29 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
 
     original = !original;
 
-    glBufferSubData(
-        GL_ARRAY_BUFFER,
-        0,
-        sizeof(Graphics::Vertex) * batch.vertexData.size(), &batch.vertexData[0]);
 
-    glBufferSubData(
-        GL_ELEMENT_ARRAY_BUFFER,
-        0,
-        sizeof(unsigned int) * batch.indexData.size(),
-        &batch.indexData[0]);
+
+
+//   glBufferSubData(
+//       GL_ARRAY_BUFFER,
+//       0,
+//       sizeof(Graphics::Vertex) * batch.vertexData.size(), 
+//       &batch.vertexData[0]
+//   );
+//
+//   glBufferSubData(
+//       GL_ELEMENT_ARRAY_BUFFER,
+//       0,
+//       sizeof(unsigned int) * batch.indexData.size(),
+//       &batch.indexData[0]
+//   );
+//
+//   glBufferSubData(
+//       GL_SHADER_STORAGE_BUFFER,
+//       0,
+//       sizeof(GLuint64) * batch.textureInfo["diffuse"].size(),
+//       loadTextureHandles(batch.textureInfo.at("diffuse")).data()
+//   );
 }
 
 unsigned int Graphics::OpenGLRenderAPI::loadTextureImpl(Graphics::TextureInfo &texture)

@@ -346,7 +346,6 @@ unsigned int Graphics::OpenGLShader::compileShader(Graphics::ShaderFileData& fil
 void Graphics::OpenGLShader::useImpl()
 {
     glUseProgram(ID);
-    std::cout << "GATHER" << std::endl; 
 }
 	
 void Graphics::OpenGLShader::setUniformImpl(std::string name, bool value)

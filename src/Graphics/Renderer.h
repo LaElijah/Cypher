@@ -71,7 +71,7 @@ namespace Graphics
             for (Graphics::RenderBatch &batch : batches)
             {
 
-		std::cout << "BATCH: " << batch.shader << std::endl;
+
                 auto shader = renderAPI.getShader(batch.shader);
 
                 shader->use();
@@ -81,9 +81,11 @@ namespace Graphics
                 shader->setUniform("view", Camera->getViewMatrix());
                 shader->setUniform("projection", Camera->getProjectionMatrix());
 
+                std::cout << "IN DRAW: " << batch.vertexData.size() << std::endl;
                 renderAPI.loadData(batch);
+
                 renderAPI.drawElements(batch.counts.size());
-                //renderAPI.flush(batch);
+                renderAPI.flush(batch);
             }
         }
 

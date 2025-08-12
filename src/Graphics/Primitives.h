@@ -110,6 +110,7 @@ namespace Graphics
         {
             std::cout << mesh.textureInfo.back().directory << std::endl;
             std::cout << mesh.textureInfo.back().path << std::endl;
+                        std::cout << "VERTEX SIZE: " << vertexData.size() << std::endl;
             vertexData.insert(
                 vertexData.end(),
                 mesh.vertices.begin(),

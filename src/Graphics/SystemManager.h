@@ -35,7 +35,7 @@ namespace Graphics
 			> &RenderBatches
 		)
 		{
-			
+			std::unordered_map<std::string, unsigned int> shaderCounts;
 		    // TODO: INDEX BATCHES IN AN ARRAY BY SHADER NAME
 
 		    auto it = componentManager
@@ -88,8 +88,6 @@ namespace Graphics
 		    }
 
 
-			std::cout << "DONE" << std::endl;
-
 		    for 
 		    (
 		        std::pair
@@ -105,7 +103,7 @@ namespace Graphics
 			
 
 		void loadModel(Entity entity, Graphics::ModelInfo &info);
-        std::unordered_map<std::string, unsigned int> shaderCounts;
+        
 		Graphics::ModelLoader<AssimpImporter> modelLoader;
 	};
 
