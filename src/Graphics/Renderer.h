@@ -81,7 +81,7 @@ namespace Graphics
                 shader->setUniform("view", Camera->getViewMatrix());
                 shader->setUniform("projection", Camera->getProjectionMatrix());
 
-                std::cout << "IN DRAW: " << batch.vertexData.size() << std::endl;
+
                 renderAPI.loadData(batch);
 
                 renderAPI.drawElements(batch.counts.size());

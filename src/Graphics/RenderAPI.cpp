@@ -259,6 +259,12 @@ Graphics::RenderConfig &Graphics::OpenGLRenderAPI::getRenderConfig(
 }
 
 bool original = true;
+
+// TODO: This function has inneficiencies where:
+// draw calls vector is not made a member variable
+// draw calls are remade even when a batch is unchanged
+// The buffer sizes have to be recreated if 
+// the batch is changed. 
 void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
 {
     size_t format = m_Shaders[batch.shader]->getFormat().first;
@@ -290,7 +296,9 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
 
     // std::cout << "BATCH VERTEX SIZE: " << std::endl;
 
-        std::cout << "BINDING NEW VAO" << std::endl;
+    if (CURRENT_FORMAT != config.format && CURRENT_FORMAT != -1)
+    {
+
         glBindVertexArray(config.VAO);
 
         glBindBuffer(GL_ARRAY_BUFFER, config.VBO);
@@ -298,6 +306,7 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
 
         glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.IBO[0]);
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, config.SSBO);
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, config.SSBO);
 
         glBufferData(
             GL_DRAW_INDIRECT_BUFFER,
@@ -325,8 +334,6 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
             &batch.indexData[0],
             GL_DYNAMIC_DRAW);
 
-        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, config.SSBO);
-
         glBufferData(
             GL_SHADER_STORAGE_BUFFER,
             sizeof(GLuint64) * batch.textureInfo["diffuse"].size(),
@@ -334,6 +341,39 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
             GL_DYNAMIC_DRAW);
 
         CURRENT_FORMAT = config.format;
+    }
+
+    glBufferData(
+        GL_DRAW_INDIRECT_BUFFER,
+        sizeof(ElementDrawCall) * drawCalls.size(),
+        drawCalls.data(),
+        GL_DYNAMIC_DRAW);
+
+    glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.IBO[1]);
+
+    glBufferData(
+        GL_DRAW_INDIRECT_BUFFER,
+        sizeof(ElementDrawCall) * drawCalls.size(),
+        drawCalls.data(),
+        GL_DYNAMIC_DRAW);
+
+    glBufferData(
+        GL_ARRAY_BUFFER,
+        sizeof(Graphics::Vertex) * batch.vertexData.size(),
+        &batch.vertexData[0],
+        GL_DYNAMIC_DRAW);
+
+    glBufferData(
+        GL_ELEMENT_ARRAY_BUFFER,
+        sizeof(unsigned int) * batch.indexData.size(),
+        &batch.indexData[0],
+        GL_DYNAMIC_DRAW);
+
+    glBufferData(
+        GL_SHADER_STORAGE_BUFFER,
+        sizeof(GLuint64) * batch.textureInfo["diffuse"].size(),
+        loadTextureHandles(batch.textureInfo.at("diffuse")).data(),
+        GL_DYNAMIC_DRAW);
 
     if (original)
     {
@@ -357,30 +397,6 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
     }
 
     original = !original;
-
-
-
-
-//   glBufferSubData(
-//       GL_ARRAY_BUFFER,
-//       0,
-//       sizeof(Graphics::Vertex) * batch.vertexData.size(), 
-//       &batch.vertexData[0]
-//   );
-//
-//   glBufferSubData(
-//       GL_ELEMENT_ARRAY_BUFFER,
-//       0,
-//       sizeof(unsigned int) * batch.indexData.size(),
-//       &batch.indexData[0]
-//   );
-//
-//   glBufferSubData(
-//       GL_SHADER_STORAGE_BUFFER,
-//       0,
-//       sizeof(GLuint64) * batch.textureInfo["diffuse"].size(),
-//       loadTextureHandles(batch.textureInfo.at("diffuse")).data()
-//   );
 }
 
 unsigned int Graphics::OpenGLRenderAPI::loadTextureImpl(Graphics::TextureInfo &texture)
