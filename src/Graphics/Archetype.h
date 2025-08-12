@@ -37,7 +37,12 @@ namespace Graphics
             ////////////////////////////////////////////////////////////
     	    ////////////////////////// EXTERNAL ////////////////////////
             ////////////////////////////////////////////////////////////
-    	
+    
+		unsigned int getSize()
+		{
+            return CONTAINERS.begin()->second->getSize();
+
+		}
     
     	ObjectInfo& getInfo()
     	{
@@ -83,6 +88,14 @@ namespace Graphics
     		    index
     		);
     	}
+
+		template <typename T>
+		std::shared_ptr<void> getData()
+		{
+
+			return CONTAINERS.at(std::type_index(typeid(T)).name())->getData();
+
+		}
     
     
     

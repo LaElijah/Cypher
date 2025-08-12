@@ -88,6 +88,7 @@ namespace Graphics
 		    }
 
 
+			std::cout << "DONE" << std::endl;
 
 		    for 
 		    (

@@ -32,7 +32,8 @@ namespace Graphics
             Graphics::ObjectInfo info;
             info.add<T>();
 
-            std::vector<ContainerIterator<T>> iterators;
+            std::vector<std::shared_ptr<void>> pointers;
+            std::vector<unsigned int> sizes;
 
             for (
                 std::pair<
@@ -41,14 +42,18 @@ namespace Graphics
                     pair : ARCHETYPES)
             {
                 auto archetype = pair.second;
+                unsigned int size = archetype->getSize(); 
                 if (archetype->getInfo().contains<T>())
-                    iterators.push_back(
-                        archetype->template getIterator<T>());
+                {
+                    sizes.push_back(size);
+                    pointers.push_back(
+                        archetype->template getData<T>());
+                }
             }
 
 
 
-            return WideIterator(iterators);
+            return WideIterator<T>(pointers, sizes);
         }
 
         template <typename T>
