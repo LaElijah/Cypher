@@ -56,6 +56,7 @@ namespace Graphics
 
         std::shared_ptr<Graphics::OpenGLShader> getShader(std::string name)
         {
+            std::cout << "SHADER NAME: " << name << std::endl;
             return static_cast<T *>(this)
                 ->getShaderImpl(name);
         }
@@ -100,7 +101,7 @@ namespace Graphics
         unsigned int VBO;
         unsigned int EBO;
         unsigned int IBO[2];
-        unsigned int SSBO;
+        unsigned int SSBO[2];
     };
 
     /**

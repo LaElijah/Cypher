@@ -19,8 +19,7 @@ void Graphics::OpenGLRenderAPI::loadShaderImpl(Graphics::ShaderInfo &info)
 
 void Graphics::OpenGLRenderAPI::loadShadersImpl(std::map<std::string, Graphics::ShaderInfo> &infoData)
 {
-    for (
-        std::pair<std::string, Graphics::ShaderInfo> pair : infoData)
+    for (std::pair<std::string, Graphics::ShaderInfo> pair : infoData)
     {
         loadShaderImpl(pair.second);
     }
@@ -223,7 +222,8 @@ Graphics::RenderConfig &Graphics::OpenGLRenderAPI::generateRenderConfig(size_t f
     glGenBuffers(1, &config.EBO);
     glGenBuffers(1, &config.IBO[0]);
     glGenBuffers(1, &config.IBO[1]);
-    glGenBuffers(1, &config.SSBO);
+    glGenBuffers(1, &config.SSBO[0]);
+    glGenBuffers(1, &config.SSBO[1]);
 
     glBindBuffer(GL_ARRAY_BUFFER, config.VBO);
 
@@ -263,8 +263,8 @@ bool original = true;
 // TODO: This function has inneficiencies where:
 // draw calls vector is not made a member variable
 // draw calls are remade even when a batch is unchanged
-// The buffer sizes have to be recreated if 
-// the batch is changed. 
+// The buffer sizes have to be recreated if
+// the batch is changed.
 void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
 {
     size_t format = m_Shaders[batch.shader]->getFormat().first;
@@ -275,6 +275,7 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
     unsigned int currentBaseIndex = 0;
     unsigned int currentBaseVertex = 0;
     unsigned int instanceIndex = 0;
+
 
     for (int i = 0; i < batch.counts.size(); i++)
     {
@@ -296,6 +297,7 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
 
     // std::cout << "BATCH VERTEX SIZE: " << std::endl;
 
+    std::cout << "LOADING BATCH COUNTS" << std::endl;
     if (CURRENT_FORMAT != config.format && CURRENT_FORMAT != -1)
     {
 
@@ -305,8 +307,6 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, config.EBO);
 
         glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.IBO[0]);
-        glBindBuffer(GL_SHADER_STORAGE_BUFFER, config.SSBO);
-        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, config.SSBO);
 
         glBufferData(
             GL_DRAW_INDIRECT_BUFFER,
@@ -334,12 +334,28 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
             &batch.indexData[0],
             GL_DYNAMIC_DRAW);
 
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, config.SSBO[0]);
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, config.SSBO[0]);
+
+        std::cout << "POSITION DATA" << std::endl;
+        // Position vectors
+        glBufferData(
+            GL_SHADER_STORAGE_BUFFER,
+            sizeof(glm::mat4) * batch.transforms.size(),
+            batch.transforms.data(),
+            GL_DYNAMIC_DRAW);
+
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, config.SSBO[1]);
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, config.SSBO[1]);
+
+        std::cout << "TEXTURE DATA" << std::endl;
         glBufferData(
             GL_SHADER_STORAGE_BUFFER,
             sizeof(GLuint64) * batch.textureInfo["diffuse"].size(),
             loadTextureHandles(batch.textureInfo.at("diffuse")).data(),
             GL_DYNAMIC_DRAW);
 
+        std::cout << "TEXTURE DATA LOADED" << std::endl;
         CURRENT_FORMAT = config.format;
     }
 
@@ -369,12 +385,26 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
         &batch.indexData[0],
         GL_DYNAMIC_DRAW);
 
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, config.SSBO[0]);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, config.SSBO[0]);
+
+    // Position vectors
+    glBufferData(
+        GL_SHADER_STORAGE_BUFFER,
+        sizeof(glm::mat4) * batch.transforms.size(),
+        batch.transforms.data(),
+        GL_DYNAMIC_DRAW);
+
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, config.SSBO[1]);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, config.SSBO[1]);
+
     glBufferData(
         GL_SHADER_STORAGE_BUFFER,
         sizeof(GLuint64) * batch.textureInfo["diffuse"].size(),
         loadTextureHandles(batch.textureInfo.at("diffuse")).data(),
         GL_DYNAMIC_DRAW);
 
+        
     if (original)
     {
         glBindBuffer(GL_DRAW_INDIRECT_BUFFER, config.IBO[0]);

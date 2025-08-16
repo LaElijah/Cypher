@@ -16,16 +16,16 @@ void Core::GLFWApplication::startImpl()
 
     // Initializing required resources	
     Graphics::OpenGLRenderAPI api = Graphics::OpenGLRenderAPI(); 
-    std::shared_ptr<Graphics::Camera> Camera = std::shared_ptr<Graphics::Camera>(new Graphics::Camera(resolution));
-    std::shared_ptr<Graphics::GUI> GUI = std::shared_ptr<Graphics::GUI>(new Graphics::GUI());
-    std::shared_ptr<Graphics::SystemManager> SystemManager = std::shared_ptr<Graphics::SystemManager>(new Graphics::SystemManager());
-    std::shared_ptr<Graphics::ResourceManager> ResourceManager = std::shared_ptr<Graphics::ResourceManager>(new Graphics::ResourceManager());
+    std::shared_ptr<Graphics::Camera> Camera = std::make_shared<Graphics::Camera>(resolution);
+    std::shared_ptr<Graphics::GUI> GUI = std::make_shared<Graphics::GUI>();
+    std::shared_ptr<Graphics::SystemManager> SystemManager = std::make_shared<Graphics::SystemManager>();
+    std::shared_ptr<Graphics::ResourceManager> ResourceManager = std::make_shared<Graphics::ResourceManager>();
     
     std::shared_ptr<Graphics::GLFWCanvas> Canvas = std::shared_ptr<Graphics::GLFWCanvas>
     (
         new Graphics::GLFWCanvas
             (
-	        resolution,
+	            resolution,
     	        Camera, 
     	        GUI
             )

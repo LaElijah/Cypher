@@ -74,12 +74,13 @@ namespace Graphics
 
     struct RenderBatch
     {
+        std::vector<glm::mat4> transforms;
         std::vector<Graphics::Vertex> vertexData;
         std::vector<unsigned int> indexData;
         std::vector<unsigned int> counts;
         std::vector<unsigned int> indexCounts;
         std::map<std::string, std::vector<Graphics::TextureInfo>> textureInfo;
-        std::string shader;
+        std::string shader = "debug";
 
         bool isChanged()
         {
@@ -92,6 +93,7 @@ namespace Graphics
             counts.clear();
             indexCounts.clear();
             textureInfo.clear();
+            transforms.clear();
         }
 
         void finish()
@@ -106,11 +108,14 @@ namespace Graphics
             CHANGED = true;
         }
 
-        void insert(Graphics::Mesh &mesh)
+        void insert
+        (
+            Graphics::Mesh &mesh,
+            glm::mat4& transform
+        )
         {
             std::cout << mesh.textureInfo.back().directory << std::endl;
-            std::cout << mesh.textureInfo.back().path << std::endl;
-                        std::cout << "VERTEX SIZE: " << vertexData.size() << std::endl;
+            std::cout << "TEXTURE PATH: " << mesh.textureInfo.back().path << std::endl;
             vertexData.insert(
                 vertexData.end(),
                 mesh.vertices.begin(),
@@ -130,7 +135,14 @@ namespace Graphics
                     mesh.textureInfo.begin(),
                     mesh.textureInfo.end());
 
+                    std::cout << "BATCH TEXTURE SIZE: " << textureInfo.at("diffuse").size() << std::endl;
+
+
+            transforms.push_back(transform);
+
+            std::cout << "BATCH MESH SHADER: " << mesh.shader << std::endl;
             shader = mesh.shader;
+            std::cout << "BATCH SHADER AFTER UPDATE: " << shader << std::endl;
         }
 
     private:
@@ -139,6 +151,32 @@ namespace Graphics
 
     struct Component
     {
+
+    };
+
+    struct Renderable : public Component
+    {
+        Renderable
+        (
+            std::string path
+        )
+        {
+            this->path = path;
+        }
+
+        std::string path;
+    };
+
+    struct Transform : public Component
+    {
+        Transform(glm::vec3 pos)
+        {
+            position = pos;
+        }
+
+        glm::vec3 position;
+        glm::mat4 localTransform = glm::mat4(1.0f);
+        bool isDirty = true;
     };
 
     struct RenderComponent : public Component

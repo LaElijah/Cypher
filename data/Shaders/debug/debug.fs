@@ -8,11 +8,10 @@ in vec2 TexCoords;
 in vec3 Test;
 in float Tester;
 
-layout(binding = 0, std430) buffer textureBuffer
+layout(binding = 1, std430) buffer textureBuffer
 {
     sampler2D textures[];
 };
-
 
 
 uniform sampler2D texture_diffuse1;
@@ -22,7 +21,6 @@ uniform sampler2D texture_specular1;
 vec4 diffuse1 = texture(textures[draw], TexCoords); 
 
 
-vec3 TestEnd = Test;
 
 void main()
 { 

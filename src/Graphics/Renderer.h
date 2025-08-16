@@ -72,19 +72,26 @@ namespace Graphics
             {
 
 
+
+
+                std::cout << "GETTING SHADER" << std::endl;
                 auto shader = renderAPI.getShader(batch.shader);
 
                 shader->use();
 
+                std::cout << "USING SHADER" << std::endl;
 
                 shader->setUniform("model", glm::mat4(1.0f));
                 shader->setUniform("view", Camera->getViewMatrix());
                 shader->setUniform("projection", Camera->getProjectionMatrix());
 
 
+                std::cout << "LOADING DATA" << std::endl;
                 renderAPI.loadData(batch);
 
+                std::cout << "DRAWING DATA" << std::endl;
                 renderAPI.drawElements(batch.counts.size());
+
                 renderAPI.flush(batch);
             }
         }
@@ -137,6 +144,7 @@ namespace Graphics
             {
 
                 SystemManager->update();
+                
                 SystemManager->getRenderBatches(batches);
 
 
@@ -171,6 +179,8 @@ namespace Graphics
                 }
 
                 Canvas->updateDeltaTime();
+
+						std::cout << "AFTER TRAVERSAL" << std::endl;
             }
 
             GUI->shutdown();

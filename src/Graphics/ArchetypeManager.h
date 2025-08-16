@@ -15,7 +15,8 @@ namespace Graphics
         template <typename T>
         T get(Graphics::Entity entity)
         {
-            return ARCHETYPES[ENTITY_TYPES[entity].getID()]
+
+            return ARCHETYPES.at(ENTITY_TYPES.at(entity).getID())
                 ->template get<T>(entity);
         }
 

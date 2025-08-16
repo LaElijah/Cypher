@@ -9,9 +9,10 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <set>
-
+#include <memory>
 #include "../../external/STB_IMAGE/stb_image.h"
 #include "Primitives.h"
+
 namespace Graphics
 {
 
@@ -19,7 +20,7 @@ namespace Graphics
     class ModelLoader
     {
     public:
-        Graphics::Model load(Graphics::ModelInfo &info)
+        std::shared_ptr<Graphics::Model> load(Graphics::ModelInfo &info)
         {
             return static_cast<T *>(this)->loadImpl(info);
         }
@@ -30,8 +31,10 @@ namespace Graphics
     class AssimpImporter : public ModelLoader<AssimpImporter>
     {
     public:
-        Graphics::Model loadImpl(Graphics::ModelInfo &info)
+        std::shared_ptr<Graphics::Model> loadImpl(Graphics::ModelInfo &info)
         {
+            if (loadedModels.count(info.path) != 0)
+                return loadedModels.at(info.path);
 
             std::cout << "LOADING MODEL AT: " <<info.path << std::endl;
 
@@ -57,11 +60,14 @@ namespace Graphics
 
             processNode(scene->mRootNode, scene, glm::mat4(1.0f), meshes, directory, info.DEFAULT_SHADER);
 
-            return Model(meshes, info);
+            auto model = std::make_shared<Graphics::Model>(meshes, info);
+            loadedModels.emplace(info.path, model);
+            return model;
         }
 
-    private:
 
+    private:
+        static inline std::unordered_map<std::string, std::shared_ptr<Graphics::Model>> loadedModels;
         // Diversify this function for each different
         // vertex type loading format
 

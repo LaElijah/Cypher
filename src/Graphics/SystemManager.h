@@ -7,6 +7,9 @@
 #include <map>
 #include <optional>
 #include "ModelLoader.h"
+#include "SceneNode.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace Graphics
 {
@@ -25,85 +28,166 @@ namespace Graphics
 
 	class RenderSystem : public System<RenderSystem>
 	{
-	    public:
-		void updateImpl
-		(
-		    std::map
-		        <
-			    std::string, 
-			    Graphics::RenderBatch
-			> &RenderBatches
-		)
+	public:
+		RenderSystem()
 		{
+			sceneGraph.emplace("ROOT", std::make_shared<Graphics::SceneNode>());
+		}
+
+		std::unordered_map<std::string, Graphics::RenderBatch> createdBatches;
+		void createBatch(
+			std::string shader,
+			std::map<
+				std::string,
+				Graphics::RenderBatch> &RenderBatches)
+		{
+			if (RenderBatches.find(shader) == RenderBatches.end())
+				RenderBatches.emplace(shader, Graphics::RenderBatch());
+		}
+
+
+
+		void updateImpl(
+			std::map<
+				std::string,
+				Graphics::RenderBatch> &RenderBatches)
+		{
+
+			// TODO: this currently sets rendering to the scene manager, this 
+			// needs to be done in a linear fashion.
+
+			sceneGraph.at("ROOT")->dirty=true;
 			std::unordered_map<std::string, unsigned int> shaderCounts;
-		    // TODO: INDEX BATCHES IN AN ARRAY BY SHADER NAME
+			// TODO: INDEX BATCHES IN AN ARRAY BY SHADER NAME
 
-		    auto it = componentManager
-		        .getAllContaining<RenderComponent>();
+			// auto it = componentManager
+			//    .getAllContaining<RenderComponent>();
+
+			for (std::pair<std::string, Graphics::RenderBatch> pair : RenderBatches)
+			{
+				// Handle what happens when a buffer is changed
+				if (pair.second.isChanged())
+					pair.second.reset();
+			}
+
+			std::function<
+				bool(
+					std::shared_ptr<Graphics::SceneNode> node,
+					glm::mat4 & parentTransform)>
+				handleNode = [this, &RenderBatches, &shaderCounts](
+								 std::shared_ptr<Graphics::SceneNode> node,
+								 glm::mat4 &parentTransform) mutable
+			{
+
+				Graphics::Entity entity = node->ENTITY;
+				std::cout << "ENTITY: " << entity << std::endl;
+
+				auto renderable = componentManager.get<Graphics::Renderable>(entity);
+				auto transform = componentManager.get<Graphics::Transform>(entity);
+
+				node->globalTransform = glm::translate(glm::mat4(1.0f), transform.position) * parentTransform;
 
 
-		    for (std::pair<std::string, Graphics::RenderBatch> pair : RenderBatches)
-		    {
-		        // Handle what happens when a buffer is changed
+				// Start of render duties
+				Graphics::ModelInfo info;
+				info.path = renderable.path;
 
-			if (pair.second.isChanged())
-			    pair.second.reset(); 
-		    }
+				std::cout << "Entity: " << node->ENTITY << std::endl;
+				auto model = modelLoader.load(info);
 
 
-		    while (it.next())
-		    {
-		    	std::optional<RenderComponent> isComponent = it.get();
+				for (Graphics::Mesh mesh : model->meshes)
+				{
+					if (RenderBatches.find(mesh.shader) == RenderBatches.end())
+						RenderBatches.emplace(mesh.shader, Graphics::RenderBatch());
 
-		    	if (!isComponent.has_value())
-		    		continue;
+					Graphics::RenderBatch &batch = RenderBatches.at(mesh.shader);
 
-		    	RenderComponent component = isComponent.value();
-		    	// Prior to handling, sort by shader then 
+					std::cout << "BATCH SHADER PROCESS: " << batch.shader << std::endl;
+					std::cout << "MESH SHADER PROCESS: " << mesh.shader << std::endl;
+					if (!batch.isChanged())
+						continue;
+
+					batch.insert(
+						mesh,
+						node->globalTransform);
+
+						std::cout << batch.vertexData.size() << std::endl;
+
+					// std::cout << "SHADER: " << shaderCounts[mesh.shader] << std::endl;
+					shaderCounts[mesh.shader]++;
+				}
+				return true;
+			};
+
+			sceneGraph.at("ROOT")->traverse(
+				sceneGraph.at("ROOT"),
+				handleNode);
+
+
+				for (auto& batch : RenderBatches)
+				{
+                    std::cout << "BATCH TRANSFORM SIZE: " << batch.second.transforms.size() << std::endl;          
+                    std::cout << "BATCH TEXTURE SIZE: " << batch.second.textureInfo.size() << std::endl;          
+
+				}
+
+			for (
+				std::pair<std::string, unsigned int> pair : shaderCounts)
+				{
+				    RenderBatches[pair.first].finish();
+				}
+
+			/*
+			while (it.next())
+			{
+			/*
+				std::optional<RenderComponent> isComponent = it.get();
+
+				if (!isComponent.has_value())
+					continue;
+
+				RenderComponent component = isComponent.value();
+				// Prior to handling, sort by shader then
 			// organize each shader group by texture
 
-
-
-		    	for (Graphics::Mesh mesh : component.model.meshes)
-		    	{
-		    		if (RenderBatches.find(mesh.shader) == RenderBatches.end() )
-		    		{
-		    		    RenderBatches
-				        .emplace
+				for (Graphics::Mesh mesh : model.meshes)
+				{
+					if (RenderBatches.find(mesh.shader) == RenderBatches.end() )
+					{
+						RenderBatches
+						.emplace
 					(
-					    mesh.shader, 
-					    Graphics::RenderBatch()
+						mesh.shader,
+						Graphics::RenderBatch()
 					);
-		    		}
+					}
 
-		    		Graphics::RenderBatch& batch = RenderBatches[mesh.shader];
+					Graphics::RenderBatch& batch = RenderBatches[mesh.shader];
 
-		    		if (!batch.isChanged())
-		    		    continue;
+					if (!batch.isChanged())
+						continue;
 
-		    		batch.insert(mesh);
+					batch.insert
+					(
+						mesh,
+						position
+					);
+
 					std::cout << "SHADER: " << shaderCounts[mesh.shader] << std::endl;
-		    		shaderCounts[mesh.shader]++;
-		    	}
-		    }
+					shaderCounts[mesh.shader]++;
+				}
+			}
 
 
-		    for 
-		    (
-		        std::pair
-		        <std::string, unsigned int> pair 
-		        : shaderCounts
-		    )
-		        RenderBatches[pair.first].finish();
+*/
 
+		}
 
+		void loadModel(Entity entity, Graphics::ModelInfo &info, Graphics::Entity parent);
 
-
-		}	
-			
-
-		void loadModel(Entity entity, Graphics::ModelInfo &info);
-        
+		std::unordered_map<std::string, std::shared_ptr<Graphics::Model>> cachedModels;
+		std::unordered_map<std::string, std::shared_ptr<Graphics::SceneNode>> sceneGraph;
 		Graphics::ModelLoader<AssimpImporter> modelLoader;
 	};
 
@@ -112,7 +196,7 @@ namespace Graphics
 	public:
 		void update();
 
-		Entity createModel(Graphics::ModelInfo &info);
+		Entity createModel(Graphics::ModelInfo &info, Graphics::Entity parent = -1);
 		std::vector<Graphics::RenderBatch> &getRenderBatches(std::vector<Graphics::RenderBatch> &values)
 		{
 			values.clear();
