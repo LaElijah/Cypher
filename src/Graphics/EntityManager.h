@@ -14,7 +14,7 @@ namespace Graphics
 	    bool removeEntity(Entity entity);
 
 	private: 
-	    Entity HEAD_ENTITY = 0;
+	    Entity HEAD_ENTITY = 1000; // All numbers for entities less than HEAD_ENTITY are used for special purposes
 	    // Entities in use
             std::set<Entity> m_ActiveEntities;
 

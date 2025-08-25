@@ -24,6 +24,7 @@ namespace Graphics
             }
     
     
+            
             template <typename T>
             T get(Graphics::Entity entity)
             {

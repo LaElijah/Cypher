@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.28)  
+#set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 project(Cypher)
 
 #set(CMAKE_SYSTEM_NAME Windows)
@@ -12,6 +13,12 @@ set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(EXTERNAL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+FetchContent_Declare(
+    json
+    URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
+)
+
 
 FetchContent_Declare(
     dirent
@@ -93,6 +100,7 @@ set(
 FetchContent_MakeAvailable(glm)
 FetchContent_MakeAvailable(glfw)
 FetchContent_MakeAvailable(assimp)
+FetchContent_MakeAvailable(json)
 
 
 add_executable(
@@ -100,9 +108,12 @@ add_executable(
     ${SOURCE_FILES}
     ${GLAD_SOURCE_FILES}
     ${STB_IMAGE_SOURCE_FILES}
-    ${IMGUI_SOURCE_FILES}
+    ${IMGUI_SOURCE_FILES} 
 )
 
-target_link_libraries(Cypher assimp)
-target_link_libraries(Cypher glfw)
-target_link_libraries(Cypher glm)
+target_link_libraries(Cypher PRIVATE nlohmann_json::nlohmann_json) 
+target_link_libraries(Cypher PRIVATE assimp)
+target_link_libraries(Cypher PRIVATE glfw)
+target_link_libraries(Cypher PRIVATE glm)
+
+

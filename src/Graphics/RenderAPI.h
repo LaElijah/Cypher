@@ -56,7 +56,6 @@ namespace Graphics
 
         std::shared_ptr<Graphics::OpenGLShader> getShader(std::string name)
         {
-            std::cout << "SHADER NAME: " << name << std::endl;
             return static_cast<T *>(this)
                 ->getShaderImpl(name);
         }

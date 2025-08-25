@@ -3,6 +3,8 @@
 #include "../../external/imgui/backends/imgui_impl_opengl3.h"
 #include "../../external/imgui/backends/imgui_impl_glfw.h"
 #include <cstdint>
+#include <nlohmann/json.hpp>
+#include <regex>
 
 Graphics::GUIComponent::GUIComponent(std::string name)
     : Name(name)
@@ -37,13 +39,19 @@ void Graphics::TestWindow::handleInput()
 Graphics::ModelWindow::ModelWindow(
     std::string name,
     std::string directory,
-    std::function<void(const char *string)> addModel)
+    std::function<std::pair<bool, nlohmann::json>()>& getJSON,
+    std::function<void(const char *string)>& addModel)
     : GUIComponent(name),
       FILE_READER(directory),
+      GET_JSON(getJSON),
       ADD_MODEL(addModel)
 {
     Name = name;
     Directory = directory;
+    auto pair = getJSON();
+    sceneChanged = pair.first;
+    jsonSceneGraph = pair.second;
+
 };
 
 void Graphics::ModelWindow::draw()
@@ -63,7 +71,59 @@ void Graphics::ModelWindow::draw()
         }
     }
 
+
+    auto pair = GET_JSON();
+
+    //std::cout << pair.second << std::endl;
+
+    if (ImGui::TreeNode("Scene"))
+    {
+        iterateGraph(pair.second);
+        ImGui::TreePop(); 
+    }
+
     ImGui::End();
+}
+
+void Graphics::ModelWindow::iterateGraph(const nlohmann::json& json)
+{
+    float* bar = new float(1.0f);
+    std::regex self_regex("ENTITY-", std::regex_constants::ECMAScript | std::regex_constants::icase);
+    //std::cout << json.dump(4) << std::endl;
+    for(auto it = json.begin(); it != json.end(); ++it)
+    {
+        if (it->is_structured())
+        {
+            nlohmann::json child = *it;
+
+            // Children Rendering
+            for (auto childIt = child.begin(); childIt != child.end(); ++childIt)
+            {
+               
+                {
+                    if (std::regex_search(it.key(), self_regex) && it.key() != "ENTITY-0")
+                    {
+                        if (ImGui::TreeNodeEx(it.key().c_str()))
+                        {
+                            ImGui::Text("Position");
+                            ImGui::Text(std::string(it.value()["transform"]["position"]["x"].dump()).c_str());
+                            ImGui::SliderFloat("X", bar, -100.0f, 100.0f);
+                            ImGui::TreePop(); 
+                        }
+                    }
+
+                }
+            }
+
+
+            iterateGraph(*it);
+        }
+        else
+        { 
+        }
+    }
+
+        delete bar;
 }
 
 void Graphics::ModelWindow::handleInput()

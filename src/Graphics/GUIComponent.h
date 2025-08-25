@@ -6,10 +6,11 @@
 #include <string>
 #include "FrameBuffer.h"
 #include "FileReader.h"
+#include <nlohmann/json.hpp>
 
 // abstract class
 
-namespace Graphics 
+namespace Graphics
 {
     /*
      * NOTE: GUI Components use virtual functions as I
@@ -18,74 +19,74 @@ namespace Graphics
 
     /**
      * This class provides an interface for subclasses
-     * to inherit, providing GUI windows with specific 
+     * to inherit, providing GUI windows with specific
      * functionality to easily be renderable to the GUI.
      *
      */
-    class GUIComponent 
+    class GUIComponent
     {
-    	public: 
+    public:
+        GUIComponent(std::string name);
+        std::string getName();
+        // virtual ~GUIComponent();
+        virtual void draw() = 0;
+        virtual void handleInput() = 0;
 
-	    GUIComponent(std::string name);
-	    std::string getName();
-    		//virtual ~GUIComponent();	
-    	    virtual void draw() = 0;
-    	    virtual void handleInput() = 0;
-
-        protected:
-	    std::string Name; 
+    protected:
+        std::string Name;
 
     };
-    
-    class TestWindow : public GUIComponent 
-    {
-        public: 
-            TestWindow(std::string name);
-	    void draw() override;
-	    void handleInput() override;
 
-	
+    class TestWindow : public GUIComponent
+    {
+    public:
+        TestWindow(std::string name);
+        void draw() override;
+        void handleInput() override;
     };
 
-    class ModelWindow : public GUIComponent 
+    class ModelWindow : public GUIComponent
     {
-        public: 
-            ModelWindow
-            (
-                std::string name,
-                std::string directory,
-                std::function<void(const char* string)> addModel
-            );
+    public:
+        ModelWindow(
+            std::string name,
+            std::string directory,
+            std::function<std::pair<bool, nlohmann::json>()>& getJSON,
+            std::function<void(const char *string)>& addModel
+        );
 
-	    void draw() override;
-	    void handleInput() override;
+        void draw() override;
+        void handleInput() override;
 
+    private:
+        std::string Directory;
+        Graphics::FileReader FILE_READER;
+        std::function<void(const char *string)> ADD_MODEL;
+        std::function<std::pair<bool, nlohmann::json>()> GET_JSON;
 
-        private:
-            std::string Directory;
-	        Graphics::FileReader FILE_READER;
-            std::function<void(const char* string)> ADD_MODEL;
+        void iterateGraph(const nlohmann::json& json);
+        nlohmann::json jsonSceneGraph;
+        bool sceneChanged = true;
+        
+
     };
 
-
-    class SceneWindow : public GUIComponent 
+    class SceneWindow : public GUIComponent
     {
-	public: 
-            SceneWindow
-	    ( 
-                std::string name,
-    	        Graphics::FrameBuffer* sceneBuffer,
-                std::function<void(float, float)>& resizeFunction,
-		std::vector<std::function<void()>>& functionStorage
-	    );
-            
-            void draw() override;
-            void handleInput() override;
-    
-        private:
-            Graphics::FrameBuffer* SceneBuffer;
-	    std::function<void(float, float)>& resizeWindow; 
-	    std::vector<std::function<void()>>& postRenderFunctions;
+    public:
+        SceneWindow(
+            std::string name,
+            Graphics::FrameBuffer *sceneBuffer,
+            std::function<void(float, float)> &resizeFunction,
+            std::vector<std::function<void()>> &functionStorage);
+
+        void draw() override;
+        void handleInput() override;
+
+    private:
+        Graphics::FrameBuffer *SceneBuffer;
+        std::function<void(float, float)> &resizeWindow;
+        std::vector<std::function<void()>> &postRenderFunctions;
     };
 }
 

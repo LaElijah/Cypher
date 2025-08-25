@@ -22,7 +22,6 @@ namespace Graphics
     	{
     	    initialize<T>();
 
-			std::cout << "CONTAINER INDEX: " << index << std::endl;
     	    return static_cast<std::vector<T>*>(m_DATA.get())
     	        ->at(index);
 

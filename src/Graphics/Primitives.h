@@ -15,7 +15,7 @@ namespace Graphics
 
     typedef std::bitset<MAX_COMPONENT_SIZE> OBJECT_ID;
 
-    typedef unsigned int Entity;
+    typedef size_t Entity;
 
     struct ModelInfo
     {

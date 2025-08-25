@@ -297,7 +297,6 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
 
     // std::cout << "BATCH VERTEX SIZE: " << std::endl;
 
-    std::cout << "LOADING BATCH COUNTS" << std::endl;
     if (CURRENT_FORMAT != config.format && CURRENT_FORMAT != -1)
     {
 

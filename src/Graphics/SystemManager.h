@@ -10,6 +10,7 @@
 #include "SceneNode.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <nlohmann/json.hpp>
 
 namespace Graphics
 {
@@ -34,34 +35,21 @@ namespace Graphics
 			sceneGraph.emplace("ROOT", std::make_shared<Graphics::SceneNode>());
 		}
 
-		std::unordered_map<std::string, Graphics::RenderBatch> createdBatches;
-		void createBatch(
-			std::string shader,
-			std::map<
-				std::string,
-				Graphics::RenderBatch> &RenderBatches)
+		std::pair<bool, nlohmann::json> getJSONGraph()
 		{
-			if (RenderBatches.find(shader) == RenderBatches.end())
-				RenderBatches.emplace(shader, Graphics::RenderBatch());
+			return {true, jsonGraph};
 		}
-
-
 
 		void updateImpl(
 			std::map<
 				std::string,
 				Graphics::RenderBatch> &RenderBatches)
 		{
-
-			// TODO: this currently sets rendering to the scene manager, this 
+			// TODO: this currently sets rendering to the scene manager, this
 			// needs to be done in a linear fashion.
 
-			sceneGraph.at("ROOT")->dirty=true;
+			sceneGraph.at("ROOT")->dirty = true;
 			std::unordered_map<std::string, unsigned int> shaderCounts;
-			// TODO: INDEX BATCHES IN AN ARRAY BY SHADER NAME
-
-			// auto it = componentManager
-			//    .getAllContaining<RenderComponent>();
 
 			for (std::pair<std::string, Graphics::RenderBatch> pair : RenderBatches)
 			{
@@ -70,6 +58,32 @@ namespace Graphics
 					pair.second.reset();
 			}
 
+
+			std::function<nlohmann::json(std::shared_ptr<SceneNode>, nlohmann::json)>
+				handleNodeJson = [this](std::shared_ptr<SceneNode> node, nlohmann::json data)
+			{
+			
+				auto transform = componentManager.get<Graphics::Transform>(node->ENTITY);
+
+
+				data["transform"]["position"]["x"] = glm::float64(transform.position.x);
+				data["transform"]["position"]["y"] = glm::float64(transform.position.y);
+				data["transform"]["position"]["z"] = glm::float64(transform.position.z);
+
+
+									 /*
+				{"position", nlohmann::json::object(
+									 {
+										 nlohmann::json::object({"x", transform.position.x}),
+										 nlohmann::json::object({"y", transform.position.y}),
+										 nlohmann::json::object({"z", transform.position.z}),
+									 })});
+									 */
+
+				return data;
+			};
+
+			// TODO: INDEX BATCHES IN AN ARRAY BY SHADER NAME
 			std::function<
 				bool(
 					std::shared_ptr<Graphics::SceneNode> node,
@@ -78,23 +92,21 @@ namespace Graphics
 								 std::shared_ptr<Graphics::SceneNode> node,
 								 glm::mat4 &parentTransform) mutable
 			{
+				// LOAD INFO TO SCENE GRAPH JSON
 
+				// LOAD DATA INTO BUFFERS
 				Graphics::Entity entity = node->ENTITY;
-				std::cout << "ENTITY: " << entity << std::endl;
-
 				auto renderable = componentManager.get<Graphics::Renderable>(entity);
 				auto transform = componentManager.get<Graphics::Transform>(entity);
 
-				node->globalTransform = glm::translate(glm::mat4(1.0f), transform.position) * parentTransform;
-
+				// std::string parent = "PARENT" + node->PARENT;
+				// std::cout << parent << std::endl;
 
 				// Start of render duties
 				Graphics::ModelInfo info;
 				info.path = renderable.path;
 
-				std::cout << "Entity: " << node->ENTITY << std::endl;
 				auto model = modelLoader.load(info);
-
 
 				for (Graphics::Mesh mesh : model->meshes)
 				{
@@ -103,8 +115,6 @@ namespace Graphics
 
 					Graphics::RenderBatch &batch = RenderBatches.at(mesh.shader);
 
-					std::cout << "BATCH SHADER PROCESS: " << batch.shader << std::endl;
-					std::cout << "MESH SHADER PROCESS: " << mesh.shader << std::endl;
 					if (!batch.isChanged())
 						continue;
 
@@ -112,91 +122,56 @@ namespace Graphics
 						mesh,
 						node->globalTransform);
 
-						std::cout << batch.vertexData.size() << std::endl;
-
-					// std::cout << "SHADER: " << shaderCounts[mesh.shader] << std::endl;
 					shaderCounts[mesh.shader]++;
 				}
 				return true;
 			};
 
-			sceneGraph.at("ROOT")->traverse(
-				sceneGraph.at("ROOT"),
-				handleNode);
-
-
-				for (auto& batch : RenderBatches)
-				{
-                    std::cout << "BATCH TRANSFORM SIZE: " << batch.second.transforms.size() << std::endl;          
-                    std::cout << "BATCH TEXTURE SIZE: " << batch.second.textureInfo.size() << std::endl;          
-
-				}
-
-			for (
-				std::pair<std::string, unsigned int> pair : shaderCounts)
-				{
-				    RenderBatches[pair.first].finish();
-				}
-
-			/*
-			while (it.next())
+			if (sceneGraph.at("ROOT")->traverse_preorder(
+					sceneGraph.at("ROOT"),
+					handleNode))
 			{
-			/*
-				std::optional<RenderComponent> isComponent = it.get();
 
-				if (!isComponent.has_value())
-					continue;
+				jsonGraph = sceneGraph.at("ROOT")->traverse_postorder(
+					sceneGraph.at("ROOT"),
+					handleNodeJson);
 
-				RenderComponent component = isComponent.value();
-				// Prior to handling, sort by shader then
-			// organize each shader group by texture
 
-				for (Graphics::Mesh mesh : model.meshes)
-				{
-					if (RenderBatches.find(mesh.shader) == RenderBatches.end() )
-					{
-						RenderBatches
-						.emplace
-					(
-						mesh.shader,
-						Graphics::RenderBatch()
-					);
-					}
 
-					Graphics::RenderBatch& batch = RenderBatches[mesh.shader];
-
-					if (!batch.isChanged())
-						continue;
-
-					batch.insert
-					(
-						mesh,
-						position
-					);
-
-					std::cout << "SHADER: " << shaderCounts[mesh.shader] << std::endl;
-					shaderCounts[mesh.shader]++;
-				}
+				/*
+					*/
 			}
 
-
+			/*
+			sceneGraph.at("ROOT")->traverse_postorder(
+			sceneGraph.at("ROOT"),
+			handleNodeJson);
 */
 
+			for (std::pair<std::string, unsigned int> pair : shaderCounts)
+				RenderBatches[pair.first].finish();
 		}
 
 		void loadModel(Entity entity, Graphics::ModelInfo &info, Graphics::Entity parent);
 
-		std::unordered_map<std::string, std::shared_ptr<Graphics::Model>> cachedModels;
 		std::unordered_map<std::string, std::shared_ptr<Graphics::SceneNode>> sceneGraph;
 		Graphics::ModelLoader<AssimpImporter> modelLoader;
+
+		nlohmann::json jsonGraph;
 	};
 
 	class SystemManager
 	{
 	public:
+		std::pair<bool, nlohmann::json> getJSONGraph()
+		{
+			return renderSystem.getJSONGraph();
+		};
+
 		void update();
 
-		Entity createModel(Graphics::ModelInfo &info, Graphics::Entity parent = -1);
+		Entity createModel(Graphics::ModelInfo &info, Graphics::Entity parent = 0);
+
 		std::vector<Graphics::RenderBatch> &getRenderBatches(std::vector<Graphics::RenderBatch> &values)
 		{
 			values.clear();

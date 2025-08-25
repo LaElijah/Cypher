@@ -15,14 +15,12 @@ namespace Graphics
         {
             m_DATA = data;
             SIZE = size;
-            std::cout << "CONTAINER ITERATOR: " << SIZE << std::endl;
         }
 
 
 
         bool next()
         {
-            std::cout << "CONTAINER ITERATOR SIZE: " << SIZE << " INDEX: " << INDEX << std::endl;
             if (SIZE == 0)
                 return false;
 

@@ -36,9 +36,6 @@ namespace Graphics
             if (loadedModels.count(info.path) != 0)
                 return loadedModels.at(info.path);
 
-            std::cout << "LOADING MODEL AT: " <<info.path << std::endl;
-
-
             Assimp::Importer importer;
             const aiScene *scene = importer.ReadFile(
                 info.path,

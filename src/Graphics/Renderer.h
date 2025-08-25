@@ -18,12 +18,11 @@
 #include "FrameBuffer.h"
 #include <functional>
 #include "../../external/GLAD/glad.h"
-
-// POTENTIAL NAME CYPHER;
-
 #include <cstdlib>
 #include <ctime>
 #include <thread>
+
+
 namespace Graphics
 {
 
@@ -67,31 +66,17 @@ namespace Graphics
         template <typename T>
         void draw(Graphics::RenderAPI<T> &renderAPI)
         {
-
             for (Graphics::RenderBatch &batch : batches)
             {
-
-
-
-
-                std::cout << "GETTING SHADER" << std::endl;
                 auto shader = renderAPI.getShader(batch.shader);
-
                 shader->use();
-
-                std::cout << "USING SHADER" << std::endl;
 
                 shader->setUniform("model", glm::mat4(1.0f));
                 shader->setUniform("view", Camera->getViewMatrix());
                 shader->setUniform("projection", Camera->getProjectionMatrix());
 
-
-                std::cout << "LOADING DATA" << std::endl;
                 renderAPI.loadData(batch);
-
-                std::cout << "DRAWING DATA" << std::endl;
                 renderAPI.drawElements(batch.counts.size());
-
                 renderAPI.flush(batch);
             }
         }
@@ -102,16 +87,23 @@ namespace Graphics
             // Initialize
             GLFWwindow *window = Canvas->getWindow();
 
+            std::function<std::pair<bool, nlohmann::json>()> getJSON =
+                [this]()
+                {
+                    return SystemManager->getJSONGraph();
+                };
+                    
+
             std::function<void(const char* string)> addModel = 
                 [this](const char* string)
                 {
-                    std::cout << "ADD MODEL " << string << std::endl;
                     Graphics::ModelInfo info;
                     info.path = string;
                     Graphics::Entity entity = SystemManager->createModel(info);
 
                 };
-            ImGuiIO &io = GUI->getIO();
+
+            //ImGuiIO &io = GUI->getIO();
             Graphics::FrameBuffer *sceneBuffer = new Graphics::FrameBuffer(1920, 1080);
 
             std::function<void(float, float)> resizeFunction =
@@ -128,35 +120,31 @@ namespace Graphics
                     resizeFunction,
                     PostRenderFunctions));
 
-
            GUI->addEditorComponent
                (new Graphics::ModelWindow
                    (
                        std::string("MODELS"), 
                        std::string("/Users/Games/Documents/c++/Cypher/data/Models"), 
+                       getJSON,
                        addModel
                    )
                );
-            GUI->addComponent(new Graphics::TestWindow(std::string("WOAAH")));
+            
+               GUI->addComponent(new Graphics::TestWindow(std::string("WOAAH")));
             // Initialize End
 
             while (!glfwWindowShouldClose(window))
             {
-
                 SystemManager->update();
-                
                 SystemManager->getRenderBatches(batches);
-
-
-                if (true)
-                {
-                    processInput(window);
-                }
+                
+                processInput(window);
 
                 renderAPI.clear();
 
                 // For drawing to scene window
                 // within gui
+
                 if (GUI->isWindowed())
                     sceneBuffer->Bind();
 
@@ -177,10 +165,7 @@ namespace Graphics
                     PostRenderFunctions.back()();
                     PostRenderFunctions.pop_back();
                 }
-
                 Canvas->updateDeltaTime();
-
-						std::cout << "AFTER TRAVERSAL" << std::endl;
             }
 
             GUI->shutdown();
@@ -200,25 +185,9 @@ namespace Graphics
         std::vector<std::function<void()>> PostRenderFunctions;
 
         void processInput(GLFWwindow *window);
-
         std::vector<Graphics::RenderBatch> batches;
 
-        std::vector<Graphics::Vertex> vertexData;
-        std::vector<unsigned int> indexData;
-        std::vector<int> counts;
 
-        std::vector<const void *> indices;
-        std::vector<int> baseVertices; // Current vertex offset per mesh
-
-        unsigned int currentBaseIndex = 0;
-        int currentBaseVertex = 0;
-        unsigned int instanceIndex = 0;
-
-        std::vector<Graphics::ElementDrawCall> drawCalls;
-
-        std::string shaderName;
-        glm::mat4 modelMatrix;
-        bool done = false;
     };
 }
 

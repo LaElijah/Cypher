@@ -5,6 +5,7 @@
 #include "Primitives.h"
 #include <glm/glm.hpp>
 #include <memory>
+#include <nlohmann/json.hpp>
 
 namespace Graphics
 {
@@ -25,8 +26,8 @@ namespace Graphics
 		// Root node constructor
 		SceneNode(glm::mat4 transform = glm::mat4(1.0))
 		{
-			ENTITY = -1;
-			PARENT = -2;
+			ENTITY = 0;
+			PARENT = 0;
 
 			globalTransform = transform;
 		}
@@ -39,7 +40,51 @@ namespace Graphics
 			return true;
 		}
 
-		void traverse(
+		static nlohmann::json updateJSON(
+			std::shared_ptr<SceneNode> node,
+			nlohmann::json data)
+		{
+
+
+			return data;
+		}
+
+		nlohmann::json traverse_postorder(
+			std::shared_ptr<SceneNode> node,
+			std::function<
+				nlohmann::json(
+					std::shared_ptr<SceneNode> node,
+					nlohmann::json data)>
+				update = updateJSON,
+			glm::mat4 &parentTransform = rootTransform,
+			bool wasDirty = false)
+		{
+
+
+			nlohmann::json data;
+
+			for (auto child : (node->ENTITY == 0) ? root : node->children)
+			{
+
+			    std::stringstream stream, childStream;
+				stream << "ENTITY-" << node->ENTITY;
+				childStream << "ENTITY-" << child.second->ENTITY;
+
+				data[stream.str()]["children"][childStream.str()] = traverse_postorder(
+					child.second,
+					update,
+					node->globalTransform,
+					(node->dirty || wasDirty));
+			}
+
+		    if (node->ENTITY != 0)
+			    data = update(node, data);
+
+		
+			return data;
+		}
+
+		bool traverse_preorder(
 			std::shared_ptr<SceneNode> node,
 			std::function<
 				bool(
@@ -47,29 +92,42 @@ namespace Graphics
 					glm::mat4 &parentTransform)>
 				update = updateNode,
 			glm::mat4 &parentTransform = rootTransform,
-			bool wasDirty = false)
+			bool wasDirty = false,
+			bool searching = true)
 		{
 
+			bool changed = false;
+			bool val = false;
 			bool next = false;
+
 			if (node->dirty || wasDirty)
 			{
 
-				if (node->ENTITY != -1)
-				    next = update(node, parentTransform);
+				if (node->ENTITY != 0)
+				{
+					next = update(node, parentTransform);
+					changed = true;
+				}
 				else
-				    next = true;
+					next = searching;
 
 				node->dirty = false;
 				wasDirty = true;
 			}
 
-			if (next)
-				for (auto child : (node->ENTITY == -1) ? root : node->children)
-					traverse(
+			if (next || searching) // If searching, will iterate through full graph
+				for (auto child : (node->ENTITY == 0) ? root : node->children)
+				{
+					val = traverse_preorder(
 						child.second,
 						update,
 						node->globalTransform,
 						(node->dirty || wasDirty));
+
+					changed = (val || changed) ? true : false;
+				}
+
+			return changed;
 		}
 
 		std::vector<std::shared_ptr<Graphics::SceneNode>> getNodes()
@@ -95,7 +153,7 @@ namespace Graphics
 
 				Graphics::Entity parent = node->PARENT;
 
-				if (parent == -1)
+				if (parent == 0)
 				{
 					root.erase(entity);
 					entities.erase(entity);
@@ -113,7 +171,7 @@ namespace Graphics
 		void insert(
 			Graphics::Entity entity,
 			glm::mat4 transform,
-			Graphics::Entity parent = -1)
+			Graphics::Entity parent = 0)
 		{
 			std::shared_ptr<SceneNode> node = std::make_shared<SceneNode>(
 				entity,
@@ -122,7 +180,7 @@ namespace Graphics
 
 			std::weak_ptr<SceneNode> weak = node;
 
-			if (parent == -1)
+			if (parent == 0)
 				root.insert(std::make_pair(entity, node));
 			else if (validate(parent))
 				entities.at(parent).lock()->children.insert(std::make_pair(entity, node));
@@ -138,7 +196,6 @@ namespace Graphics
 		bool dirty = true;
 		glm::mat4 globalTransform;
 		size_t ENTITY;
-
 		size_t PARENT;
 
 	protected:

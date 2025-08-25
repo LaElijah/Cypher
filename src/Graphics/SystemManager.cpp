@@ -9,8 +9,9 @@ Graphics::Entity Graphics::SystemManager::createModel(Graphics::ModelInfo &info,
 {
 
     Graphics::Entity entity = entityManager.createEntity();
-    renderSystem.loadModel(entity, info, parent);
     m_RenderBatches[info.DEFAULT_SHADER].alertChange();
+    renderSystem.loadModel(entity, info, parent);
+
     return entity;
 }
 
@@ -18,18 +19,16 @@ void Graphics::RenderSystem::loadModel(Graphics::Entity entity, Graphics::ModelI
 {
 
     componentManager
-        .add<Renderable>
-        (
-            entity, 
-            Graphics::Renderable(info.path)
-        );
+        .add<Renderable>(
+            entity,
+            Graphics::Renderable(info.path));
 
     componentManager
-        .add<Graphics::Transform>
-        (
+        .add<Graphics::Transform>(
             entity,
-            Graphics::Transform(glm::vec3(1.0f))
-        );
+            Graphics::Transform(glm::vec3(1.0f)));
+
+            
 
     sceneGraph.at("ROOT")->insert(entity, glm::mat4(1.0f), parent);
 }
