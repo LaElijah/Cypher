@@ -7,7 +7,8 @@
 #include "FrameBuffer.h"
 #include "FileReader.h"
 #include <nlohmann/json.hpp>
-
+#include <set>
+#include "ComponentManager.h"
 // abstract class
 
 namespace Graphics
@@ -51,6 +52,7 @@ namespace Graphics
         ModelWindow(
             std::string name,
             std::string directory,
+            std::shared_ptr<Graphics::ComponentManager> componentManager,
             std::function<std::pair<bool, nlohmann::json>()>& getJSON,
             std::function<void(const char *string)>& addModel
         );
@@ -67,8 +69,9 @@ namespace Graphics
         void iterateGraph(const nlohmann::json& json);
         nlohmann::json jsonSceneGraph;
         bool sceneChanged = true;
-        
-
+        std::unordered_map<std::string, std::shared_ptr<float>> floatPointers;
+        std::set<std::string> usedPointers;
+        std::shared_ptr<Graphics::ComponentManager> COMPONENT_MANAGER;
     };
 
     class SceneWindow : public GUIComponent

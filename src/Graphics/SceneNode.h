@@ -170,7 +170,7 @@ namespace Graphics
 
 		void insert(
 			Graphics::Entity entity,
-			glm::mat4 transform,
+			glm::mat4 transform = glm::mat4(1.0),
 			Graphics::Entity parent = 0)
 		{
 			std::shared_ptr<SceneNode> node = std::make_shared<SceneNode>(

@@ -80,6 +80,10 @@ namespace Graphics
         std::vector<unsigned int> counts;
         std::vector<unsigned int> indexCounts;
         std::map<std::string, std::vector<Graphics::TextureInfo>> textureInfo;
+        std::unordered_map<std::string, std::pair<unsigned int, unsigned int>> transformMappings;
+        unsigned int TRANSFORM_OFFSET = 0;
+        unsigned int lastModelSize = 0;
+        std::string recentModel;
         std::string shader = "debug";
 
         bool isChanged()
@@ -94,6 +98,8 @@ namespace Graphics
             indexCounts.clear();
             textureInfo.clear();
             transforms.clear();
+            transformMappings.clear();
+            lastModelSize = 0;
         }
 
         void finish()
@@ -108,11 +114,9 @@ namespace Graphics
             CHANGED = true;
         }
 
-        void insert
-        (
+        void insert(
             Graphics::Mesh &mesh,
-            glm::mat4& transform
-        )
+            glm::mat4 &transform)
         {
             std::cout << mesh.textureInfo.back().directory << std::endl;
             std::cout << "TEXTURE PATH: " << mesh.textureInfo.back().path << std::endl;
@@ -135,10 +139,12 @@ namespace Graphics
                     mesh.textureInfo.begin(),
                     mesh.textureInfo.end());
 
-                    std::cout << "BATCH TEXTURE SIZE: " << textureInfo.at("diffuse").size() << std::endl;
+            std::cout << "BATCH TEXTURE SIZE: " << textureInfo.at("diffuse").size() << std::endl;
 
-
+    
             transforms.push_back(transform);
+
+            
 
             std::cout << "BATCH MESH SHADER: " << mesh.shader << std::endl;
             shader = mesh.shader;
@@ -151,20 +157,20 @@ namespace Graphics
 
     struct Component
     {
-
     };
 
     struct Renderable : public Component
     {
-        Renderable
-        (
-            std::string path
-        )
+        Renderable(
+            std::string path,
+            std::string name)
         {
             this->path = path;
+            this->name = name;
         }
 
         std::string path;
+        std::string name;
     };
 
     struct Transform : public Component

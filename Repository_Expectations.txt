@@ -1,0 +1,45 @@
+
+
+#################################################
+#################################################
+############ General Expectations ###############
+#################################################
+#################################################
+
+
+The Renderer (And render api classes) are special 
+classes. While the aforementioned classes may share 
+some of the same expectations that the rest of the 
+project must follow, they act as an api for the 
+application layer, thusly requiring abstractions.
+
+
+
+
+### Naming Conventions
+
+- Naming a new file must follow capital camel case
+as in ComponentManager
+
+
+
+### Functionality
+
+Managers
+- Managers must follow the naming convention
+(Functionality)Manager
+
+- Managers often handle memory, access, insertion.
+
+
+Systems
+- Systems handle changes to memory 
+
+
+
+
+
+
+Refraction Plans:
+
+

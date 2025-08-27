@@ -125,8 +125,10 @@ namespace Graphics
                 entityInfo.add<T>();
             }
             else
-                ARCHETYPES[archetypeID]->replace(entity, component);
+            {
 
+                ARCHETYPES[archetypeID]->replace(entity, component);
+            }
             return index;
         };
 

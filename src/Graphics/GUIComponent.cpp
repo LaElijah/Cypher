@@ -5,6 +5,8 @@
 #include <cstdint>
 #include <nlohmann/json.hpp>
 #include <regex>
+#include <set>
+#include <glm/gtc/matrix_transform.hpp>
 
 Graphics::GUIComponent::GUIComponent(std::string name)
     : Name(name)
@@ -39,8 +41,9 @@ void Graphics::TestWindow::handleInput()
 Graphics::ModelWindow::ModelWindow(
     std::string name,
     std::string directory,
-    std::function<std::pair<bool, nlohmann::json>()>& getJSON,
-    std::function<void(const char *string)>& addModel)
+    std::shared_ptr<Graphics::ComponentManager> componentManager,
+    std::function<std::pair<bool, nlohmann::json>()> &getJSON,
+    std::function<void(const char *string)> &addModel)
     : GUIComponent(name),
       FILE_READER(directory),
       GET_JSON(getJSON),
@@ -51,7 +54,7 @@ Graphics::ModelWindow::ModelWindow(
     auto pair = getJSON();
     sceneChanged = pair.first;
     jsonSceneGraph = pair.second;
-
+    COMPONENT_MANAGER = componentManager;
 };
 
 void Graphics::ModelWindow::draw()
@@ -60,7 +63,7 @@ void Graphics::ModelWindow::draw()
     ImGui::Begin(Name.c_str());
 
     ImGui::Text("Loaded Models");
-    
+
     for (std::string file : files)
     {
         ImGui::Text(file.c_str());
@@ -71,59 +74,102 @@ void Graphics::ModelWindow::draw()
         }
     }
 
-
     auto pair = GET_JSON();
 
-    //std::cout << pair.second << std::endl;
+    //std::cout << pair.second.dump(4) << std::endl;
 
     if (ImGui::TreeNode("Scene"))
     {
         iterateGraph(pair.second);
-        ImGui::TreePop(); 
+        ImGui::TreePop();
     }
 
+    for (auto pointer : floatPointers)
+    {
+        if (!usedPointers.contains(pointer.first))
+        {
+            floatPointers.erase(pointer.first);
+        }
+    }
+
+    usedPointers.clear();
     ImGui::End();
 }
 
-void Graphics::ModelWindow::iterateGraph(const nlohmann::json& json)
+void Graphics::ModelWindow::iterateGraph(const nlohmann::json &json)
 {
-    float* bar = new float(1.0f);
+
     std::regex self_regex("ENTITY-", std::regex_constants::ECMAScript | std::regex_constants::icase);
-    //std::cout << json.dump(4) << std::endl;
-    for(auto it = json.begin(); it != json.end(); ++it)
+    // std::cout << json.dump(4) << std::endl;
+    for (auto it = json.begin(); it != json.end(); ++it)
     {
         if (it->is_structured())
         {
             nlohmann::json child = *it;
-
-            // Children Rendering
-            for (auto childIt = child.begin(); childIt != child.end(); ++childIt)
-            {
-               
+                if (std::regex_search(it.key(), self_regex) && it.key() != "ENTITY-0")
                 {
-                    if (std::regex_search(it.key(), self_regex) && it.key() != "ENTITY-0")
+                    if (ImGui::TreeNodeEx(it.key().c_str())) 
                     {
-                        if (ImGui::TreeNodeEx(it.key().c_str()))
+                        ImGui::Text("Position");
+                        // ImGui::Text(std::string(it.value()["transform"]["position"]["x"].dump()).c_str());
+
+
+
+                        // TODO: Every frame, have list of all pointers keys in a set
+                        //  Then through this function, erase the keys that have been used
+                        //  and store them in a different set to remember the still used pointers
+                        //  whats left are unused, delete those pointers, the remembered
+                        //  pointers becomes the new pointer key set.
+                        //  Whenever the keys are inserted newly add to the first set
+
+                        std::string entityString = it.value()["entity"]["id"];
+                        Graphics::Entity entity;
+                        std::stringstream entityStream(entityString);
+
+                        entityStream >> entity;
+
+                        auto transform = COMPONENT_MANAGER->get<Graphics::Transform>(entity);
+
+                        std::string floatKeyPositionX = it.key() + "-float" + "-x";
+
+                        if (floatPointers.count(floatKeyPositionX) == 0)
+                            floatPointers.emplace(floatKeyPositionX, std::make_shared<float>(transform.position.x));
+
+
+
+                        usedPointers.insert(floatKeyPositionX);
+
+                        float preFloat = *floatPointers.at(floatKeyPositionX).get();
+                        ImGui::SliderFloat("X", floatPointers.at(floatKeyPositionX).get(), -100.0f, 100.0f);
+                        if (preFloat != *floatPointers.at(floatKeyPositionX).get())
                         {
-                            ImGui::Text("Position");
-                            ImGui::Text(std::string(it.value()["transform"]["position"]["x"].dump()).c_str());
-                            ImGui::SliderFloat("X", bar, -100.0f, 100.0f);
-                            ImGui::TreePop(); 
+
+                            Graphics::Transform newTransform(glm::vec3(1.0f));
+
+                            newTransform.position.x = *floatPointers.at(floatKeyPositionX).get();
+                            newTransform.position.y = 1;
+                            newTransform.position.z = 1;
+
+                            newTransform.localTransform = glm::translate
+                                (
+                                    newTransform.localTransform, 
+                                    newTransform.position
+                                );
+
+                            COMPONENT_MANAGER->add(entity, newTransform);
+
+                           
                         }
+
+                        ImGui::TreePop();
                     }
-
                 }
-            }
-
-
             iterateGraph(*it);
         }
         else
-        { 
+        {
         }
     }
-
-        delete bar;
 }
 
 void Graphics::ModelWindow::handleInput()

@@ -387,6 +387,8 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, config.SSBO[0]);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, config.SSBO[0]);
 
+
+        std::cout << "POSITION RELOAD DATA" << std::endl;
     // Position vectors
     glBufferData(
         GL_SHADER_STORAGE_BUFFER,

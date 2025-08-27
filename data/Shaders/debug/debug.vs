@@ -14,7 +14,7 @@ uniform mat4 view;
 uniform mat4 projection;
 
 
-layout(binding = 0, std430) buffer transformBudder
+layout(binding = 0, std430) buffer transformBuffer
 {
     mat4 positions[];
 };

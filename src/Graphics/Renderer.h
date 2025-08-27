@@ -66,6 +66,8 @@ namespace Graphics
         template <typename T>
         void draw(Graphics::RenderAPI<T> &renderAPI)
         {
+
+            std::cout << "RENDERING" << std::endl;
             for (Graphics::RenderBatch &batch : batches)
             {
                 auto shader = renderAPI.getShader(batch.shader);
@@ -75,8 +77,11 @@ namespace Graphics
                 shader->setUniform("view", Camera->getViewMatrix());
                 shader->setUniform("projection", Camera->getProjectionMatrix());
 
+                std::cout << "LOADING" << std::endl;
                 renderAPI.loadData(batch);
+                std::cout << "DRAWING" << std::endl;
                 renderAPI.drawElements(batch.counts.size());
+                std::cout << "DRAWN" << std::endl;
                 renderAPI.flush(batch);
             }
         }
@@ -125,6 +130,7 @@ namespace Graphics
                    (
                        std::string("MODELS"), 
                        std::string("/Users/Games/Documents/c++/Cypher/data/Models"), 
+                       SystemManager->getComponentManager(),
                        getJSON,
                        addModel
                    )

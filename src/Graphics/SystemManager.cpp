@@ -18,15 +18,20 @@ Graphics::Entity Graphics::SystemManager::createModel(Graphics::ModelInfo &info,
 void Graphics::RenderSystem::loadModel(Graphics::Entity entity, Graphics::ModelInfo &info, Graphics::Entity parent)
 {
 
-    componentManager
-        .add<Renderable>(
-            entity,
-            Graphics::Renderable(info.path));
+    std::stringstream name;
+    name << "ENTITY-" << entity;
 
     componentManager
-        .add<Graphics::Transform>(
+        ->add<Renderable>(
+            entity,
+            Graphics::Renderable(info.path, name.str()));
+
+    componentManager
+        ->add<Graphics::Transform>(
             entity,
             Graphics::Transform(glm::vec3(1.0f)));
+
+            std::cout << "ADDED ENTITY:" << entity << std::endl;
 
             
 
