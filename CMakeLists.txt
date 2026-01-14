@@ -14,6 +14,8 @@ set(EXTERNAL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+find_package(OpenGL 3 REQUIRED)
+
 FetchContent_Declare(
     json
     URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
@@ -42,6 +44,12 @@ FetchContent_Declare(
     glm
     GIT_REPOSITORY https://github.com/g-truc/glm.git 
     GIT_TAG master
+)
+
+FetchContent_Declare(
+  imgui
+  GIT_REPOSITORY https://github.com/ocornut/imgui.git
+  GIT_TAG master
 )
 
 
@@ -75,32 +83,11 @@ set(
     ${EXTERNAL_DIR}/STB_IMAGE/stb_image.cpp
 )
      
-set(
-    IMGUI_SOURCE_FILES
-    ${EXTERNAL_DIR}/imgui/imconfig.h
-    ${EXTERNAL_DIR}/imgui/imgui.cpp
-    ${EXTERNAL_DIR}/imgui/imgui_demo.cpp
-    ${EXTERNAL_DIR}/imgui/imgui_draw.cpp
-    ${EXTERNAL_DIR}/imgui/imgui.h 
-    ${EXTERNAL_DIR}/imgui/imgui_internal.h
-    ${EXTERNAL_DIR}/imgui/imgui_tables.cpp
-    ${EXTERNAL_DIR}/imgui/imgui_widgets.cpp
-    ${EXTERNAL_DIR}/imgui/imstb_rectpack.h
-    ${EXTERNAL_DIR}/imgui/imstb_textedit.h
-    ${EXTERNAL_DIR}/imgui/imstb_truetype.h
-    ${EXTERNAL_DIR}/imgui/backends/imgui_impl_glfw.cpp
-    ${EXTERNAL_DIR}/imgui/backends/imgui_impl_glfw.h
-    ${EXTERNAL_DIR}/imgui/backends/imgui_impl_opengl3.cpp
-    ${EXTERNAL_DIR}/imgui/backends/imgui_impl_opengl3.h
-    ${EXTERNAL_DIR}/imgui/backends/imgui_impl_opengl3_loader.h 
-    ${EXTERNAL_DIR}/imgui/misc/cpp/imgui_stdlib.cpp
-    ${EXTERNAL_DIR}/imgui/misc/cpp/imgui_stdlib.h
-)
-
 FetchContent_MakeAvailable(glm)
 FetchContent_MakeAvailable(glfw)
 FetchContent_MakeAvailable(assimp)
 FetchContent_MakeAvailable(json)
+FetchContent_MakeAvailable(imgui)
 
 
 add_executable(
@@ -109,6 +96,13 @@ add_executable(
     ${GLAD_SOURCE_FILES}
     ${STB_IMAGE_SOURCE_FILES}
     ${IMGUI_SOURCE_FILES} 
+    imgui/imgui.cpp
+    imgui/imgui_demo.cpp
+    imgui/imgui_draw.cpp
+    imgui/imgui_tables.cpp
+    imgui/imgui_widgets.cpp
+    imgui/backends/imgui_impl_glfw.cpp
+    imgui/backends/imgui_impl_opengl3.cpp
 )
 
 target_link_libraries(Cypher PRIVATE nlohmann_json::nlohmann_json) 
@@ -116,4 +110,10 @@ target_link_libraries(Cypher PRIVATE assimp)
 target_link_libraries(Cypher PRIVATE glfw)
 target_link_libraries(Cypher PRIVATE glm)
 
+target_include_directories(Cypher
+PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/imgui
+  ${CMAKE_CURRENT_LIST_DIR}/imgui/backends
+)
+#target_link_libraries(Cypher PRIVATE imgui)
 

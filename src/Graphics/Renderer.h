@@ -11,9 +11,9 @@
 #include "RenderAPI.h"
 #include <memory>
 #include "ResourceManager.h"
-#include "../../external/imgui/imgui.h"
-#include "../../external/imgui/backends/imgui_impl_opengl3.h"
-#include "../../external/imgui/backends/imgui_impl_glfw.h"
+#include "imgui.h"
+#include "backends/imgui_impl_opengl3.h"
+#include "backends/imgui_impl_glfw.h"
 #include "GUIComponent.h"
 #include "FrameBuffer.h"
 #include <functional>
@@ -129,7 +129,7 @@ namespace Graphics
                (new Graphics::ModelWindow
                    (
                        std::string("MODELS"), 
-                       std::string("/Users/Games/Documents/c++/Cypher/data/Models"), 
+                       std::string("/home/personal/Projects/Cypher/data/Models"), 
                        SystemManager->getComponentManager(),
                        getJSON,
                        addModel

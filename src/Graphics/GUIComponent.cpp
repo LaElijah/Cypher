@@ -1,7 +1,7 @@
 #include "GUIComponent.h"
-#include "../../external/imgui/imgui.h"
-#include "../../external/imgui/backends/imgui_impl_opengl3.h"
-#include "../../external/imgui/backends/imgui_impl_glfw.h"
+#include "imgui.h"
+#include "backends/imgui_impl_opengl3.h"
+#include "backends/imgui_impl_glfw.h"
 #include <cstdint>
 #include <nlohmann/json.hpp>
 #include <regex>
