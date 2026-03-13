@@ -1,5 +1,6 @@
 #include "GUIComponent.h"
 #include "imgui.h"
+#include "FileReader.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_glfw.h"
 #include <cstdint>
@@ -45,7 +46,6 @@ Graphics::ModelWindow::ModelWindow(
     std::function<std::pair<bool, nlohmann::json>()> &getJSON,
     std::function<void(const char *string)> &addModel)
     : GUIComponent(name),
-      FILE_READER(directory),
       GET_JSON(getJSON),
       ADD_MODEL(addModel)
 {
@@ -59,7 +59,7 @@ Graphics::ModelWindow::ModelWindow(
 
 void Graphics::ModelWindow::draw()
 {
-    std::vector<std::string> files = FILE_READER.getFiles();
+    std::vector<std::string> files = Graphics::FileReader::getFolders(Directory);
     ImGui::Begin(Name.c_str());
 
     ImGui::Text("Loaded Models");
@@ -68,9 +68,11 @@ void Graphics::ModelWindow::draw()
     {
         ImGui::Text(file.c_str());
 
+	// Change so scene file type is searched for and then loaded
+	// into function ADD_MODEL
         if (ImGui::Button(("SPAWN MODEL##" + file).c_str()))
         {
-            ADD_MODEL((Directory + "/" + file + "/scene.gltf").c_str());
+            ADD_MODEL((file + "/scene.gltf").c_str());
         }
     }
 

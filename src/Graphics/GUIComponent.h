@@ -62,7 +62,6 @@ namespace Graphics
 
     private:
         std::string Directory;
-        Graphics::FileReader FILE_READER;
         std::function<void(const char *string)> ADD_MODEL;
         std::function<std::pair<bool, nlohmann::json>()> GET_JSON;
 

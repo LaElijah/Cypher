@@ -14,16 +14,16 @@ void Graphics::ShaderInfo::validateShaderSupport(const std::vector<std::string>&
     std::set<std::string> uniqueExtensions;
     for (const std::string& file : files)
     {
-        std::string extension = Graphics::FileReader::splitFileExtension(file).second;
+        std::string extension = Graphics::FileReader::getFileExtension(file).second;
 
         if (extensionEnums.count(extension) <= 0)
         {
-            throw std::invalid_argument("Unsupported file extension: " + extension); 
+            throw std::invalid_argument("Unsupported file extension: " + extension + "\n Path: " + file); 
         }
 
         if (!uniqueExtensions.insert(extension).second)
         {
-            throw std::invalid_argument("Duplicate file extension: " + extension); 
+            throw std::invalid_argument("Duplicate file extension: " + extension + "\n Path: " + file); 
         }
     }	
 }
@@ -155,11 +155,12 @@ std::map<size_t, std::vector<Graphics::OpenGLVertexAttribute>> Graphics::OpenGLS
 
 const std::unordered_map<std::string, Graphics::SHADER_FILE_TYPE> Graphics::ShaderInfo::extensionEnums = 
 {
-    {"vs", Graphics::SHADER_FILE_TYPE::VERTEX},
-    {"fs", Graphics::SHADER_FILE_TYPE::FRAGMENT},
-    {"cs", Graphics::SHADER_FILE_TYPE::COMPUTE}
+    {".vs", Graphics::SHADER_FILE_TYPE::VERTEX},
+    {".fs", Graphics::SHADER_FILE_TYPE::FRAGMENT},
+    {".cs", Graphics::SHADER_FILE_TYPE::COMPUTE}
 };
 
+const int Graphics::ShaderInfo::maxShaderTypes = extensionEnums.size();
 std::pair<size_t, std::vector<Graphics::OpenGLVertexAttribute>> Graphics::OpenGLShader::getFormat()
 {
     return std::make_pair(formatKey, m_Formats[formatKey]);

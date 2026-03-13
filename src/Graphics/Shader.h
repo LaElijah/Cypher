@@ -35,34 +35,22 @@ namespace Graphics
 	    std::string name;
     
             ShaderInfo(
-	        std::string shaderName,
-                std::string vertexShaderPath, 
-    	        std::string fragmentShaderPath)
+	        std::string Name,
+    	        std::vector<std::string> files
+		)
             {
-                name = shaderName; 
-                loadData(vertexShaderPath.c_str(), fragmentShaderPath.c_str());   
+                name = Name; 
+                loadData(files);   
 	    };
-              
-            ShaderInfo(
-                const char* shaderName,
-                const char* vertexShaderPath, 
-    	        const char* fragmentShaderPath)
-            {
-                name = std::string(shaderName); 
-	        loadData(vertexShaderPath, fragmentShaderPath);
-            };
+             
 
+	    static const std::unordered_map<std::string, Graphics::SHADER_FILE_TYPE> extensionEnums;
         private:
-            template <typename...Args>
-	    void loadData(Args... args)
+	    void loadData(std::vector<std::string>& files)
 	    {
-	        constexpr int numArgs = sizeof...(args);
-		//static_assert(numArgs <= maxShaderTypes, "Too many shader files for one shader program");
+	        validateShaderSupport(files); 
 
-		std::vector<std::string> shaderFiles = {args...};
-	        validateShaderSupport(shaderFiles); 
-
-                for (std::string& file : shaderFiles)
+                for (std::string& file : files)
 		{
 		    ShaderFileData data;
 	            std::fstream shaderFile;	
@@ -79,10 +67,13 @@ namespace Graphics
 		   	shaderFile.close();
 
 
-			data.type = extensionEnums.find(
-				Graphics::FileReader::splitFileExtension(
-				Graphics::FileReader::getNameFromDirectory(file))
-			        .second)->second;
+			data.type = extensionEnums.find
+			(
+			    Graphics::FileReader::getFileExtension
+			    (
+			        Graphics::FileReader::getFileName(file)
+			    ).second
+			)->second;
 
                         data.source = shaderSource.str();
     	                data.path = std::string(file);
@@ -96,10 +87,9 @@ namespace Graphics
 		}
 	    }		
 
-	    static const std::unordered_map<std::string, Graphics::SHADER_FILE_TYPE> extensionEnums;
             
 	    // TODO: Get compile time loading for this from supported extensions
-	    static const int maxShaderTypes = 2;
+	    static const int maxShaderTypes;
 
             void validateShaderSupport(const std::vector<std::string>& files);
     };
