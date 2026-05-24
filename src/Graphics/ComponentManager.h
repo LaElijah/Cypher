@@ -23,8 +23,11 @@ namespace Graphics
                 return archetypeManager.getAllContaining<T>();
             }
     
-    
-            
+            template <typename... T>
+            Graphics::PackIterator<T...> getAllContainingMulti()
+            {
+                return archetypeManager.getAllContainingMulti<T...>(); // was missing ...
+            }   
             template <typename T>
             T get(Graphics::Entity entity)
             {

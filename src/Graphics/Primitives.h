@@ -7,15 +7,193 @@
 #include <map>
 #include <bitset>
 #include <iostream>
+#include <memory> 
 
+#include <functional>
+ 
 const unsigned int MAX_COMPONENT_SIZE = 256;
 
 namespace Graphics
 {
 
+    struct Vertex
+    {
+        glm::vec3 Position;
+        glm::vec3 Normal;
+        glm::vec2 TexCoords;
+    };
+
+
     typedef std::bitset<MAX_COMPONENT_SIZE> OBJECT_ID;
 
     typedef size_t Entity;
+
+struct BufferRecord
+{
+    BufferRecord
+    (
+        int size = 0,
+        std::function<void(BufferRecord)> callback = nullptr,
+        int start = 0,
+	std::string owner = ""
+    )
+    : size(size),
+      cleanup(callback),
+      start(start),
+      owner(owner)
+    {
+        split = 0;
+ 
+        if (size == 0)
+            active = false;
+    }
+ 
+    int start;
+    int size;
+    int split;
+    bool active = true;
+    std::string owner;
+ 
+    std::function<void(BufferRecord)> cleanup;
+ 
+    ~BufferRecord()
+    {
+        if (cleanup && active)
+        {
+            active = false;
+            cleanup(BufferRecord(size, nullptr, start));
+        }
+    }
+ 
+    std::string toString()
+    {
+        return "START: " + std::to_string(start)
+             + " | SIZE: "   + std::to_string(size)
+             + " | SPLIT: "  + std::to_string(split)
+             + " | ACTIVE: " + std::to_string(active);
+    }
+};
+ 
+	    
+ 
+class Buffer
+{
+    public:
+        Buffer(int size, std::string label) : size(size), name(label)
+        {
+            tail = 0;
+            this->cleanup = [this](auto deleted)
+            {
+                for (int i = records.size() - 1; i >= 0; i--)
+                {
+                    if (records[i].expired())
+		    {
+                        freeSpaces.push_back
+			(
+                            std::make_shared<BufferRecord>(deleted.size, nullptr, deleted.start, name)
+			);
+
+                        records.erase(records.begin() + i);
+			break;
+		    }
+                }
+            };
+        }
+ 
+
+	void clear()
+	{
+
+	    records.clear();
+	    freeSpaces.clear();
+	}
+
+        std::shared_ptr<BufferRecord> allocate(int byteSize)
+        {
+            if (byteSize > size)
+                return nullptr;
+ 
+            // Fresh buffer
+            if (freeSpaces.empty() && records.empty())
+            {
+                auto record = std::make_shared<BufferRecord>(byteSize, cleanup, tail, name);
+                records.push_back(record);   // store as weak_ptr
+                tail += byteSize;
+                return record;
+            }
+ 
+            // Try to fit into an existing free space
+            for (int i = 0; i < freeSpaces.size(); i++)
+            {
+                if (freeSpaces[i]->size >= byteSize)
+                {
+                    auto record = std::make_shared<BufferRecord>(
+                        byteSize, cleanup, freeSpaces[i]->start, name);
+ 
+                    freeSpaces[i]->size  -= byteSize;
+                    freeSpaces[i]->start += byteSize;
+                    ++freeSpaces[i]->split;
+ 
+                    if (freeSpaces[i]->size == 0)
+                        freeSpaces.erase(freeSpaces.begin() + i);
+ 
+                    records.push_back(record);   // store as weak_ptr
+                    return record;
+                }
+            }
+ 
+            // Try the unallocated tail
+            if ((size - tail) >= byteSize)
+            {
+                auto record = std::make_shared<BufferRecord>(byteSize, cleanup, tail, name);
+                records.push_back(record);   // store as weak_ptr
+                tail += byteSize;
+                return record;
+            }
+ 
+            return nullptr;
+        }
+ 
+        bool free(std::shared_ptr<BufferRecord> record)
+        {
+            if (!record)
+                return false;
+ 
+            for (int i = 0; i < (int)records.size(); i++)
+            {
+                if (records[i].lock() == record)
+                {
+                    freeSpaces.push_back(
+                        std::make_shared<BufferRecord>(record->size, nullptr, record->start, name));
+                    records.erase(records.begin() + i);
+                    return true;
+                }
+            }
+            return false;
+        }
+ 
+        std::vector<std::weak_ptr<BufferRecord>> getRecords()
+        {
+            return records;
+        }
+ 
+        std::vector<std::shared_ptr<BufferRecord>> getFreeSpaces()
+        {
+            return freeSpaces;
+        }
+ 
+        std::function<void(BufferRecord)> cleanup;
+
+    private:
+        std::vector<std::weak_ptr<BufferRecord>>   records;     // non-owning
+        std::vector<std::shared_ptr<BufferRecord>> freeSpaces;  // buffer-owned
+ 
+        int size;
+        int tail;
+	std::string name;
+};
+
+
 
     struct ModelInfo
     {
@@ -31,14 +209,6 @@ namespace Graphics
         std::string path;
         std::string directory;
     };
-
-    struct Vertex
-    {
-        glm::vec3 Position;
-        glm::vec3 Normal;
-        glm::vec2 TexCoords;
-    };
-
     struct Mesh
     {
         Mesh(
@@ -71,9 +241,15 @@ namespace Graphics
         std::vector<Graphics::Mesh> meshes;
         Graphics::ModelInfo info;
     };
-
     struct RenderBatch
     {
+
+
+	std::vector<unsigned int> instanceCounts;
+	std::vector<unsigned int> startingVertices;
+	std::vector<unsigned int> startingIndices;
+
+
         std::vector<glm::mat4> transforms;
         std::vector<Graphics::Vertex> vertexData;
         std::vector<unsigned int> indexData;
@@ -92,13 +268,10 @@ namespace Graphics
         }
         void reset()
         {
-            vertexData.clear();
-            indexData.clear();
             counts.clear();
             indexCounts.clear();
             textureInfo.clear();
             transforms.clear();
-            transformMappings.clear();
             lastModelSize = 0;
         }
 
@@ -115,40 +288,30 @@ namespace Graphics
         }
 
         void insert(
-            Graphics::Mesh &mesh,
+            std::shared_ptr<Graphics::BufferRecord>vRecord,
+            //std::shared_ptr<Graphics::BufferRecord<Graphics::Index>>iRecord,
             glm::mat4 &transform)
         {
-            std::cout << mesh.textureInfo.back().directory << std::endl;
-            std::cout << "TEXTURE PATH: " << mesh.textureInfo.back().path << std::endl;
-            vertexData.insert(
-                vertexData.end(),
-                mesh.vertices.begin(),
-                mesh.vertices.end());
+            //std::cout << mesh.textureInfo.back().directory << std::endl;
+            //std::cout << "TEXTURE PATH: " << mesh.textureInfo.back().path << std::endl;
 
-            indexData.insert(
-                indexData.end(),
-                mesh.indices.begin(),
-                mesh.indices.end());
+	    counts.push_back(vRecord->size);
+            //indexCounts.push_back(iRecord->size);
 
-            counts.push_back(mesh.vertices.size());
-            indexCounts.push_back(mesh.indices.size());
-
+	    /*
             textureInfo["diffuse"]
                 .insert(
                     textureInfo["diffuse"].end(),
                     mesh.textureInfo.begin(),
                     mesh.textureInfo.end());
-
-            std::cout << "BATCH TEXTURE SIZE: " << textureInfo.at("diffuse").size() << std::endl;
+*/
 
     
             transforms.push_back(transform);
 
             
 
-            std::cout << "BATCH MESH SHADER: " << mesh.shader << std::endl;
-            shader = mesh.shader;
-            std::cout << "BATCH SHADER AFTER UPDATE: " << shader << std::endl;
+            shader = "debug";
         }
 
     private:
@@ -170,8 +333,11 @@ namespace Graphics
         }
 
         std::string path;
-        std::string name;
+        std::string name = "debug";
     };
+
+    struct Index : public Component
+    {};
 
     struct Transform : public Component
     {
@@ -192,6 +358,22 @@ namespace Graphics
         RenderComponent(Graphics::Model model) : model(model) {};
         Graphics::Model model;
     };
+
+// GOTO: 327 of renderAPI to change loading method in renderAPI
+    struct RenderDrawData
+    {
+	// Draw Call data 
+	unsigned int vertexCount;
+        unsigned int instanceCount;
+	unsigned int indexCount;
+	unsigned int startingIndex;
+	unsigned int startingVertex;
+	unsigned int baseInstance;
+
+	// Instance data
+	std::vector<Graphics::Transform> transforms;
+    };
+
 
 }
 

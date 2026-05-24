@@ -13,6 +13,7 @@
 #include "../../external/STB_IMAGE/stb_image.h"
 #include "Primitives.h"
 
+
 namespace Graphics
 {
 
@@ -25,7 +26,28 @@ namespace Graphics
             return static_cast<T *>(this)->loadImpl(info);
         }
 
+	void storeModelRecord(std::string path, std::shared_ptr<Graphics::BufferRecord> vRecord, std::shared_ptr<Graphics::BufferRecord> iRecord)
+    {
+        if (modelRecords.count(path) != 0)
+	{
+	        auto record = modelRecords.at(path);	
+		std::get<2>(record) += 1;
+	}
+
+	else 
+	    modelRecords.emplace(path, std::tuple<std::shared_ptr<Graphics::BufferRecord>, std::shared_ptr<Graphics::BufferRecord>, unsigned int>(vRecord, iRecord, 0));
+    }
+
+	std::pair<std::shared_ptr<Graphics::BufferRecord>, std::shared_ptr<Graphics::BufferRecord>> getModelRecords(std::string path)
+	{
+
+	    auto [v, i, count] = modelRecords.at(path);
+	    return {v, i};
+	};
     protected:
+
+    private:
+	std::unordered_map<std::string, std::tuple<std::shared_ptr<Graphics::BufferRecord>, std::shared_ptr<Graphics::BufferRecord>, unsigned int>> modelRecords;
     };
 
     class AssimpImporter : public ModelLoader<AssimpImporter>

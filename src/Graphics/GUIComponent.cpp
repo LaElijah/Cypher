@@ -12,6 +12,7 @@
 Graphics::GUIComponent::GUIComponent(std::string name)
     : Name(name)
 {
+    
 }
 
 std::string Graphics::GUIComponent::getName()
@@ -85,92 +86,146 @@ void Graphics::ModelWindow::draw()
         iterateGraph(pair.second);
         ImGui::TreePop();
     }
+    // TODO: OPTIMIZE POINTER CREATION AND DELETION
 
+    /*
     for (auto pointer : floatPointers)
     {
         if (!usedPointers.contains(pointer.first))
         {
+
             floatPointers.erase(pointer.first);
         }
     }
-
+    */
     usedPointers.clear();
+    floatPointers.clear();
     ImGui::End();
 }
 
+
+void Graphics::ModelWindow::drawNodeTransforms(Graphics::Entity entity, std::string key)
+{
+    bool changed = false; 
+    auto transform = COMPONENT_MANAGER->get<Graphics::Transform>(entity);
+
+    std::string sliderKeyRoot = key + "-float" + "-";
+    std::string floatKeyPositionX = sliderKeyRoot + "x";
+    std::string floatKeyPositionY = sliderKeyRoot + "y";
+    std::string floatKeyPositionZ = sliderKeyRoot + "z";
+
+    if (floatPointers.count(floatKeyPositionX) == 0)
+        floatPointers.emplace(floatKeyPositionX, std::make_shared<float>(transform.position.x));
+
+    if (floatPointers.count(floatKeyPositionY) == 0)
+        floatPointers.emplace(floatKeyPositionY, std::make_shared<float>(transform.position.y));
+
+    if (floatPointers.count(floatKeyPositionZ) == 0)
+        floatPointers.emplace(floatKeyPositionZ, std::make_shared<float>(transform.position.z));
+
+
+    usedPointers.insert(floatKeyPositionX);
+    usedPointers.insert(floatKeyPositionY);
+    usedPointers.insert(floatKeyPositionZ);
+
+    float preFloatX = *floatPointers.at(floatKeyPositionX).get();
+    float preFloatY = *floatPointers.at(floatKeyPositionY).get();
+    float preFloatZ = *floatPointers.at(floatKeyPositionZ).get();
+
+        
+    
+    ImGui::SliderFloat("X", floatPointers.at(floatKeyPositionX).get(), -100.0f, 100.0f);
+    ImGui::SliderFloat("Y", floatPointers.at(floatKeyPositionY).get(), -100.0f, 100.0f);
+    ImGui::SliderFloat("Z", floatPointers.at(floatKeyPositionZ).get(), -100.0f, 100.0f);
+    
+    if (preFloatX != *floatPointers.at(floatKeyPositionX).get())
+    {
+        transform.position.x = *floatPointers.at(floatKeyPositionX).get();
+	changed = true;
+    }
+
+    if (preFloatY != *floatPointers.at(floatKeyPositionY).get())
+    {
+        transform.position.y = *floatPointers.at(floatKeyPositionY).get();
+	changed = true;
+    }   
+
+    if (preFloatZ != *floatPointers.at(floatKeyPositionZ).get())
+    {
+        transform.position.z = *floatPointers.at(floatKeyPositionZ).get();
+	changed = true;
+    }
+
+    if (changed)
+    {
+
+        transform.localTransform = glm::translate
+            (
+                transform.localTransform, 
+                transform.position
+            );
+
+        COMPONENT_MANAGER->add(entity, transform);
+
+    }
+}
+
+
 void Graphics::ModelWindow::iterateGraph(const nlohmann::json &json)
 {
-
     std::regex self_regex("ENTITY-", std::regex_constants::ECMAScript | std::regex_constants::icase);
-    // std::cout << json.dump(4) << std::endl;
+
+    //std::cout << json.dump(1) << std::endl;
     for (auto it = json.begin(); it != json.end(); ++it)
     {
         if (it->is_structured())
         {
-            nlohmann::json child = *it;
-                if (std::regex_search(it.key(), self_regex) && it.key() != "ENTITY-0")
+            if (std::regex_search(it.key(), self_regex))
+            {
+                if (ImGui::TreeNodeEx(it.key().c_str())) 
                 {
-                    if (ImGui::TreeNodeEx(it.key().c_str())) 
-                    {
-                        ImGui::Text("Position");
-                        // ImGui::Text(std::string(it.value()["transform"]["position"]["x"].dump()).c_str());
+                    ImGui::Text("Position");
 
 
-
-                        // TODO: Every frame, have list of all pointers keys in a set
-                        //  Then through this function, erase the keys that have been used
-                        //  and store them in a different set to remember the still used pointers
-                        //  whats left are unused, delete those pointers, the remembered
-                        //  pointers becomes the new pointer key set.
-                        //  Whenever the keys are inserted newly add to the first set
-
-                        std::string entityString = it.value()["entity"]["id"];
-                        Graphics::Entity entity;
-                        std::stringstream entityStream(entityString);
-
-                        entityStream >> entity;
-
-                        auto transform = COMPONENT_MANAGER->get<Graphics::Transform>(entity);
-
-                        std::string floatKeyPositionX = it.key() + "-float" + "-x";
-
-                        if (floatPointers.count(floatKeyPositionX) == 0)
-                            floatPointers.emplace(floatKeyPositionX, std::make_shared<float>(transform.position.x));
-
-
-
-                        usedPointers.insert(floatKeyPositionX);
-
-                        float preFloat = *floatPointers.at(floatKeyPositionX).get();
-                        ImGui::SliderFloat("X", floatPointers.at(floatKeyPositionX).get(), -100.0f, 100.0f);
-                        if (preFloat != *floatPointers.at(floatKeyPositionX).get())
-                        {
-
-                            Graphics::Transform newTransform(glm::vec3(1.0f));
-
-                            newTransform.position.x = *floatPointers.at(floatKeyPositionX).get();
-                            newTransform.position.y = 1;
-                            newTransform.position.z = 1;
-
-                            newTransform.localTransform = glm::translate
-                                (
-                                    newTransform.localTransform, 
-                                    newTransform.position
-                                );
-
-                            COMPONENT_MANAGER->add(entity, newTransform);
-
-                           
-                        }
-
-                        ImGui::TreePop();
-                    }
+                    std::string entityString = it.value()["children"]["entity"]["id"];
+                    Graphics::Entity entity;
+                    std::stringstream entityStream(entityString);
+                    entityStream >> entity;
+ 
+                    
+                    drawNodeTransforms(entity, it.key());
+		    iterateGraph(*it);
+                    ImGui::TreePop();
                 }
-            iterateGraph(*it);
+            }
+	    else
+	    {
+		iterateGraph(*it);
+	    }
         }
+	/*
         else
         {
-        }
+            if (std::regex_search(it.key(), self_regex))
+            {
+                if (ImGui::TreeNodeEx(it.key().c_str())) 
+                {
+                    ImGui::Text("Position");
+ 
+                    std::string entityString = it.value()["children"]["entity"]["id"];
+ 
+                    Graphics::Entity entity;
+                    std::stringstream entityStream(entityString);
+ 
+                    entityStream >> entity;
+ 
+                    drawNodeTransforms(entity, it.key());
+                    iterateGraph(*it);
+                    ImGui::TreePop();
+                }
+            }
+ 	}
+	*/
     }
 }
 

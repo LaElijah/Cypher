@@ -8,7 +8,7 @@
 #include "Primitives.h"
 #include "ResourceManager.h"
 #include "Shader.h"
-
+#include <cstring>
 
 namespace Graphics
 {
@@ -78,6 +78,23 @@ namespace Graphics
                 ->flushImpl(batch);
 
         }
+
+	unsigned int getBufferID(std::string name)
+	{
+            return static_cast<T*>(this)
+		    ->getBufferIDImpl(name);
+	}
+
+	std::shared_ptr<Graphics::BufferRecord> insert(void* data, int byteSize, std::string name)
+	{
+            return static_cast<T*>(this)
+		->insertImpl(data, byteSize, name);
+	}
+	bool createNamedBuffer(int byteSize, std::string name)
+	{
+            return static_cast<T*>(this)
+		    ->createNamedBufferImpl(byteSize, name);
+	}
     };
 
     ////////////////////////////////////////////////////////////////
@@ -103,6 +120,47 @@ namespace Graphics
         unsigned int SSBO[2];
     };
 
+    class OpenGLBuffer
+    {
+	public:
+	    OpenGLBuffer(int size, std::string name)
+	    {
+                buffer = std::make_unique<Graphics::Buffer>(Graphics::Buffer(size, name));
+
+
+		glCreateBuffers(1, &id);
+		glNamedBufferData(id, size, NULL, GL_DYNAMIC_DRAW);
+	    }
+	    std::unique_ptr<Graphics::Buffer> buffer = nullptr;   
+
+	    bool load(void* data, std::shared_ptr<Graphics::BufferRecord> record)
+	    {
+	        void* ptr = glMapNamedBuffer(id, GL_WRITE_ONLY);
+		if (ptr)
+		{
+                    memcpy((char*)ptr + record->start, data, record->size);
+		    glUnmapNamedBuffer(id);
+		    return true;
+		}
+
+		return false; 
+
+          
+	    }
+
+	    unsigned int getID()
+	    {
+                return id;
+	    }
+
+	    void clear()
+	    {
+                return buffer->clear();
+	    }
+	private:
+	    unsigned int id;
+    };
+
     /**
      * This class inherits and passes its type to its parent
      * and provides direct graphics api control and management
@@ -112,6 +170,12 @@ namespace Graphics
     class OpenGLRenderAPI : public RenderAPI<OpenGLRenderAPI>
     {
     public:
+
+	bool clearBuffer(std::string name);
+	bool createNamedBufferImpl(int byteSize, std::string name);
+
+	unsigned int getBufferIDImpl(std::string name);
+	std::shared_ptr<Graphics::BufferRecord> insertImpl(void* data, int byteSize, std::string name);
         // Defined methods that align with render api implementation
         void clearImpl();
         void loadDataImpl(Graphics::RenderBatch &batch);
@@ -129,6 +193,7 @@ namespace Graphics
         unsigned int loadFileTexture(Graphics::TextureInfo &texture);
 
     private:
+	std::map<std::string, std::shared_ptr<Graphics::OpenGLBuffer>> buffers;
         size_t CURRENT_FORMAT;
         std::map<std::string, unsigned int> loadedTextureData;
         std::set<uint64_t> residentHandles;

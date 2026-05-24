@@ -42,7 +42,11 @@ void Graphics::GUI::initialize(GLFWwindow *window)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplGlfw_InitForOpenGL
+    (
+        window, 
+	true
+    );
     ImGui_ImplOpenGL3_Init();
 
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;

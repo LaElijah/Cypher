@@ -5,6 +5,57 @@
 
 #include "../../external/STB_IMAGE/stb_image.h"
 
+std::shared_ptr<Graphics::BufferRecord> Graphics::OpenGLRenderAPI::insertImpl(void* data, int byteSize, std::string name)
+{
+    if (buffers.count(name) == 0)
+        return nullptr;
+
+
+    auto record = buffers.at(name)->buffer->allocate(byteSize);
+
+    if (record == nullptr)
+	return nullptr;
+
+    buffers.at(name)->load(data, record);
+
+    return record;
+
+    
+}
+
+bool Graphics::OpenGLRenderAPI::clearBuffer(std::string name)
+{
+    if (buffers.count(name) == 0)
+        return false;
+
+    buffers.at(name)->clear();
+
+    return true;
+}
+
+unsigned int Graphics::OpenGLRenderAPI::getBufferIDImpl(std::string name)
+{
+    if(buffers.count(name) == 0)
+        return -1;
+
+    return buffers.at(name)->getID();
+}
+bool Graphics::OpenGLRenderAPI::createNamedBufferImpl(int byteSize, std::string name)
+{
+    if (buffers.count(name) != 0)
+        return false; 
+
+    buffers.emplace
+    (
+	name,
+	std::make_shared<Graphics::OpenGLBuffer>(Graphics::OpenGLBuffer(byteSize, name))
+    );
+
+    return true;
+
+}
+
+
 std::shared_ptr<Graphics::OpenGLShader> Graphics::OpenGLRenderAPI::getShaderImpl(std::string name)
 {
     return (m_Shaders.at(name));
@@ -282,9 +333,9 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
         Graphics::ElementDrawCall drawCall;
 
         drawCall.count = batch.indexCounts[i];
-        drawCall.instanceCount = 1;
-        drawCall.firstIndex = currentBaseIndex;
-        drawCall.baseVertex = currentBaseVertex;
+        drawCall.instanceCount = batch.instanceCounts[i];
+        drawCall.firstIndex = batch.startingIndices[i];
+        drawCall.baseVertex = batch.startingVertices[i];
         drawCall.baseInstance = instanceIndex;
 
         currentBaseIndex += batch.indexCounts[i];
@@ -301,6 +352,7 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
     {
 
         glBindVertexArray(config.VAO);
+        //glBindVertexArray(config.VAO);
 
         glBindBuffer(GL_ARRAY_BUFFER, config.VBO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, config.EBO);
@@ -321,6 +373,7 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
             drawCalls.data(),
             GL_DYNAMIC_DRAW);
 
+	/*
         glBufferData(
             GL_ARRAY_BUFFER,
             sizeof(Graphics::Vertex) * batch.vertexData.size(),
@@ -343,7 +396,6 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
             sizeof(glm::mat4) * batch.transforms.size(),
             batch.transforms.data(),
             GL_DYNAMIC_DRAW);
-
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, config.SSBO[1]);
         glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, config.SSBO[1]);
 
@@ -356,6 +408,7 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
 
         std::cout << "TEXTURE DATA LOADED" << std::endl;
         CURRENT_FORMAT = config.format;
+*/
     }
 
     glBufferData(
@@ -372,6 +425,26 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
         drawCalls.data(),
         GL_DYNAMIC_DRAW);
 
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, getBufferIDImpl("vertices"));
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, getBufferIDImpl("indices"));
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, getBufferIDImpl("transforms"));
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, getBufferIDImpl("textureHandles"));
+
+	// TODO: Update to only change when buffers are dirty
+
+	clearBuffer("transforms");
+	clearBuffer("textureHandles");
+	insert(batch.transforms.data(), batch.transforms.size() * sizeof(Graphics::Transform), "transforms");
+	
+	insert
+	(
+	    loadTextureHandles(batch.textureInfo.at("diffuse")).data(),
+	    sizeof(GLuint64) * batch.textureInfo["diffuse"].size(),
+	    "textureHandles"
+	);
+
+            
+/*
     glBufferData(
         GL_ARRAY_BUFFER,
         sizeof(Graphics::Vertex) * batch.vertexData.size(),
@@ -388,7 +461,6 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, config.SSBO[0]);
 
 
-        std::cout << "POSITION RELOAD DATA" << std::endl;
     // Position vectors
     glBufferData(
         GL_SHADER_STORAGE_BUFFER,
@@ -404,7 +476,7 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
         sizeof(GLuint64) * batch.textureInfo["diffuse"].size(),
         loadTextureHandles(batch.textureInfo.at("diffuse")).data(),
         GL_DYNAMIC_DRAW);
-
+*/
         
     if (original)
     {

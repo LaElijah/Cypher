@@ -65,6 +65,8 @@ namespace Graphics
         std::function<void(const char *string)> ADD_MODEL;
         std::function<std::pair<bool, nlohmann::json>()> GET_JSON;
 
+
+	void drawNodeTransforms(Graphics::Entity entity, std::string key);
         void iterateGraph(const nlohmann::json& json);
         nlohmann::json jsonSceneGraph;
         bool sceneChanged = true;

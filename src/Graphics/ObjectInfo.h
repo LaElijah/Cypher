@@ -30,8 +30,14 @@ namespace Graphics
     	{
                 copy(info);	
     	}
-    
-    	auto getID()
+   
+	bool fullyContains(ObjectInfo& info)
+	{
+ 
+	    return ((info.getID() & ID) == info.getID());
+	}
+
+	Graphics::OBJECT_ID getID()
     	{
                 return ID;	
     	}

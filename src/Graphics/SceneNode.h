@@ -63,14 +63,15 @@ namespace Graphics
 
 			nlohmann::json data;
 
+
 			for (auto child : (node->ENTITY == 0) ? root : node->children)
 			{
 
 			    std::stringstream stream, childStream;
-				stream << "ENTITY-" << node->ENTITY;
-				childStream << "ENTITY-" << child.second->ENTITY;
+				stream << "ENTITY-" << child.first;
+				//childStream << "ENTITY-" << child.second->ENTITY;
 
-				data[stream.str()]["children"][childStream.str()] = traverse_postorder(
+				data[stream.str()]["children"] = traverse_postorder(
 					child.second,
 					update,
 					node->globalTransform,
@@ -78,7 +79,9 @@ namespace Graphics
 			}
 
 		    if (node->ENTITY != 0)
+		    {
 			    data = update(node, data);
+		    }
 
 		
 			return data;
@@ -168,22 +171,45 @@ namespace Graphics
 			}
 		}
 
+		// TODO: on destructor, delete entity from componentManager
 		void insert(
 			Graphics::Entity entity,
-			glm::mat4 transform = glm::mat4(1.0),
-			Graphics::Entity parent = 0)
+			glm::mat4 transform,
+			Graphics::Entity parent)
 		{
-			std::shared_ptr<SceneNode> node = std::make_shared<SceneNode>(
-				entity,
-				transform,
-				parent);
+			std::shared_ptr<SceneNode> node = std::make_shared<SceneNode>
+			(
+			   entity,
+			   transform,
+			   parent
+			);
 
 			std::weak_ptr<SceneNode> weak = node;
 
-			if (parent == 0)
+			// Is the entity already a scene node
+			if (validate(entity))
+			{
+			    std::cout << "ENTITY: " << entity << " IS ALREADY A SCENE NODE" << std::endl;
+			    return;
+			}
+
+			// Is the parent the root
+			else if (parent == 0)
+			{
 				root.insert(std::make_pair(entity, node));
+				entities.insert(std::make_pair(entity, weak));
+				std::cout << "ENTITY ADDED TO " << parent << std::endl;
+				return;
+			}
+			// Does the parent exist in the scene
 			else if (validate(parent))
+			{
+				std::cout << "ENTITY ADDED TO " << parent << std::endl;
 				entities.at(parent).lock()->children.insert(std::make_pair(entity, node));
+			entities.insert(std::make_pair(entity, weak));
+				return;
+			}
+
 			else
 			{
 				std::cout << "PARENT NOT FOUND IN SCENE" << std::endl;
@@ -191,6 +217,7 @@ namespace Graphics
 			}
 
 			entities.insert(std::make_pair(entity, weak));
+
 		}
 
 		bool dirty = true;
@@ -207,13 +234,13 @@ namespace Graphics
 	private:
 		bool validate(Graphics::Entity entity)
 		{
-			if (!entities.count(entity) == 0)
+			if (entities.count(entity) == 0)
 			{
-				std::cout << "NODE DOESNT EXIST" << std::endl;
+				std::cout << "NODE: " << entity << " DOESNT EXIST" << std::endl;
 				return false;
 			}
 
-			if (!entities.at(entity).expired())
+			if (entities.at(entity).expired())
 			{
 				std::cout << "NODE DELETED ALREADY" << std::endl;
 				entities.erase(entity);

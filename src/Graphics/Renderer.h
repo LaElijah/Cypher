@@ -87,6 +87,11 @@ namespace Graphics
             // Initialize
             GLFWwindow *window = Canvas->getWindow();
 
+	    renderAPI.createNamedBuffer(1000000 * 10 * sizeof(Graphics::Vertex), "vertices");
+	    renderAPI.createNamedBuffer(1000000 * 10 * sizeof(Graphics::Vertex), "indices");
+	    renderAPI.createNamedBuffer(10000 * sizeof(Graphics::Transform), "transforms");
+	    renderAPI.createNamedBuffer(10000 * sizeof(uint64_t), "textureHandles");
+
             std::function<std::pair<bool, nlohmann::json>()> getJSON =
                 [this]()
                 {
@@ -95,13 +100,83 @@ namespace Graphics
                     
 
             std::function<void(const char* string)> addModel = 
-                [this](const char* string)
+                [&renderAPI, this](const char* string)
                 {
                     Graphics::ModelInfo info;
                     info.path = string;
-                    Graphics::Entity entity = SystemManager->createModel(info);
+		    Graphics::Entity modelEntity;
+		    std::vector<Graphics::Entity> meshes;
+		    int start = -1;
+		    int size = 0;
 
-                };
+		    auto modelLoader = SystemManager->getResourceManager();
+		    // Is there a model? if not, load vertices into buffe
+		    modelEntity = SystemManager->createModel();
+
+		    if (modelRecords.count(info.path) == 0)
+		    {
+		        auto model = modelLoader->load(info);
+
+		        for (Graphics::Mesh& mesh : model->meshes) // Gather mesh data for model 
+		        {
+			            std::shared_ptr<Graphics::BufferRecord> vRecord = renderAPI
+			    .insert
+			    (
+			        mesh.vertices.data(), 
+				mesh.vertices.size() * sizeof(Graphics::Vertex), 
+				"vertices"
+			    );
+
+				    // TODO: Update so each entity
+				    // gets a record
+				    // for its mesh by appending
+				    // entity at the end of the path
+				    // or making a new object 
+				    // type that replaces the
+				    // info.path with 
+				    // path and entity 
+				    // prob the first option 
+	            std::shared_ptr<Graphics::BufferRecord> iRecord = renderAPI
+			    .insert
+			    (
+			        mesh.indices.data(), 
+				mesh.indices.size() * sizeof(unsigned int), 
+				"indices"
+			    );
+
+		    modelLoader->storeModelRecord(info.path, vRecord, iRecord);
+
+			    SystemManager->createMesh(info, modelEntity);
+			    //
+			    //meshes.push_back(record);
+
+			    /*
+			    if (start = -1)
+			        start = record->start;
+			    else if (start > record->start)
+				start = record->start;
+
+			    size += mesh.vertices.size();
+*/
+		        }
+		    }
+		    else
+		    {
+		        for 
+			(
+			    std::shared_ptr<Graphics::BufferRecord> record : modelRecords.at(info.path)
+			)
+			    SystemManager->createMesh(info, modelEntity);
+
+			
+		    }
+
+
+                    };
+		   
+		    //modelRecords.insert(info.path, meshes);
+		    //modelCount.at(info.path) = modelCount.at(info.path) + 1;
+                
 
             //ImGuiIO &io = GUI->getIO();
             Graphics::FrameBuffer *sceneBuffer = new Graphics::FrameBuffer(1920, 1080);
@@ -187,7 +262,10 @@ namespace Graphics
 
         void processInput(GLFWwindow *window);
         std::vector<Graphics::RenderBatch> batches;
+	std::map<std::string, std::vector<std::shared_ptr<Graphics::BufferRecord>>> modelRecords;
 
+
+	// TODO: TEMP MOVE TO RESOURCE MANAGER
 
     };
 }

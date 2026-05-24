@@ -40,6 +40,7 @@ namespace Graphics
 	public:
 		RenderSystem()
 		{
+			modelLoader = std::make_shared<Graphics::ModelLoader<AssimpImporter>>();
 			sceneGraph.emplace("ROOT", std::make_shared<Graphics::SceneNode>());
 		}
 
@@ -53,183 +54,117 @@ namespace Graphics
 				std::string,
 				Graphics::RenderBatch> &RenderBatches)
 		{
-			// TODO: this currently sets rendering to the scene manager, this
-			// needs to be done in a linear fashion.
-
-			sceneGraph.at("ROOT")->dirty = true;
-			std::unordered_map<std::string, unsigned int> shaderCounts;
-
-			for (std::pair<std::string, Graphics::RenderBatch> pair : RenderBatches)
-			{
-				// Handle what happens when a buffer is changed
-				if (pair.second.isChanged())
-					pair.second.reset();
-			}
-
-
 			std::function<nlohmann::json(std::shared_ptr<SceneNode>, nlohmann::json)>
 				handleNodeJson = [this](std::shared_ptr<SceneNode> node, nlohmann::json data)
 			{
-			
+	
+				if (node->ENTITY == 0)
+				    return nlohmann::json();
+
+				
 				auto transform = componentManager->get<Graphics::Transform>(node->ENTITY);
-				auto renderable = componentManager->get<Graphics::Renderable>(node->ENTITY);
-
-
-
+				//auto renderable = componentManager->get<Graphics::Renderable>(node->ENTITY);
 
 				std::stringstream entity;
 				entity << node->ENTITY;
+
 				
 				data["transform"]["position"]["x"] = glm::float64(transform.position.x);
 				data["transform"]["position"]["y"] = glm::float64(transform.position.y);
 				data["transform"]["position"]["z"] = glm::float64(transform.position.z);
 				data["entity"]["id"] = entity.str();
-				data["entity"]["name"] = renderable.name;
+				data["entity"]["name"] = "renderable";
+
 
 				return data;
 			};
 
 			// TODO: INDEX BATCHES IN AN ARRAY BY SHADER NAME
+
 			std::function<
-				bool(
-					std::shared_ptr<Graphics::SceneNode> node,
-					glm::mat4 & parentTransform)>
-				handleNode = [this, &RenderBatches, &shaderCounts](
-								 std::shared_ptr<Graphics::SceneNode> node,
-								 glm::mat4 &parentTransform) mutable
+			    bool
+			    (
+			        std::shared_ptr<Graphics::SceneNode> node,
+				glm::mat4 & parentTransform)>
+				handleNode = 
+				[this, &RenderBatches]
+				(
+				    std::shared_ptr<Graphics::SceneNode> node,
+				    glm::mat4 &parentTransform
+				) mutable
 			{
-				// LOAD INFO TO SCENE GRAPH JSON
+			    // LOAD DATA INTO BUFFERS
+			    Graphics::Entity entity = node->ENTITY;
 
-				// LOAD DATA INTO BUFFERS
-				Graphics::Entity entity = node->ENTITY;
-				auto renderable = componentManager->get<Graphics::Renderable>(entity);
-				auto transform = componentManager->get<Graphics::Transform>(entity);
+			    //auto renderable = componentManager->get<Graphics::Renderable>(entity);
+			    auto transform = componentManager->get<Graphics::Transform>(entity);
 
-
-
-				node->globalTransform = transform.localTransform * parentTransform;
-				// std::string parent = "PARENT" + node->PARENT;
-				// std::cout << parent << std::endl;
-
-				// Start of render duties
-				Graphics::ModelInfo info;
-				info.path = renderable.path;
-			 
-
-				auto model = modelLoader.load(info);
-
-				for (Graphics::Mesh& mesh : model->meshes)
-				{
-					if (RenderBatches.find(mesh.shader) == RenderBatches.end())
-						RenderBatches.emplace(mesh.shader, Graphics::RenderBatch());
-
-					Graphics::RenderBatch &batch = RenderBatches.at(mesh.shader);
-
-
-
-
-					if (batch.transformMappings.contains(model->info.path))
-					{
-
-						unsigned int size = batch.transformMappings.at(model->info.path).first;
-						unsigned int start = batch.transformMappings.at(model->info.path).second;
-
-						unsigned int end = size + start;
-
-						std::cout << "OFFSET: " << start << std::endl;
-						std::cout << "SIZE: " << size << std::endl;
-						std::cout << "END SIZE: " << end << std::endl;
-
-
-						std::cout << "TRANSFORM SIZE: " << batch.transforms.size() << std::endl;
-					    std::fill(
-						batch.transforms.begin(), // Start of model block
-						batch.transforms.end(),   // end of model block 
-						node->globalTransform);
-						//glm::translate(glm::mat4(1.0f), transform.position));
-					}
-
-
-					if (!batch.isChanged())
-						continue;
-
-					if (!batch.transformMappings.contains(model->info.path))
-					{
-						std::cout << "NEW MAP: CURRENT OFFSET: " << batch.TRANSFORM_OFFSET << std::endl;
-
-						if (batch.transformMappings.size() > 0)
-						{
-						    batch.TRANSFORM_OFFSET += batch.lastModelSize;
-							batch.lastModelSize = model->meshes.size();
-						}
-							std::cout << "MESH SIZE: " << model->meshes.size() << std::endl;
-						std::cout << "NEW MAP: CHANGED OFFSET: " << batch.TRANSFORM_OFFSET << std::endl;
-	                         	
-							std::pair<unsigned int, unsigned int> pair = 
-							{
-								model->meshes.size(),
-							    batch.TRANSFORM_OFFSET
-							};
-
-					    batch.transformMappings.emplace
-						(
-							model->info.path, 
-							pair
-						);
-
-						batch.recentModel = model->info.path;
-					}
-
-
-					//batch.recentModel = model->info.path;
-
-						//model->info.path
-
-					batch.insert(
-						mesh,
-						node->globalTransform);
-
-						std::cout << "TRANSFORM COUNT: " << batch.transforms.size() << std::endl;
-
-            std::cout << "POST INSERT" << std::endl;
-					shaderCounts[mesh.shader]++;
-				}
-
-            std::cout << "NODE FINISHED" << std::endl;
-				return true;
+			    node->globalTransform = transform.localTransform * parentTransform;
+			    return true;
 			};
 
-			if (sceneGraph.at("ROOT")->traverse_preorder(
-					sceneGraph.at("ROOT"),
-					handleNode))
+			// Searches for dirty nodes and 
+			// will update all children of dirty nodes 
+			if 
+			(
+			    sceneGraph.at("ROOT")
+			        ->traverse_preorder
+			        (
+				    sceneGraph.at("ROOT"),
+				    handleNode
+				)
+			)
 			{
+		            jsonGraph = sceneGraph.at("ROOT")
+			        ->traverse_postorder
+			        (
+			            sceneGraph.at("ROOT"),
+			            handleNodeJson
+			        );
 
-            std::cout << "POST RENDER TRAVERSAL" << std::endl;
-				jsonGraph = sceneGraph.at("ROOT")->traverse_postorder(
-					sceneGraph.at("ROOT"),
-					handleNodeJson);
-
-
-
-				/*
-					*/
 			}
+		    	
+			auto it = componentManager
+			->getAllContainingMulti
+			<
+			Graphics::Renderable,
+                        Graphics::Transform
+			>();
 
-			/*
-			sceneGraph.at("ROOT")->traverse_postorder(
-			sceneGraph.at("ROOT"),
-			handleNodeJson);
-*/
 
-            std::cout << "FINISHING" << std::endl;
-			for (std::pair<std::string, unsigned int> pair : shaderCounts)
-				RenderBatches[pair.first].finish();
+			while (it.next())
+			{
+                            auto val = it.get();
+
+			    auto& [renderable, transform] = *val;
+
+			    //std::cout << "CURRENT TRANSFORM: " << transform.position.x << std::endl;
+			    auto [vertexRecord, indexRecord] = modelLoader->getModelRecords(renderable.path);
+
+			    //std::cout << "RECORDS: " << vertexRecord->start << std::endl;
+
+			    /*
+			    if (drawData.count(renderable.path) != 0)
+			    {
+			        Graphics::RenderDrawData data = drawData.at(renderable.path);
+				data.
+
+			    }
+			    */
+			}
 		}
 
-		void loadModel(Entity entity, Graphics::ModelInfo &info, Graphics::Entity parent);
+		std::shared_ptr<Graphics::ModelLoader<AssimpImporter>> getResourceManager()
+		{
+		    return modelLoader;
+		}
+
+		std::shared_ptr<Graphics::ModelLoader<AssimpImporter>> modelLoader;
+		void loadMesh(Graphics::Entity entity, Graphics::ModelInfo &info, Graphics::Entity parent);
+
+		void loadModel(Entity entity, Graphics::Entity parent);
 
 		std::unordered_map<std::string, std::shared_ptr<Graphics::SceneNode>> sceneGraph;
-		Graphics::ModelLoader<AssimpImporter> modelLoader;
 
 		nlohmann::json jsonGraph;
 	};
@@ -242,6 +177,12 @@ namespace Graphics
 			return renderSystem.getJSONGraph();
 		};
 
+		
+	
+		std::shared_ptr<Graphics::ModelLoader<AssimpImporter>> getResourceManager()
+		{
+                    return renderSystem.getResourceManager();
+		};
 
 		std::shared_ptr<Graphics::ComponentManager> getComponentManager()
 		{
@@ -250,7 +191,11 @@ namespace Graphics
 
 		void update();
 
-		Entity createModel(Graphics::ModelInfo &info, Graphics::Entity parent = 0);
+		Entity createModel(Graphics::Entity parent = 0);
+
+
+
+		Graphics::Entity createMesh(Graphics::ModelInfo &info, Graphics::Entity parent);
 
 		std::vector<Graphics::RenderBatch> &getRenderBatches(std::vector<Graphics::RenderBatch> &values)
 		{

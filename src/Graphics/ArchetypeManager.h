@@ -9,6 +9,10 @@
 
 namespace Graphics
 {
+template <typename>
+using VoidPtr = std::shared_ptr<void>;
+
+
     class ArchetypeManager
     {
     public:
@@ -20,6 +24,32 @@ namespace Graphics
                 ->template get<T>(entity);
         }
 
+
+template <typename... T>
+Graphics::PackIterator<T...> getAllContainingMulti()
+{
+    using DataTuple = std::tuple<VoidPtr<T>...>;
+
+    std::vector<DataTuple>      data;
+    std::vector<unsigned int>   sizes;
+
+    for (auto& [id, archetype] : ARCHETYPES)
+    {
+        // Keep only archetypes that contain every requested type
+        bool containsAll = (archetype->getInfo().template contains<T>() && ...);
+        if (!containsAll)
+            continue;
+
+        sizes.push_back(archetype->getSize());
+        data.push_back(std::make_tuple(
+            archetype->template getData<T>()...  // one ptr per type, packed
+        ));
+    }
+
+    return Graphics::PackIterator<T...>(std::move(data), std::move(sizes));
+}
+
+            
         template <typename T>
         Graphics::ContainerIterator<T> getAll()
         {

@@ -125,6 +125,77 @@ class WideIterator
 
 };
 
+template <typename>
+using VoidPtr = std::shared_ptr<void>;
+
+template <typename... T>
+class PackIterator
+{
+public:
+    // One entry per archetype: a tuple of pointers, one per component type
+    using DataTuple = std::tuple<VoidPtr<T>...>;
+
+    PackIterator(
+        std::vector<DataTuple>       data,
+        std::vector<unsigned int>    sizes)
+        : m_DATA(std::move(data))
+        , m_SIZES(std::move(sizes))
+        , SIZE(m_SIZES.size())
+    {}
+
+    bool next() const
+    {
+        if (SIZE == 0 || INDEX >= SIZE)
+            return false;
+        if (INDEX == SIZE - 1)
+            return POINTER_INDEX < static_cast<int>(m_SIZES[INDEX]);
+        return true;
+    }
+
+    // Returns references into the live contiguous arrays — zero copy.
+    // std::optional cannot hold references directly, so we use a pointer
+    // sentinel: nullopt when exhausted, tuple of refs otherwise.
+    std::optional<std::tuple<T&...>> get()
+    {
+        if (!next())
+            return std::nullopt;
+
+        auto result = fetchComponents(std::index_sequence_for<T...>{});
+
+        // Advance; move to next archetype when current one is exhausted
+        if (POINTER_INDEX + 1 >= static_cast<int>(m_SIZES[INDEX]))
+        {
+            POINTER_INDEX = 0;
+            ++INDEX;
+        }
+        else
+        {
+            ++POINTER_INDEX;
+        }
+
+        return result;
+    }
+
+private:
+    // Index into each type's vector at POINTER_INDEX using pack expansion.
+    // std::tie returns a tuple of lvalue references — no copies.
+    template <std::size_t... Is>
+    std::tuple<T&...> fetchComponents(std::index_sequence<Is...>)
+    {
+        return std::tie(
+            static_cast<std::vector<T>*>(
+                std::get<Is>(m_DATA[INDEX]).get()
+            )->at(POINTER_INDEX)...
+        );
+    }
+
+    std::vector<DataTuple>      m_DATA;
+    std::vector<unsigned int>   m_SIZES;
+
+    unsigned int  SIZE          = 0;
+    unsigned int  INDEX         = 0;
+    int           POINTER_INDEX = 0;
+};
 
     /*
     template <typename T>
