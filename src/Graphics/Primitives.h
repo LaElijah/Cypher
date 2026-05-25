@@ -201,6 +201,7 @@ class Buffer
         std::string name;
         std::string extension;
         std::string DEFAULT_SHADER = "debug";
+	int meshIndex = 0;
     };
 
     struct TextureInfo
@@ -334,6 +335,7 @@ class Buffer
 
         std::string path;
         std::string name = "debug";
+	int meshIndex = 0;
     };
 
     struct Index : public Component

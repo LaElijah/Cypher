@@ -139,19 +139,56 @@ namespace Graphics
 			    auto& [renderable, transform] = *val;
 
 			    //std::cout << "CURRENT TRANSFORM: " << transform.position.x << std::endl;
-			    auto [vertexRecord, indexRecord] = modelLoader->getModelRecords(renderable.path);
 
-			    //std::cout << "RECORDS: " << vertexRecord->start << std::endl;
+			    std::stringstream ss;
 
-			    /*
-			    if (drawData.count(renderable.path) != 0)
+			    ss << renderable.path << "-" << renderable.meshIndex;
+
+			    std::string meshKey = ss.str();
+			    auto [vertexRecord, indexRecord] = modelLoader->getMeshRecords(meshKey);
+
+
+			    if (drawData.count(meshKey) == 0)
 			    {
-			        Graphics::RenderDrawData data = drawData.at(renderable.path);
-				data.
+			        Graphics::RenderDrawData data; 
+				data.vertexCount = vertexRecord->size;
+				data.indexCount = indexRecord->size;
+				data.startingVertex = vertexRecord->start;
+				data.startingIndex = indexRecord->start;
+				data.baseInstance = 0;
+				++data.instanceCount;
+
+				// Instance data
+				data.transforms.push_back(transform);
+				
+				drawData.emplace(meshKey, data); 
+			    }
+			    else
+			    {
+                                Graphics::RenderDrawData& data = drawData.at(meshKey);
+			        ++data.instanceCount;
+
+
+				// Instance data
+				data.transforms.push_back(transform);
+
+
 
 			    }
-			    */
+
 			}
+
+			drawList.clear();
+			int baseInstance = 0;
+			for (auto it : drawData)
+			{
+			    auto data = it.second; 
+			    data.baseInstance = baseInstance;
+			    baseInstance += data.instanceCount;
+			    drawList.push_back(it.second);
+			}
+
+
 		}
 
 		std::shared_ptr<Graphics::ModelLoader<AssimpImporter>> getResourceManager()
@@ -167,6 +204,8 @@ namespace Graphics
 		std::unordered_map<std::string, std::shared_ptr<Graphics::SceneNode>> sceneGraph;
 
 		nlohmann::json jsonGraph;
+	        std::unordered_map<std::string, Graphics::RenderDrawData> drawData;
+		std::vector<Graphics::RenderDrawData> drawList;
 	};
 
 	class SystemManager

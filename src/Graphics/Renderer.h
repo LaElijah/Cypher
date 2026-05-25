@@ -102,77 +102,88 @@ namespace Graphics
             std::function<void(const char* string)> addModel = 
                 [&renderAPI, this](const char* string)
                 {
+		    // TODO: Rename to meshInfo and 
+		    // create modelInfo as a struct with a 
+		    // vector of meshInfo 
                     Graphics::ModelInfo info;
                     info.path = string;
 		    Graphics::Entity modelEntity;
-		    std::vector<Graphics::Entity> meshes;
-		    int start = -1;
-		    int size = 0;
+		    //std::vector<Graphics::Entity> meshes;
+		    //int start = -1;
+		    //int size = 0;
 
+		    std::vector<Graphics::ModelInfo> meshInfoList;
 		    auto modelLoader = SystemManager->getResourceManager();
 		    // Is there a model? if not, load vertices into buffe
 		    modelEntity = SystemManager->createModel();
 
-		    if (modelRecords.count(info.path) == 0)
+		    int meshIndex = 0;
+		    // Change to modelLoader.loaded
+		    // use a weak pointer called modelLoadedPointer TBD
+		    // check if it exists (if its stored in a buffer object
+		    // add to buffers shared pointer stores for 
+		    if (!modelLoader->isModelLoaded(info.path))
 		    {
 		        auto model = modelLoader->load(info);
-
 		        for (Graphics::Mesh& mesh : model->meshes) // Gather mesh data for model 
 		        {
-			            std::shared_ptr<Graphics::BufferRecord> vRecord = renderAPI
+			    std::shared_ptr<Graphics::BufferRecord> vRecord = renderAPI
 			    .insert
 			    (
 			        mesh.vertices.data(), 
-				mesh.vertices.size() * sizeof(Graphics::Vertex), 
+				mesh.vertices.size() 
+				* sizeof(Graphics::Vertex), 
 				"vertices"
 			    );
 
-				    // TODO: Update so each entity
-				    // gets a record
-				    // for its mesh by appending
-				    // entity at the end of the path
-				    // or making a new object 
-				    // type that replaces the
-				    // info.path with 
-				    // path and entity 
-				    // prob the first option 
-	            std::shared_ptr<Graphics::BufferRecord> iRecord = renderAPI
+	                    std::shared_ptr<Graphics::BufferRecord> iRecord = renderAPI
 			    .insert
 			    (
 			        mesh.indices.data(), 
-				mesh.indices.size() * sizeof(unsigned int), 
+				mesh.indices.size() 
+				* sizeof(unsigned int), 
 				"indices"
 			    );
 
-		    modelLoader->storeModelRecord(info.path, vRecord, iRecord);
+		            info.meshIndex = meshIndex;
 
-			    SystemManager->createMesh(info, modelEntity);
-			    //
-			    //meshes.push_back(record);
+			    std::stringstream ss; 
 
-			    /*
-			    if (start = -1)
-			        start = record->start;
-			    else if (start > record->start)
-				start = record->start;
+			    ss << info.path << "-" << meshIndex;
 
-			    size += mesh.vertices.size();
-*/
+		            modelLoader
+			        ->storeMeshRecords
+			        (
+			            ss.str(), 
+			            vRecord, 
+			            iRecord
+			        );
+	
+			    meshInfoList.push_back(info);
+		            
+			    ++meshIndex;
+			    SystemManager
+			        ->createMesh(info, modelEntity);
 		        }
-		    }
-		    else
-		    {
-		        for 
-			(
-			    std::shared_ptr<Graphics::BufferRecord> record : modelRecords.at(info.path)
-			)
-			    SystemManager->createMesh(info, modelEntity);
 
+			modelLoader
+			    ->storeModelInfo(info.path, meshInfoList);
+		    }
+		    else 
+		    {
+			for 
+			(
+			    Graphics::ModelInfo savedInfo 
+			    : modelLoader->getModelInfo(string)
+			)
+			{
+                            SystemManager->createMesh(savedInfo, modelEntity);
+			}
 			
 		    }
 
 
-                    };
+                };
 		   
 		    //modelRecords.insert(info.path, meshes);
 		    //modelCount.at(info.path) = modelCount.at(info.path) + 1;

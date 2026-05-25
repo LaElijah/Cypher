@@ -8,6 +8,8 @@
 #include <regex>
 #include <set>
 #include <glm/gtc/matrix_transform.hpp>
+#include <format>
+
 
 Graphics::GUIComponent::GUIComponent(std::string name)
     : Name(name)
@@ -131,7 +133,20 @@ void Graphics::ModelWindow::drawNodeTransforms(Graphics::Entity entity, std::str
     float preFloatX = *floatPointers.at(floatKeyPositionX).get();
     float preFloatY = *floatPointers.at(floatKeyPositionY).get();
     float preFloatZ = *floatPointers.at(floatKeyPositionZ).get();
+auto m = transform.localTransform;
+std::string print = std::format(
+        "[{:.2f}, {:.2f}, {:.2f}, {:.2f}]\n"
+        "[{:.2f}, {:.2f}, {:.2f}, {:.2f}]\n"
+        "[{:.2f}, {:.2f}, {:.2f}, {:.2f}]\n"
+        "[{:.2f}, {:.2f}, {:.2f}, {:.2f}]",
+        m[0][0], m[1][0], m[2][0], m[3][0],  // Row 1
+        m[0][1], m[1][1], m[2][1], m[3][1],  // Row 2
+        m[0][2], m[1][2], m[2][2], m[3][2],  // Row 3
+        m[0][3], m[1][3], m[2][3], m[3][3]   // Row 4
+    );
 
+   ImGui::Text("TRANSFORM MATRIX");
+   ImGui::Text(print.c_str());
         
     
     ImGui::SliderFloat("X", floatPointers.at(floatKeyPositionX).get(), -100.0f, 100.0f);
@@ -161,7 +176,7 @@ void Graphics::ModelWindow::drawNodeTransforms(Graphics::Entity entity, std::str
 
         transform.localTransform = glm::translate
             (
-                transform.localTransform, 
+                glm::mat4(1.0f), 
                 transform.position
             );
 

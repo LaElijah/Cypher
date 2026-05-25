@@ -26,28 +26,54 @@ namespace Graphics
             return static_cast<T *>(this)->loadImpl(info);
         }
 
-	void storeModelRecord(std::string path, std::shared_ptr<Graphics::BufferRecord> vRecord, std::shared_ptr<Graphics::BufferRecord> iRecord)
-    {
-        if (modelRecords.count(path) != 0)
+	std::vector<Graphics::ModelInfo> getModelInfo(std::string path)
 	{
-	        auto record = modelRecords.at(path);	
+            return modelInfo.at(path);
+	}
+
+	bool isModelLoaded(std::string path) 
+	{
+	    return (modelInfo.count(path) != 0);
+	}
+
+	void storeModelInfo(std::string path, std::vector<Graphics::ModelInfo> meshInfo)
+	{
+ 
+
+	    if (modelInfo.count(path) != 0)
+                return; 
+ 
+	    modelInfo.emplace(path, meshInfo);
+	}
+
+	std::pair<std::shared_ptr<Graphics::BufferRecord>, std::shared_ptr<Graphics::BufferRecord>> getMeshRecords(std::string path)
+	{
+            auto [v, i, count] = meshRecords.at(path);
+	    return {v, i};
+	}
+	void storeMeshRecords(std::string path, std::shared_ptr<Graphics::BufferRecord> vRecord, std::shared_ptr<Graphics::BufferRecord> iRecord)
+    {
+        if (meshRecords.count(path) != 0)
+	{
+	        auto record = meshRecords.at(path);	
 		std::get<2>(record) += 1;
 	}
 
 	else 
-	    modelRecords.emplace(path, std::tuple<std::shared_ptr<Graphics::BufferRecord>, std::shared_ptr<Graphics::BufferRecord>, unsigned int>(vRecord, iRecord, 0));
+	    meshRecords.emplace(path, std::tuple<std::shared_ptr<Graphics::BufferRecord>, std::shared_ptr<Graphics::BufferRecord>, unsigned int>(vRecord, iRecord, 0));
     }
 
 	std::pair<std::shared_ptr<Graphics::BufferRecord>, std::shared_ptr<Graphics::BufferRecord>> getModelRecords(std::string path)
 	{
 
-	    auto [v, i, count] = modelRecords.at(path);
+	    auto [v, i, count] = meshRecords.at(path);
 	    return {v, i};
 	};
     protected:
 
     private:
-	std::unordered_map<std::string, std::tuple<std::shared_ptr<Graphics::BufferRecord>, std::shared_ptr<Graphics::BufferRecord>, unsigned int>> modelRecords;
+	std::unordered_map<std::string, std::tuple<std::shared_ptr<Graphics::BufferRecord>, std::shared_ptr<Graphics::BufferRecord>, unsigned int>> meshRecords;
+	std::unordered_map<std::string, std::vector<Graphics::ModelInfo>> modelInfo;
     };
 
     class AssimpImporter : public ModelLoader<AssimpImporter>
