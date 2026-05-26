@@ -22,8 +22,6 @@ namespace Graphics
         glm::vec3 Normal;
         glm::vec2 TexCoords;
     };
-
-
     typedef std::bitset<MAX_COMPONENT_SIZE> OBJECT_ID;
 
     typedef size_t Entity;

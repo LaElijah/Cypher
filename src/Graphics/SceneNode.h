@@ -49,6 +49,15 @@ namespace Graphics
 			return data;
 		}
 
+		static void signalResponse(Graphics::Entity entity)
+		{
+
+		    if (entities.count(entity) == 0 || entities.at(entity).expired())
+		        return;
+
+		    entities.at(entity).lock()->dirty = true;
+		}
+
 		nlohmann::json traverse_postorder(
 			std::shared_ptr<SceneNode> node,
 			std::function<

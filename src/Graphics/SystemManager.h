@@ -42,6 +42,7 @@ namespace Graphics
 		{
 			modelLoader = std::make_shared<Graphics::ModelLoader<AssimpImporter>>();
 			sceneGraph.emplace("ROOT", std::make_shared<Graphics::SceneNode>());
+			componentManager->template subscribe<Graphics::Transform>(sceneGraph.at("ROOT")->signalResponse);
 		}
 
 		std::pair<bool, nlohmann::json> getJSONGraph()
