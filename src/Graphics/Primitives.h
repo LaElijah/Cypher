@@ -99,6 +99,11 @@ class Buffer
                 }
             };
         }
+
+	    Buffer(const Buffer&) = delete;
+    Buffer& operator=(const Buffer&) = delete;
+    Buffer(Buffer&&) = delete;
+    Buffer& operator=(Buffer&&) = delete;
  
 
 	void clear()
@@ -106,6 +111,7 @@ class Buffer
 
 	    records.clear();
 	    freeSpaces.clear();
+	    tail = 0;
 	}
 
         std::shared_ptr<BufferRecord> allocate(int byteSize)
@@ -365,12 +371,12 @@ class Buffer
     struct RenderDrawData
     {
 	// Draw Call data 
-	unsigned int vertexCount;
-        unsigned int instanceCount;
-	unsigned int indexCount;
-	unsigned int startingIndex;
-	unsigned int startingVertex;
-	unsigned int baseInstance;
+	unsigned int vertexCount = 0;
+        unsigned int instanceCount = 0;
+	unsigned int indexCount = 0;
+	unsigned int startingIndex = 0;
+	unsigned int startingVertex = 0;
+	unsigned int baseInstance = 0;
 
 	// Instance data
 	std::vector<Graphics::Transform> transforms;

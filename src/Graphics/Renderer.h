@@ -66,6 +66,16 @@ namespace Graphics
         template <typename T>
         void draw(Graphics::RenderAPI<T> &renderAPI)
         {
+	    auto& drawList = SystemManager->getDrawList();
+            if (drawList.empty()) return;
+
+            auto shader = renderAPI.getShader("debug");
+            shader->use();
+            shader->setUniform("view",       Camera->getViewMatrix());
+            shader->setUniform("projection", Camera->getProjectionMatrix());
+
+            renderAPI.drawFromDrawList(drawList);
+		/*
             for (Graphics::RenderBatch &batch : batches)
             {
                 auto shader = renderAPI.getShader(batch.shader);
@@ -79,6 +89,7 @@ namespace Graphics
                 renderAPI.drawElements(batch.counts.size());
                 renderAPI.flush(batch);
             }
+	    */
         }
 
         template <typename T>
@@ -91,6 +102,9 @@ namespace Graphics
 	    renderAPI.createNamedBuffer(1000000 * 10 * sizeof(Graphics::Vertex), "indices");
 	    renderAPI.createNamedBuffer(10000 * sizeof(Graphics::Transform), "transforms");
 	    renderAPI.createNamedBuffer(10000 * sizeof(uint64_t), "textureHandles");
+	    renderAPI.createNamedBuffer(10000 * sizeof(Graphics::ElementDrawCall), "indirect");
+
+	    renderAPI.setupVAO("debug");
 
             std::function<std::pair<bool, nlohmann::json>()> getJSON =
                 [this]()

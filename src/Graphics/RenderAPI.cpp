@@ -5,6 +5,98 @@
 
 #include "../../external/STB_IMAGE/stb_image.h"
 
+// Rewires the VAO's vertex/element bindings to point at your
+// named persistent GPU buffers using DSA — call once after all
+// createNamedBuffer calls have finished.
+void Graphics::OpenGLRenderAPI::setupVAOImpl(std::string shaderName)
+{
+    Graphics::RenderConfig& config = getRenderConfig(0, shaderName);
+
+    unsigned int vertexBufferID = getBufferIDImpl("vertices");
+    unsigned int indexBufferID  = getBufferIDImpl("indices");
+
+    // Point the VAO at the named persistent buffers (DSA — no bind/unbind)
+    glVertexArrayVertexBuffer(config.VAO, 0, vertexBufferID, 0, sizeof(Graphics::Vertex));
+    glVertexArrayElementBuffer(config.VAO, indexBufferID);
+
+    // Redo attrib format declarations against binding index 0
+    glEnableVertexArrayAttrib(config.VAO, 0);
+    glVertexArrayAttribFormat(config.VAO, 0, 3, GL_FLOAT, GL_FALSE,
+                              offsetof(Graphics::Vertex, Position));
+    glVertexArrayAttribBinding(config.VAO, 0, 0);
+
+    glEnableVertexArrayAttrib(config.VAO, 1);
+    glVertexArrayAttribFormat(config.VAO, 1, 3, GL_FLOAT, GL_FALSE,
+                              offsetof(Graphics::Vertex, Normal));
+    glVertexArrayAttribBinding(config.VAO, 1, 0);
+
+    glEnableVertexArrayAttrib(config.VAO, 2);
+    glVertexArrayAttribFormat(config.VAO, 2, 2, GL_FLOAT, GL_FALSE,
+                              offsetof(Graphics::Vertex, TexCoords));
+    glVertexArrayAttribBinding(config.VAO, 2, 0);
+}
+
+void Graphics::OpenGLRenderAPI::drawFromDrawListImpl(
+    std::vector<Graphics::RenderDrawData>& drawList)
+{
+    if (drawList.empty()) return;
+
+    std::vector<Graphics::ElementDrawCall> commands;
+    std::vector<glm::mat4>                allTransforms;
+
+    for (auto& data : drawList)
+    {
+        Graphics::ElementDrawCall cmd;
+        // startingIndex/startingVertex are byte offsets — convert to element units
+        cmd.count         = data.indexCount   / sizeof(unsigned int);
+        cmd.instanceCount = data.instanceCount;
+        cmd.firstIndex    = data.startingIndex  / sizeof(unsigned int);
+        cmd.baseVertex    = data.startingVertex / sizeof(Graphics::Vertex);
+        cmd.baseInstance  = data.baseInstance;
+        commands.push_back(cmd);
+
+        for (auto& t : data.transforms)
+            allTransforms.push_back(t.localTransform);
+    }
+
+    // Upload indirect commands into the named "indirect" buffer
+    clearBuffer("indirect");
+    auto indirectRecord = insertImpl(
+        commands.data(),
+        commands.size() * sizeof(Graphics::ElementDrawCall),
+        "indirect");
+
+    // Upload flat per-instance transforms into the named "transforms" buffer
+    clearBuffer("transforms");
+    insertImpl(
+        allTransforms.data(),
+        allTransforms.size() * sizeof(glm::mat4),
+        "transforms");
+
+    // Bind transform SSBO at slot 0 — matches shader layout(binding = 0)
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, getBufferIDImpl("transforms"));
+
+    // Bind the VAO (vertex + element buffers already wired in setupVAO)
+    Graphics::RenderConfig& config = getRenderConfig(0, "debug");
+    glBindVertexArray(config.VAO);
+
+    // Bind indirect buffer and issue the multi-draw
+    glBindBuffer(GL_DRAW_INDIRECT_BUFFER, getBufferIDImpl("indirect"));
+    glMultiDrawElementsIndirect(
+        GL_TRIANGLES,
+        GL_UNSIGNED_INT,
+        reinterpret_cast<void*>(static_cast<uintptr_t>(indirectRecord->start)),
+        static_cast<GLsizei>(commands.size()),
+        0);  // stride 0 = tightly packed commands
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_DRAW_INDIRECT_BUFFER, 0);
+
+}
+
+//////////////////////////////////////////////
+
+
 std::shared_ptr<Graphics::BufferRecord> Graphics::OpenGLRenderAPI::insertImpl(void* data, int byteSize, std::string name)
 {
     if (buffers.count(name) == 0)
@@ -48,7 +140,7 @@ bool Graphics::OpenGLRenderAPI::createNamedBufferImpl(int byteSize, std::string 
     buffers.emplace
     (
 	name,
-	std::make_shared<Graphics::OpenGLBuffer>(Graphics::OpenGLBuffer(byteSize, name))
+	std::make_shared<Graphics::OpenGLBuffer>(byteSize, name)
     );
 
     return true;
@@ -426,23 +518,24 @@ void Graphics::OpenGLRenderAPI::loadDataImpl(Graphics::RenderBatch &batch)
         GL_DYNAMIC_DRAW);
 
         glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, getBufferIDImpl("vertices"));
-        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, getBufferIDImpl("indices"));
+ //       glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, getBufferIDImpl("indices"));
         glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, getBufferIDImpl("transforms"));
-        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, getBufferIDImpl("textureHandles"));
+  //      glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, getBufferIDImpl("textureHandles"));
 
 	// TODO: Update to only change when buffers are dirty
 
 	clearBuffer("transforms");
-	clearBuffer("textureHandles");
-	insert(batch.transforms.data(), batch.transforms.size() * sizeof(Graphics::Transform), "transforms");
-	
+	//clearBuffer("textureHandles");
+	//insert(batch.transforms.data(), batch.transforms.size() * sizeof(Graphics::Transform), "transforms");
+
+/*	
 	insert
 	(
 	    loadTextureHandles(batch.textureInfo.at("diffuse")).data(),
 	    sizeof(GLuint64) * batch.textureInfo["diffuse"].size(),
 	    "textureHandles"
 	);
-
+*/
             
 /*
     glBufferData(

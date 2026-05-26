@@ -54,6 +54,10 @@ namespace Graphics
 				std::string,
 				Graphics::RenderBatch> &RenderBatches)
 		{
+			drawData.clear();
+
+
+
 			std::function<nlohmann::json(std::shared_ptr<SceneNode>, nlohmann::json)>
 				handleNodeJson = [this](std::shared_ptr<SceneNode> node, nlohmann::json data)
 			{
@@ -94,12 +98,17 @@ namespace Graphics
 				) mutable
 			{
 			    // LOAD DATA INTO BUFFERS
+			    
 			    Graphics::Entity entity = node->ENTITY;
 
+			    if (entity == 0) return true;
 			    //auto renderable = componentManager->get<Graphics::Renderable>(entity);
 			    auto transform = componentManager->get<Graphics::Transform>(entity);
 
-			    node->globalTransform = transform.localTransform * parentTransform;
+			    glm::mat4 lMat = glm::translate(glm::mat4(1.0f), transform.position);
+			    node->globalTransform = parentTransform * lMat;
+			    transform.localTransform = node->globalTransform;
+			    componentManager->add<Graphics::Transform>(entity, transform);
 			    return true;
 			};
 
@@ -147,6 +156,10 @@ namespace Graphics
 			    std::string meshKey = ss.str();
 			    auto [vertexRecord, indexRecord] = modelLoader->getMeshRecords(meshKey);
 
+			    Graphics::Transform finalInstanceTransform = transform;
+    
+    
+			    finalInstanceTransform.position = glm::vec3(transform.localTransform[3]); // Extracts world position
 
 			    if (drawData.count(meshKey) == 0)
 			    {
@@ -156,10 +169,10 @@ namespace Graphics
 				data.startingVertex = vertexRecord->start;
 				data.startingIndex = indexRecord->start;
 				data.baseInstance = 0;
-				++data.instanceCount;
+				data.instanceCount = 1;
 
 				// Instance data
-				data.transforms.push_back(transform);
+				data.transforms.push_back(finalInstanceTransform);
 				
 				drawData.emplace(meshKey, data); 
 			    }
@@ -170,7 +183,7 @@ namespace Graphics
 
 
 				// Instance data
-				data.transforms.push_back(transform);
+				data.transforms.push_back(finalInstanceTransform);
 
 
 
@@ -185,7 +198,7 @@ namespace Graphics
 			    auto data = it.second; 
 			    data.baseInstance = baseInstance;
 			    baseInstance += data.instanceCount;
-			    drawList.push_back(it.second);
+			    drawList.push_back(data);
 			}
 
 
@@ -211,6 +224,10 @@ namespace Graphics
 	class SystemManager
 	{
 	public:
+		std::vector<Graphics::RenderDrawData>& getDrawList()
+                {
+                    return renderSystem.drawList;
+                }
 		std::pair<bool, nlohmann::json> getJSONGraph()
 		{
 			return renderSystem.getJSONGraph();

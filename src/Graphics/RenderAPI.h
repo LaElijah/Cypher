@@ -31,6 +31,22 @@ namespace Graphics
     class RenderAPI
     {
     public:
+	// TEMP
+	//
+
+        void setupVAO(std::string shaderName)
+	{
+            static_cast<T*>(this)->setupVAOImpl(shaderName);
+	}
+
+	void drawFromDrawList
+	(
+	    std::vector<Graphics::RenderDrawData>& drawList
+	)
+        {
+            static_cast<T*>(this)->drawFromDrawListImpl(drawList);
+        }
+	///////////////////////////////
         void clear()
         {
             static_cast<T *>(this)->clearImpl();
@@ -125,7 +141,7 @@ namespace Graphics
 	public:
 	    OpenGLBuffer(int size, std::string name)
 	    {
-                buffer = std::make_unique<Graphics::Buffer>(Graphics::Buffer(size, name));
+                buffer = std::make_unique<Graphics::Buffer>(size, name);
 
 
 		glCreateBuffers(1, &id);
@@ -135,6 +151,9 @@ namespace Graphics
 
 	    bool load(void* data, std::shared_ptr<Graphics::BufferRecord> record)
 	    {
+		glNamedBufferSubData(id, record->start, record->size, data);
+		return true;
+		/*
 	        void* ptr = glMapNamedBuffer(id, GL_WRITE_ONLY);
 		if (ptr)
 		{
@@ -144,7 +163,7 @@ namespace Graphics
 		}
 
 		return false; 
-
+*/
           
 	    }
 
@@ -171,6 +190,14 @@ namespace Graphics
     {
     public:
 
+	// TEMP
+	//
+	//
+	//
+	
+	void setupVAOImpl(std::string shaderName);
+	void drawFromDrawListImpl(std::vector<Graphics::RenderDrawData>& drawList);
+	//////////////////////////////////////////////////
 	bool clearBuffer(std::string name);
 	bool createNamedBufferImpl(int byteSize, std::string name);
 

@@ -13,10 +13,9 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
-
 layout(binding = 0, std430) buffer transformBuffer
 {
-    mat4 positions[];
+    mat4 transforms[];
 };
 
 
@@ -25,6 +24,6 @@ out uint draw;
 void main()
 {
     TexCoords = aTexCoords;    
-    gl_Position = projection * view * model * positions[gl_DrawID] * vec4(aPos, 1.0);
+    gl_Position = projection * view * transforms[gl_BaseInstance + gl_InstanceID] * vec4(aPos, 1.0);
     draw = gl_DrawID;
 }

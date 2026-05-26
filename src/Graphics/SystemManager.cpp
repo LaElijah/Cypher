@@ -21,8 +21,10 @@ void Graphics::RenderSystem::loadMesh(Graphics::Entity entity, Graphics::ModelIn
     std::stringstream name;
     name << "ENTITY-" << entity;
 
+    Graphics::Renderable renderable(info.path, info.path);
+    renderable.meshIndex = info.meshIndex;
     componentManager
-	    ->add<Graphics::Renderable>(entity, Graphics::Renderable(info.path, info.path));
+	    ->add<Graphics::Renderable>(entity, renderable);
 
     componentManager
         ->add<Graphics::Transform>(

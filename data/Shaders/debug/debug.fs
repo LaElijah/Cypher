@@ -25,5 +25,5 @@ vec4 diffuse1 = texture(textures[draw], TexCoords);
 
 void main()
 { 
-    FragColor = vec4(0.5, 0.2, 0.1, 1);
+    FragColor = vec4(1, 1, 1, 1);
 }
