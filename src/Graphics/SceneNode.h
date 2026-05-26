@@ -198,13 +198,11 @@ namespace Graphics
 			{
 				root.insert(std::make_pair(entity, node));
 				entities.insert(std::make_pair(entity, weak));
-				std::cout << "ENTITY ADDED TO " << parent << std::endl;
 				return;
 			}
 			// Does the parent exist in the scene
 			else if (validate(parent))
 			{
-				std::cout << "ENTITY ADDED TO " << parent << std::endl;
 				entities.at(parent).lock()->children.insert(std::make_pair(entity, node));
 			entities.insert(std::make_pair(entity, weak));
 				return;
@@ -236,7 +234,6 @@ namespace Graphics
 		{
 			if (entities.count(entity) == 0)
 			{
-				std::cout << "NODE: " << entity << " DOESNT EXIST" << std::endl;
 				return false;
 			}
 

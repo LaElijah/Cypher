@@ -10,7 +10,6 @@ Graphics::Entity Graphics::SystemManager::createMesh(Graphics::ModelInfo &info, 
     Graphics::Entity entity = entityManager.createEntity();
     renderSystem.loadMesh(entity, info, parent);
 
-    std::cout << "MESH ENTITY: " << entity << std::endl;
 
     return entity;
 }
@@ -56,7 +55,6 @@ void Graphics::RenderSystem::loadModel(Graphics::Entity entity, Graphics::Entity
             entity,
             Graphics::Transform(glm::vec3(1.0f)));
 
-            std::cout << "ADDED ENTITY: " << entity << " | PARENT: " << parent << std::endl;
 
             
 
