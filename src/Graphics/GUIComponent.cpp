@@ -111,6 +111,14 @@ void Graphics::ModelWindow::drawNodeTransforms(Graphics::Entity entity, std::str
     bool changed = false; 
     auto transform = COMPONENT_MANAGER->get<Graphics::Transform>(entity);
 
+ 
+    std::stringstream entityIDss; 
+    entityIDss << "Entity ID: " << entity;
+    ImGui::Text((entityIDss.str()).c_str());
+    ImGui::Text("Position");
+
+   
+
     std::string sliderKeyRoot = key + "-float" + "-";
     std::string floatKeyPositionX = sliderKeyRoot + "x";
     std::string floatKeyPositionY = sliderKeyRoot + "y";
@@ -134,6 +142,7 @@ void Graphics::ModelWindow::drawNodeTransforms(Graphics::Entity entity, std::str
     float preFloatY = *floatPointers.at(floatKeyPositionY).get();
     float preFloatZ = *floatPointers.at(floatKeyPositionZ).get();
 auto m = transform.localTransform;
+/*
 std::string print = std::format(
         "[{:.2f}, {:.2f}, {:.2f}, {:.2f}]\n"
         "[{:.2f}, {:.2f}, {:.2f}, {:.2f}]\n"
@@ -147,8 +156,8 @@ std::string print = std::format(
 
    ImGui::Text("TRANSFORM MATRIX");
    ImGui::Text(print.c_str());
-        
-    
+       */ 
+
     ImGui::SliderFloat("X", floatPointers.at(floatKeyPositionX).get(), -100.0f, 100.0f);
     ImGui::SliderFloat("Y", floatPointers.at(floatKeyPositionY).get(), -100.0f, 100.0f);
     ImGui::SliderFloat("Z", floatPointers.at(floatKeyPositionZ).get(), -100.0f, 100.0f);
@@ -197,9 +206,13 @@ void Graphics::ModelWindow::iterateGraph(const nlohmann::json &json)
         {
             if (std::regex_search(it.key(), self_regex))
             {
-                if (ImGui::TreeNodeEx(it.key().c_str())) 
+		    //std::cout << it.dump(2) << std::endl;
+		//if (ImGui::TreeNodeEx(it.key().c_str())) 
+		    std::string name = it.value()["children"]["entity"]["name"];
+		    std::string id = it.value()["children"]["entity"]["id"];
+		    name = name + "##" + id;
+                if (ImGui::TreeNodeEx(name.c_str())) 
                 {
-                    ImGui::Text("Position");
 
 
                     std::string entityString = it.value()["children"]["entity"]["id"];
@@ -209,7 +222,12 @@ void Graphics::ModelWindow::iterateGraph(const nlohmann::json &json)
  
                     
                     drawNodeTransforms(entity, it.key());
-		    iterateGraph(*it);
+		    if (ImGui::TreeNodeEx(("Children##" + it.key()).c_str()))
+		    {
+		        iterateGraph(*it);
+
+                        ImGui::TreePop();
+		    }
                     ImGui::TreePop();
                 }
             }
