@@ -8,6 +8,7 @@
 #include "Primitives.h"
 #include "ResourceManager.h"
 #include "Shader.h"
+#include "Buffer.h"
 #include <cstring>
 
 namespace Graphics

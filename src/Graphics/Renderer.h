@@ -21,7 +21,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <thread>
-
+#include "Buffer.h" 
 
 namespace Graphics
 {
