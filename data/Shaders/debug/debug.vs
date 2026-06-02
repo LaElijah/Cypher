@@ -25,5 +25,5 @@ void main()
 {
     TexCoords = aTexCoords;    
     gl_Position = projection * view * transforms[gl_BaseInstance + gl_InstanceID] * vec4(aPos, 1.0);
-    draw = gl_DrawID;
+    draw = gl_BaseInstance + gl_InstanceID;
 }

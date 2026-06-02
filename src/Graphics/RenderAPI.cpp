@@ -344,7 +344,6 @@ void Graphics::OpenGLRenderAPI::offloadTextureHandles(Graphics::RenderBatch &bat
         residentHandles.erase(id);
     }
     */
-
     for (auto handle : residentHandles)
     {
         glMakeTextureHandleNonResidentARB(handle);
