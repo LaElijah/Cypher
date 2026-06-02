@@ -5,17 +5,17 @@ void Graphics::SystemManager::update()
     renderSystem.updateImpl(m_RenderBatches);
 }
 
-Graphics::Entity Graphics::SystemManager::createMesh(Graphics::ModelInfo &info, Graphics::Entity parent)
+Graphics::Entity Graphics::SystemManager::createMesh(Graphics::ModelInfo &info, Graphics::MaterialID materialID, Graphics::Entity parent)
 {
     Graphics::Entity entity = entityManager.createEntity();
-    renderSystem.loadMesh(entity, info, parent);
+    renderSystem.loadMesh(entity, info, materialID, parent);
 
 
     return entity;
 }
 
 
-void Graphics::RenderSystem::loadMesh(Graphics::Entity entity, Graphics::ModelInfo &info, Graphics::Entity parent)
+void Graphics::RenderSystem::loadMesh(Graphics::Entity entity, Graphics::ModelInfo &info, Graphics::MaterialID materialID, Graphics::Entity parent)
 {
     std::stringstream name;
     name << "ENTITY-" << entity;
@@ -29,6 +29,11 @@ void Graphics::RenderSystem::loadMesh(Graphics::Entity entity, Graphics::ModelIn
         ->add<Graphics::Transform>(
             entity,
             Graphics::Transform(glm::vec3(1.0f)));
+
+    componentManager
+	    ->add<Graphics::MaterialID>(
+	    entity,
+	    materialID);
 
 
             

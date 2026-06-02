@@ -138,7 +138,8 @@ namespace Graphics
 			->getAllContainingMulti
 			<
 			Graphics::Renderable,
-                        Graphics::Transform
+                        Graphics::Transform,
+			Graphics::MaterialID
 			>();
 
 
@@ -146,7 +147,7 @@ namespace Graphics
 			{
                             auto val = it.get();
 
-			    auto& [renderable, transform] = *val;
+			    auto& [renderable, transform, materialID] = *val;
 
 			    //std::cout << "CURRENT TRANSFORM: " << transform.position.x << std::endl;
 
@@ -174,6 +175,7 @@ namespace Graphics
 
 				// Instance data
 				data.transforms.push_back(finalInstanceTransform);
+				data.materials.push_back(modelLoader->getMaterial(materialID));
 				
 				drawData.emplace(meshKey, data); 
 			    }
@@ -185,6 +187,7 @@ namespace Graphics
 
 				// Instance data
 				data.transforms.push_back(finalInstanceTransform);
+				data.materials.push_back(modelLoader->getMaterial(materialID));
 
 
 
@@ -211,7 +214,7 @@ namespace Graphics
 		}
 
 		std::shared_ptr<Graphics::ModelLoader<AssimpImporter>> modelLoader;
-		void loadMesh(Graphics::Entity entity, Graphics::ModelInfo &info, Graphics::Entity parent);
+		void loadMesh(Graphics::Entity entity, Graphics::ModelInfo &info, Graphics::MaterialID materialID, Graphics::Entity parent);
 
 		void loadModel(Entity entity, Graphics::Entity parent);
 
@@ -252,7 +255,7 @@ namespace Graphics
 
 
 
-		Graphics::Entity createMesh(Graphics::ModelInfo &info, Graphics::Entity parent);
+		Graphics::Entity createMesh(Graphics::ModelInfo &info, Graphics::MaterialID materialID, Graphics::Entity parent);
 
 		std::vector<Graphics::RenderBatch> &getRenderBatches(std::vector<Graphics::RenderBatch> &values)
 		{

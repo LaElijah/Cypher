@@ -69,11 +69,74 @@ namespace Graphics
 	    auto [v, i, count] = meshRecords.at(path);
 	    return {v, i};
 	};
+
+
+	Graphics::MaterialID saveMaterial(Graphics::Material material)
+	{
+	   auto materialPtr = std::make_shared<Graphics::Material>(material);
+	   Graphics::MaterialID newMaterialID;
+	   if (m_InactiveMaterialIDs.size() > 0)
+	   {
+               newMaterialID = *m_InactiveMaterialIDs.begin();
+	       m_InactiveMaterialIDs.erase(newMaterialID);
+	       m_ActiveMaterialIDs.insert(newMaterialID);
+               materials.insert({newMaterialID, materialPtr}); 
+	       return newMaterialID;
+	   }
+
+	   newMaterialID = HEAD_MATERIAL_ID;
+	   m_ActiveMaterialIDs.insert(newMaterialID);
+	   ++HEAD_MATERIAL_ID;
+           materials.insert({newMaterialID, materialPtr}); 
+	   return newMaterialID;
+	}
+
+	void saveDefaultMaterial(std::string defaultMeshKey, Graphics::Material material)
+	{
+	    defaultMaterials.insert({defaultMeshKey, material});
+	}
+
+	bool removeMaterial(Graphics::MaterialID id)
+	{
+            if (m_ActiveMaterialIDs.find(id) != m_ActiveMaterialIDs.end())
+	    {
+                m_ActiveMaterialIDs.erase(id);
+		m_InactiveMaterialIDs.insert(id);
+		materials.erase(id);
+		return true;
+ 	    }
+	    else
+	        return false;
+	}
+
+	std::shared_ptr<Graphics::Material> getMaterial(Graphics::MaterialID id)
+	{
+            //std::cout << "RETURNING MATERIAL IN MODEL LOADER GETMATERIAL" << std::endl;
+
+	    return materials.at(id);
+	}
+
+	Graphics::Material getDefaultMaterial(std::string defaultMeshKey)
+	{
+            //std::cout << "RETURNING MATERIAL IN MODEL LOADER GETMATERIAL" << std::endl;
+
+	    return defaultMaterials.at(defaultMeshKey);
+	}
     protected:
 
     private:
 	std::unordered_map<std::string, std::tuple<std::shared_ptr<Graphics::BufferRecord>, std::shared_ptr<Graphics::BufferRecord>, unsigned int>> meshRecords;
 	std::unordered_map<std::string, std::vector<Graphics::ModelInfo>> modelInfo;
+
+	static inline std::unordered_map<Graphics::MaterialID, std::shared_ptr<Graphics::Material>> materials;
+	std::unordered_map<std::string, Graphics::Material> defaultMaterials;
+
+	Graphics::MaterialID HEAD_MATERIAL_ID = 1000; 
+
+	std::set<Graphics::MaterialID> m_ActiveMaterialIDs;
+	std::set<Graphics::MaterialID> m_InactiveMaterialIDs;
+
+
     };
 
     class AssimpImporter : public ModelLoader<AssimpImporter>
@@ -113,7 +176,8 @@ namespace Graphics
 
     private:
         static inline std::unordered_map<std::string, std::shared_ptr<Graphics::Model>> loadedModels;
-        // Diversify this function for each different
+
+	// Diversify this function for each different
         // vertex type loading format
 
         void processNode(

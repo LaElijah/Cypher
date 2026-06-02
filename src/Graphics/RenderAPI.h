@@ -196,6 +196,8 @@ namespace Graphics
 	//
 	//
 	
+
+	Graphics::TextureHandle getTextureHandle(Graphics::TextureInfo &textureInfo);
 	void setupVAOImpl(std::string shaderName);
 	void drawFromDrawListImpl(std::vector<Graphics::RenderDrawData>& drawList);
 	//////////////////////////////////////////////////

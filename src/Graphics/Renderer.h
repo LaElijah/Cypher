@@ -101,7 +101,8 @@ namespace Graphics
 	    renderAPI.createNamedBuffer(1000000 * 10 * sizeof(Graphics::Vertex), "vertices");
 	    renderAPI.createNamedBuffer(1000000 * 10 * sizeof(Graphics::Vertex), "indices");
 	    renderAPI.createNamedBuffer(10000 * sizeof(Graphics::Transform), "transforms");
-	    renderAPI.createNamedBuffer(10000 * sizeof(uint64_t), "textureHandles");
+	    renderAPI.createNamedBuffer(10000 * sizeof(Graphics::TextureHandle), "textureHandles");
+	    renderAPI.createNamedBuffer(10000 * sizeof(Graphics::MaterialData), "materials");
 	    renderAPI.createNamedBuffer(10000 * sizeof(Graphics::ElementDrawCall), "indirect");
 
 	    renderAPI.setupVAO("debug");
@@ -165,6 +166,28 @@ namespace Graphics
 
 			    ss << info.path << "-" << meshIndex;
 
+			    Graphics::Material material;
+
+			    for (auto texture : mesh.textureInfo)
+			    {
+				// TODO: Switch texture info 
+				// type to enum
+				if (texture.type == "texture_diffuse")
+				{
+                                    material.diffuseMap = texture;
+ 				}
+				    /*
+                                switch (texture.type)
+				    case "diffuse":
+					material->diffuseMap = texture;
+					break;
+					*/
+			    }
+
+			    Graphics::MaterialID materialID = modelLoader->saveMaterial(material);
+
+			    modelLoader->saveDefaultMaterial(ss.str(), material);
+
 		            modelLoader
 			        ->storeMeshRecords
 			        (
@@ -177,7 +200,7 @@ namespace Graphics
 		            
 			    ++meshIndex;
 			    SystemManager
-			        ->createMesh(info, modelEntity);
+			        ->createMesh(info, materialID, modelEntity);
 		        }
 
 			modelLoader
@@ -191,7 +214,11 @@ namespace Graphics
 			    : modelLoader->getModelInfo(string)
 			)
 			{
-                            SystemManager->createMesh(savedInfo, modelEntity);
+			    std::stringstream currentss; 
+			    currentss << info.path << "-" << info.meshIndex;
+
+			    Graphics::MaterialID materialID = modelLoader->saveMaterial(modelLoader->getDefaultMaterial(currentss.str()));
+                            SystemManager->createMesh(savedInfo, materialID, modelEntity);
 			}
 			
 		    }

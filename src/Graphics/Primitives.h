@@ -16,6 +16,7 @@ const unsigned int MAX_COMPONENT_SIZE = 256;
 namespace Graphics
 {
 
+    typedef unsigned int MaterialID;
     struct Vertex
     {
         glm::vec3 Position;
@@ -193,6 +194,19 @@ namespace Graphics
         Graphics::Model model;
     };
 
+    struct Material
+    {
+        Graphics::TextureInfo diffuseMap;
+    };   
+
+    typedef uint64_t TextureHandle;
+
+    struct MaterialData
+    {
+        TextureHandle diffuseMap;
+    };
+
+
 // GOTO: 327 of renderAPI to change loading method in renderAPI
     struct RenderDrawData
     {
@@ -206,8 +220,8 @@ namespace Graphics
 
 	// Instance data
 	std::vector<Graphics::Transform> transforms;
+	std::vector<std::shared_ptr<Graphics::Material>> materials;
     };
-
 
 }
 

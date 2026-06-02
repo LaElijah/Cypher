@@ -42,7 +42,8 @@ void Graphics::OpenGLRenderAPI::drawFromDrawListImpl(
     if (drawList.empty()) return;
 
     std::vector<Graphics::ElementDrawCall> commands;
-    std::vector<glm::mat4>                allTransforms;
+    std::vector<glm::mat4> allTransforms;
+    std::vector<Graphics::MaterialData> allMaterials;
 
     for (auto& data : drawList)
     {
@@ -57,6 +58,13 @@ void Graphics::OpenGLRenderAPI::drawFromDrawListImpl(
 
         for (auto& t : data.transforms)
             allTransforms.push_back(t.localTransform);
+
+	for (auto& m : data.materials)
+	{
+	    Graphics::MaterialData mData;
+            mData.diffuseMap = getTextureHandle(m->diffuseMap);
+	    allMaterials.push_back(mData);
+ 	}
     }
 
     // Upload indirect commands into the named "indirect" buffer
@@ -68,13 +76,20 @@ void Graphics::OpenGLRenderAPI::drawFromDrawListImpl(
 
     // Upload flat per-instance transforms into the named "transforms" buffer
     clearBuffer("transforms");
+    clearBuffer("materials");
     insertImpl(
         allTransforms.data(),
         allTransforms.size() * sizeof(glm::mat4),
         "transforms");
 
+   insertImpl(
+        allMaterials.data(),
+        allMaterials.size() * sizeof(Graphics::MaterialData),
+        "materials");
+
     // Bind transform SSBO at slot 0 — matches shader layout(binding = 0)
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, getBufferIDImpl("transforms"));
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, getBufferIDImpl("materials"));
 
     // Bind the VAO (vertex + element buffers already wired in setupVAO)
     Graphics::RenderConfig& config = getRenderConfig(0, "debug");
@@ -237,6 +252,35 @@ void Graphics::OpenGLRenderAPI::clearImpl()
 }
 
 bool print = true;
+
+Graphics::TextureHandle Graphics::OpenGLRenderAPI::getTextureHandle(Graphics::TextureInfo &textureInfo)
+{
+        unsigned int id = loadTextureData(textureInfo);
+
+        // Retrieve the texture handle after we finish creating the texture
+
+	Graphics::TextureHandle handle;
+        auto it = loadedTextureHandles.find(id);
+
+	if (it == loadedTextureHandles.end())
+            handle = glGetTextureHandleARB(id);
+        else
+            handle = it->second;
+
+        if (handle == 0)
+        {
+            std::cerr << "Error! Handle returned null" << std::endl;
+            exit(-1);
+        }
+
+        if (residentHandles.find(handle) == residentHandles.end())
+        {
+            glMakeTextureHandleResidentARB(handle);
+        }
+
+	return handle;
+
+}
 std::vector<uint64_t> Graphics::OpenGLRenderAPI::loadTextureHandles(std::vector<Graphics::TextureInfo> &textureInfo)
 {
     // std::cout << "Working" << std::endl;
@@ -292,12 +336,22 @@ std::vector<uint64_t> Graphics::OpenGLRenderAPI::loadTextureHandles(std::vector<
 
 void Graphics::OpenGLRenderAPI::offloadTextureHandles(Graphics::RenderBatch &batch)
 {
+	/*
     for (Graphics::TextureInfo info : batch.textureInfo["diffuse"])
     {
         unsigned int id = loadTextureData(info);
         glMakeTextureHandleNonResidentARB(id);
         residentHandles.erase(id);
     }
+    */
+
+    for (auto handle : residentHandles)
+    {
+        glMakeTextureHandleNonResidentARB(handle);
+    }
+
+
+    residentHandles.clear();
 }
 
 unsigned int Graphics::OpenGLRenderAPI::loadTextureData(Graphics::TextureInfo &info)
