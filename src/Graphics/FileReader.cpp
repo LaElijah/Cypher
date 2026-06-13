@@ -7,16 +7,16 @@
 std::string Graphics::FileReader::getFileName(std::string path)
 {
     const std::filesystem::path Path{path};
-    return Path.filename();
+    return Path.filename().string();
 }
 
 std::string Graphics::FileReader::getDirectory(std::string path, bool full)
 {
     const std::filesystem::path Path{path};
     if (full) 
-        return Path.parent_path();
+        return Path.parent_path().string();
 
-    return Path.parent_path().filename();
+    return Path.parent_path().filename().string();
 }
 
 
@@ -24,7 +24,7 @@ std::pair<std::string, std::string> Graphics::FileReader::getFileExtension(std::
 {
     const std::filesystem::path Path{path};
 
-    return {Path.stem(), Path.extension()};
+    return {Path.stem().string(), Path.extension().string()};
 }
 
 std::pair<bool, std::string> Graphics::FileReader::getFile

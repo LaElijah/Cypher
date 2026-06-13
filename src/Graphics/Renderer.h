@@ -251,7 +251,7 @@ namespace Graphics
                (new Graphics::ModelWindow
                    (
                        std::string("MODELS"), 
-                       std::string("/home/personal/Projects/Cypher/data/Models"), 
+                       std::string("/Users/DEV/Documents/Projects/Cypher/data/Models"), 
                        SystemManager->getComponentManager(),
                        getJSON,
                        addModel
