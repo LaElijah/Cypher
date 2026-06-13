@@ -51,7 +51,6 @@ namespace Graphics
     public:
         ModelWindow(
             std::string name,
-            std::string directory,
             std::shared_ptr<Graphics::ComponentManager> componentManager,
             std::function<std::pair<bool, nlohmann::json>()>& getJSON,
             std::function<void(const char *string)>& addModel
@@ -60,11 +59,14 @@ namespace Graphics
         void draw() override;
         void handleInput() override;
 
+
     private:
-        std::string Directory;
+        std::string lastDirectory;
+        std::vector<std::string> files;
+        std::unique_ptr<char[]> directoryBuffer;
         std::function<void(const char *string)> ADD_MODEL;
         std::function<std::pair<bool, nlohmann::json>()> GET_JSON;
-
+        int directoryFilter(std::string string);
 
 	void drawNodeTransforms(Graphics::Entity entity, std::string key);
         void iterateGraph(const nlohmann::json& json);

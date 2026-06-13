@@ -250,8 +250,7 @@ namespace Graphics
            GUI->addEditorComponent
                (new Graphics::ModelWindow
                    (
-                       std::string("MODELS"), 
-                       std::string("/Users/DEV/Documents/Projects/Cypher/data/Models"), 
+                       std::string("MODELS"),  
                        SystemManager->getComponentManager(),
                        getJSON,
                        addModel

@@ -44,7 +44,6 @@ void Graphics::TestWindow::handleInput()
 
 Graphics::ModelWindow::ModelWindow(
     std::string name,
-    std::string directory,
     std::shared_ptr<Graphics::ComponentManager> componentManager,
     std::function<std::pair<bool, nlohmann::json>()> &getJSON,
     std::function<void(const char *string)> &addModel)
@@ -53,17 +52,40 @@ Graphics::ModelWindow::ModelWindow(
       ADD_MODEL(addModel)
 {
     Name = name;
-    Directory = directory;
     auto pair = getJSON();
     sceneChanged = pair.first;
     jsonSceneGraph = pair.second;
     COMPONENT_MANAGER = componentManager;
+    directoryBuffer = std::make_unique<char[]>(50);
 };
 
 void Graphics::ModelWindow::draw()
 {
-    std::vector<std::string> files = Graphics::FileReader::getFolders(Directory);
+    //std::vector<std::string> files = Graphics::FileReader::getFolders(Directory);
+
     ImGui::Begin(Name.c_str());
+
+    ImGui::InputText
+    (
+        "Directory", 
+        directoryBuffer.get(), 
+        256
+        //directoryFilter(std::string(directoryBuffer.get()))
+    );
+
+
+    
+
+
+
+    if (ImGui::Button("Load Models"))
+        if (std::string(directoryBuffer.get()) != lastDirectory)
+        {
+            lastDirectory = std::string(directoryBuffer.get());
+            files = Graphics::FileReader::getFolders(lastDirectory);
+        }
+
+
 
     ImGui::Text("Loaded Models");
 
@@ -105,6 +127,10 @@ void Graphics::ModelWindow::draw()
     ImGui::End();
 }
 
+int Graphics::ModelWindow::directoryFilter(std::string string)
+{
+    return 0;
+}
 
 void Graphics::ModelWindow::drawNodeTransforms(Graphics::Entity entity, std::string key)
 {
