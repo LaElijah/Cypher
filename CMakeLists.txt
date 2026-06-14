@@ -15,6 +15,31 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 find_package(OpenGL 3 REQUIRED)
+set(FA5_HEADER_URL "https://raw.githubusercontent.com/juliettef/IconFontCppHeaders/main/IconsFontAwesome5.h")
+
+set(FA5_HEADER_PATH "${EXTERNAL_DIR}/IconFontCppHeaders/IconsFontAwesome5.h")
+
+if(NOT EXISTS "${FA5_HEADER_PATH}")
+    message(STATUS "Downloading IconsFontAwesome5.h...")
+    file(DOWNLOAD "${FA5_HEADER_URL}" "${FA5_HEADER_PATH}")
+endif()
+
+set(BASE_URL "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.x/webfonts")
+set(FA5_SOLID_URL   "${BASE_URL}/fa-solid-900.ttf")
+set(FA5_REGULAR_URL "${BASE_URL}/fa-regular-400.ttf")
+set(FA5_BRANDS_URL  "${BASE_URL}/fa-brands-400.ttf")
+
+set(FONT_DEST_DIR "${EXTERNAL_DIR}/IconFontCppHeaders")
+function(download_font URL DEST_NAME)
+    if(NOT EXISTS "${FONT_DEST_DIR}/${DEST_NAME}")
+        message(STATUS "Downloading ${DEST_NAME}...")
+        file(DOWNLOAD "${URL}" "${FONT_DEST_DIR}/${DEST_NAME}")
+    endif()
+endfunction()
+
+download_font(${FA5_SOLID_URL} "fa-solid-900.ttf")
+download_font(${FA5_REGULAR_URL} "fa-regular-400.ttf")
+download_font(${FA5_BRANDS_URL} "fa-brands-400.ttf")
 
 FetchContent_Declare(
     json
@@ -114,6 +139,14 @@ target_include_directories(Cypher
 PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/imgui
   ${CMAKE_CURRENT_LIST_DIR}/imgui/backends
+  ${EXTERNAL_DIR}/IconFontCppHeaders
+)
+add_custom_command(TARGET Cypher POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "${FONT_DEST_DIR}/fa-solid-900.ttf"
+    "${FONT_DEST_DIR}/fa-regular-400.ttf"
+    "${FONT_DEST_DIR}/fa-brands-400.ttf"
+    $<TARGET_FILE_DIR:Cypher>
 )
 #target_link_libraries(Cypher PRIVATE imgui)
 

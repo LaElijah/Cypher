@@ -19,3 +19,7 @@ libCypher.dll.a
 cmake_install.cmake
 Makefile
 .vscode
+fa-brands-400.ttf
+fa-regular-400.ttf
+fa-solid-900.ttf
+/external

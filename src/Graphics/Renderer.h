@@ -106,7 +106,7 @@ namespace Graphics
 	    renderAPI.createNamedBuffer(10000 * sizeof(Graphics::ElementDrawCall), "indirect");
 
 	    renderAPI.setupVAO("debug");
-
+    
             std::function<std::pair<bool, nlohmann::json>()> getJSON =
                 [this]()
                 {
@@ -259,7 +259,6 @@ namespace Graphics
             
                GUI->addComponent(new Graphics::TestWindow(std::string("WOAAH")));
             // Initialize End
-
             while (!glfwWindowShouldClose(window))
             {
                 SystemManager->update();

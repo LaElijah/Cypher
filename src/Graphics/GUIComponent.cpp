@@ -9,7 +9,8 @@
 #include <set>
 #include <glm/gtc/matrix_transform.hpp>
 #include <format>
-
+#include "IconsFontAwesome5.h"
+#include <cstring> 
 
 Graphics::GUIComponent::GUIComponent(std::string name)
     : Name(name)
@@ -42,6 +43,94 @@ void Graphics::TestWindow::handleInput()
 {
 }
 
+int Graphics::FileExplorerWindow::windowCount = 0;
+Graphics::FileExplorerWindow::FileExplorerWindow
+(
+    std::string path,
+    std::shared_ptr<char[]> pathResult,
+    std::shared_ptr<bool> activeState
+) : 
+    GUIComponent(path + "##" + std::to_string(windowCount)),
+    path(path), pathResult(pathResult), activeState(activeState)
+{
+    pathResult[0] = '/';
+    pathResult[1] = '\0';
+    files = Graphics::FileReader::getFolders(std::string(pathResult.get()));
+    ++windowCount;
+}
+
+void Graphics::FileExplorerWindow::handleInput()
+{
+
+}
+
+void Graphics::FileExplorerWindow::draw()
+{
+    ImGui::Begin(Name.c_str());
+    if(ImGui::Button
+    (
+        ICON_FA_ARROW_UP
+        //directoryFilter(std::string(directoryBuffer.get()))
+    ))
+    {
+        char* lastSlash = std::strrchr(pathResult.get(), '/');
+
+        if (lastSlash != nullptr)
+        {
+            if (lastSlash == pathResult.get())
+                *(lastSlash + 1) = '\0';
+            else
+                *lastSlash = '\0';
+        }
+
+        files = Graphics::FileReader::getFolders(std::string(pathResult.get()));
+    }
+
+    ImGui::SameLine(); ImGui::InputText
+    (
+        ("##" + Name).c_str(), 
+        pathResult.get(), 
+        256
+        //directoryFilter(std::string(directoryBuffer.get()))
+    );
+
+    ImGui::SameLine(); 
+    if (ImGui::Button(ICON_FA_REDO))
+    {
+        files = Graphics::FileReader::getFolders(std::string(pathResult.get()));
+    }
+
+    float footerHeight = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
+    if (ImGui::BeginChild("ScrollingContentRegion", ImVec2(0, -footerHeight), ImGuiChildFlags_None))
+    {
+        for (std::string file : files)
+        {
+            std::string label = std::string(ICON_FA_FOLDER) + " " + file;
+            if (ImGui::Selectable(label.c_str(), false))
+            {
+
+                std::memcpy(pathResult.get(), file.data(), file.size() + 1);
+
+                files = Graphics::FileReader::getFolders(std::string(pathResult.get()));
+            }	
+        }
+    }
+
+    ImGui::EndChild();
+
+
+
+   
+
+    ImGui::Separator();
+    float buttonWidth = 80.0f;
+    ImGui::SetCursorPosX(ImGui::GetWindowWidth() - buttonWidth - ImGui::GetStyle().ItemSpacing.x);
+
+    if (ImGui::Button("Close", ImVec2(buttonWidth, 0))) {
+        *activeState.get() = false; 
+    }
+    ImGui::End();
+}
 Graphics::ModelWindow::ModelWindow(
     std::string name,
     std::shared_ptr<Graphics::ComponentManager> componentManager,
@@ -49,21 +138,29 @@ Graphics::ModelWindow::ModelWindow(
     std::function<void(const char *string)> &addModel)
     : GUIComponent(name),
       GET_JSON(getJSON),
-      ADD_MODEL(addModel)
+      ADD_MODEL(addModel),
+      explorer(Graphics::FileExplorerWindow("", directoryBuffer, drawExplorer))
 {
     Name = name;
     auto pair = getJSON();
     sceneChanged = pair.first;
     jsonSceneGraph = pair.second;
     COMPONENT_MANAGER = componentManager;
-    directoryBuffer = std::make_unique<char[]>(50);
+
 };
 
 void Graphics::ModelWindow::draw()
 {
     //std::vector<std::string> files = Graphics::FileReader::getFolders(Directory);
 
+    if (*drawExplorer) explorer.draw();
+    
     ImGui::Begin(Name.c_str());
+
+    if(ImGui::Button("Load Directory"))
+    {
+        *drawExplorer = true; 
+    }
 
     ImGui::InputText
     (

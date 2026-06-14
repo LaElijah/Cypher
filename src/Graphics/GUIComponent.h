@@ -46,6 +46,27 @@ namespace Graphics
         void handleInput() override;
     };
 
+  class FileExplorerWindow: public GUIComponent
+    {
+        public:
+            FileExplorerWindow
+            (
+                std::string path, 
+                std::shared_ptr<char[]> pathResult,
+                std::shared_ptr<bool> activeState
+            );
+
+            void draw() override;
+            void handleInput() override;
+        private: 
+            std::string path;
+            std::shared_ptr<char[]> pathResult; 
+            static int windowCount;
+            std::shared_ptr<bool> activeState; 
+            std::vector<std::string> files; 
+            std::string lastPath;
+    };
+
     class ModelWindow : public GUIComponent
     {
     public:
@@ -63,12 +84,14 @@ namespace Graphics
     private:
         std::string lastDirectory;
         std::vector<std::string> files;
-        std::unique_ptr<char[]> directoryBuffer;
+        std::shared_ptr<char[]> directoryBuffer = std::make_unique<char[]>(256);
         std::function<void(const char *string)> ADD_MODEL;
         std::function<std::pair<bool, nlohmann::json>()> GET_JSON;
         int directoryFilter(std::string string);
+        std::shared_ptr<bool> drawExplorer = std::make_shared<bool>(false); 
+        Graphics::FileExplorerWindow explorer;
 
-	void drawNodeTransforms(Graphics::Entity entity, std::string key);
+	    void drawNodeTransforms(Graphics::Entity entity, std::string key);
         void iterateGraph(const nlohmann::json& json);
         nlohmann::json jsonSceneGraph;
         bool sceneChanged = true;
@@ -76,6 +99,8 @@ namespace Graphics
         std::set<std::string> usedPointers;
         std::shared_ptr<Graphics::ComponentManager> COMPONENT_MANAGER;
     };
+
+  
 
     class SceneWindow : public GUIComponent
     {

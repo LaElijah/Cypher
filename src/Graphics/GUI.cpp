@@ -8,6 +8,7 @@
 #include "ResourceManager.h"
 #include "GLFWCanvas.h"
 #include "Camera.h"
+#include "IconsFontAwesome5.h"
 
 Graphics::GUI::GUI()
 {
@@ -48,9 +49,22 @@ void Graphics::GUI::initialize(GLFWwindow *window)
 	true
     );
     ImGui_ImplOpenGL3_Init();
-
-    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     // ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
+
+    // Font setup
+    io.Fonts->AddFontDefault();
+float baseFontSize = 13.0f; // 13.0f is the size of the default font. Change to the font size you use.
+float iconFontSize = baseFontSize * 2.0f / 3.0f; // FontAwesome fonts need to have their sizes reduced by 2.0f/3.0f in order to align correctly
+
+// merge in icons from Font Awesome
+static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
+ImFontConfig icons_config; 
+icons_config.MergeMode = true; 
+icons_config.PixelSnapH = true; 
+icons_config.GlyphMinAdvanceX = iconFontSize;
+io.Fonts->AddFontFromFileTTF( FONT_ICON_FILE_NAME_FAS, iconFontSize, &icons_config, icons_ranges );
 }
 
 void Graphics::GUI::drawGUI()
