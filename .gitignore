@@ -8,6 +8,7 @@
 /cmake_install.cmake
 **/Makefile
 /_deps
+**/data/*
 *~
 *.swp
 *.swo
