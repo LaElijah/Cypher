@@ -1,0 +1,14 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="cypher_launcher.Views.CreateProjectWindow"
+        Title="Create Project"
+        Width="400" Height="300">
+
+    <StackPanel Margin="20" Spacing="10">
+        <TextBlock Text="Project Name"/>
+        <TextBox x:Name="ProjectNameBox"/>
+        
+        <Button Content="Create" Click="OnCreateClick"/>
+        <Button Content="Cancel" Click="OnCancelClick"/>
+    </StackPanel>
+</Window>

@@ -1,0 +1,50 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:cypher_launcher.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="cypher_launcher.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="cypher_launcher">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <StackPanel Spacing="12" Margin="0" Orientation="Horizontal">
+        <StackPanel Width="160" Spacing="0" Margin="0" Background="LightBlue">
+        
+            <Image Source="avares://cypher-launcher/Assets/logo.png" Width="64" Height="64" Margin="16"/>
+            <TextBlock Text="Cypher" HorizontalAlignment="Center"/>
+            <Button HorizontalAlignment="Center" Click="OnNewProjectClick">New Project</Button>
+        </StackPanel>
+
+        <StackPanel Spacing="12" Margin="20">
+
+            <Button HorizontalAlignment="Center" Click="Button_OnClick">Launch Cypher</Button>
+        
+            <TextBlock x:Name="StatusLabel" 
+                   HorizontalAlignment="Center" 
+                   TextWrapping="Wrap"
+                   Foreground="Red"/>
+            
+            <ListBox ItemsSource="{Binding Projects}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}" Margin="0,0,10,0" />
+                            <TextBlock Text="{Binding Name}" Margin="0,0,10,0" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            
+        </StackPanel>
+    </StackPanel>
+    
+
+</Window>
