@@ -7,7 +7,7 @@
 **/CMakeCache.txt
 /cmake_install.cmake
 **/Makefile
-/_deps
+**/_deps
 **/data/Models/*
 *~
 *.swp
@@ -25,4 +25,4 @@ Makefile
 **/fa-solid-900.ttf
 **//external/IconFontCppHeaders
 **/Projects
-cypher-launcher.lnk
+**/cypher-launcher.lnk
