@@ -8,6 +8,12 @@
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
+
+    <Application.Resources>
+        <FontFamily x:Key="FaSolid">avares://cypher-launcher/Assets/Fonts/fa-solid-900.ttf#Font Awesome 5 Free Solid</FontFamily>
+        <FontFamily x:Key="FaRegular">avares://cypher-launcher/Assets/Fonts/fa-regular-400.ttf#Font Awesome 5 Free Regular</FontFamily>
+        <FontFamily x:Key="FaBrands">avares://cypher-launcher/Assets/Fonts/fa-brands-400.ttf#Font Awesome 5 Brands Regular</FontFamily>
+</Application.Resources>
   
     <Application.Styles>
         <FluentTheme />
