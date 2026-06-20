@@ -5,13 +5,14 @@
 #include "../Graphics/RenderAPI.h"
 #include "../Graphics/SystemManager.h" 
 #include "Application.h"
+#include <iostream> 
 
 
 
-
-void Core::GLFWApplication::startImpl()
+void Core::GLFWApplication::startImpl(std::string path)
 {
 
+    std::cout << "START PATH: " << path << std::endl;
     std::pair<float, float> resolution = std::make_pair(1920, 1080);
 
     // Initializing required resources	

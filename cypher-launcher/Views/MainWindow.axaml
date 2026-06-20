@@ -18,26 +18,25 @@
     <DockPanel>
 
         <StackPanel DockPanel.Dock="Top" Spacing="12" Margin="0" Orientation="Horizontal">
-	    <DockPanel>
-	        <Menu DockPanel.Dock="Top">
-		    <MenuItem Header="_File">
-		        <MenuItem Header="_Open..."/>
-			<Separator/>
-			<MenuItem Header="_Exit"/>
-		    </MenuItem>
-		    <MenuItem Header="_Edit">
-		        <MenuItem Header="Copy"/>
-			<Separator/>
-			<MenuItem Header="Paste"/>
-		    </MenuItem>
-		</Menu>
-	    </DockPanel>
-	</StackPanel>
-
+	        <DockPanel>
+	            <Menu DockPanel.Dock="Top">
+		            <MenuItem Header="_File">
+		                <MenuItem Header="_Open..."/>
+			            <Separator/>
+			            <MenuItem Header="_Exit"/>
+		            </MenuItem>
+		                <MenuItem Header="_Edit">
+		                <MenuItem Header="Copy"/>
+			            <Separator/>
+			            <MenuItem Header="Paste"/>
+		            </MenuItem>
+		        </Menu>
+	        </DockPanel>
+	    </StackPanel>
 
         <StackPanel Spacing="12" Margin="0" Orientation="Horizontal">
-            <StackPanel Width="160" Spacing="0" Margin="0" Background="LightBlue">
             
+            <StackPanel Width="160" Spacing="0" Margin="0" Background="LightBlue">
                 <Image Source="avares://cypher-launcher/Assets/logo.png" Width="64" Height="64" Margin="16"/>
                 <TextBlock Text="Cypher" HorizontalAlignment="Center"/>
                 <Button HorizontalAlignment="Center" Click="OnNewProjectClick">New Project</Button>
@@ -45,33 +44,34 @@
 
             <StackPanel Spacing="12" Margin="20">
 
-                <Button IsVisible="true" HorizontalAlignment="Center" Click="Button_OnClick">Launch Cypher</Button>
-            
-                <TextBlock x:Name="StatusLabel" 
-                       HorizontalAlignment="Center" 
-                       TextWrapping="Wrap"
-                       Foreground="Red"/>
+		        <DockPanel IsVisible="{Binding !Projects.Count}">
+		            <TextBlock Text="No projects found..."/>
+		        </DockPanel>
 
-		<DockPanel IsVisible="{Binding !Projects.Count}">
-		    <TextBlock Text="No projects found..."/>
-		</DockPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Name" Margin="0,0,10,0" />
+                    <TextBlock Text="Last Modified" Margin="0,0,10,0" />
+                    <TextBlock Text="Size" Margin="0,0,10,0" />
+                </StackPanel>
 
-                <ListBox ItemsSource="{Binding Projects}"
-		    IsVisible="{Binding !!Projects.Count}">
+                <ListBox ItemsSource="{Binding Projects}" IsVisible="{Binding !!Projects.Count}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-			        <Button FontFamily="{StaticResource FaSolid}" FontSize="24">&#xf141;</Button>
-                                <TextBlock Text="{Binding Name}" Margin="0,0,10,0" />
-                                <TextBlock Text="{Binding Name}" Margin="0,0,10,0" />
-                                <TextBlock Text="{Binding Name}" Margin="0,0,10,0" />
-                            </StackPanel>
+                            <Button Click="OpenProject" Tag="{Binding Path}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Name}" Margin="0,0,10,0" />
+                                    <TextBlock Text="{Binding TimeAgo}" Margin="0,0,10,0" />
+                                    <TextBlock Text="{Binding Size}" Margin="0,0,10,0" />
+                                </StackPanel>
+                            </Button>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                
+
             </StackPanel>
+
         </StackPanel>
+
     </DockPanel>
 
 </Window>

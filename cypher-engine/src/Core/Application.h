@@ -1,6 +1,6 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
-
+#include <string> 
 
 
 namespace Core {
@@ -29,9 +29,9 @@ namespace Core {
 	        static_cast<T*>(this)->initImpl(); 
 	    }
 
-            void start()
+            void start(std::string path)
 	    {
-	        static_cast<T*>(this)->startImpl(); 
+	        static_cast<T*>(this)->startImpl(path); 
 	    }	    
     };
 
@@ -49,7 +49,7 @@ namespace Core {
 	    /**
 	     * Starts the application 
 	     */
-	    void startImpl();	
+	    void startImpl(std::string path);	
     };
 }
 

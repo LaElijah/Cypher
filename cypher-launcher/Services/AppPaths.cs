@@ -15,6 +15,26 @@ namespace Services
         (
             Path.Combine(Path.GetDirectoryName(Environment.ProcessPath)!, "../../../../cypher-engine/Projects")
         );
+
+
+
+        public static bool AddProject(string name)
+        {
+            string path = Path.Combine(ProjectsPath, name);
+
+            if (Directory.Exists(path))
+            {
+                return false;
+            }
+            else
+            {
+                Directory.CreateDirectory(path);
+
+                return true;
+            }
+
+
+        }
         
         private static void InitializeFolders()
         {

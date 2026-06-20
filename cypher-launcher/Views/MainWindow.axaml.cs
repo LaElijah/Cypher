@@ -1,5 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using CommunityToolkit.Mvvm.Input;
+using cypher_launcher.ViewModels;
+using Services;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -20,44 +23,58 @@ public partial class MainWindow : Window
 
         if (result == true)
         {
-            // User clicked Create
+            MainWindowViewModel.LoadProjects();
         }
     }
 
-    private void Button_OnClick(object? sender, RoutedEventArgs e)
-{
-    string launcherDir = Path.GetDirectoryName(Environment.ProcessPath)!;
 
-    string solutionRoot = Path.GetFullPath(Path.Combine(launcherDir, "../../../../"));
-    string engineDir = Path.Combine(solutionRoot, "cypher-engine");
-    string engineExeName = OperatingSystem.IsWindows() ? "Cypher.exe" : "Cypher";
-    string enginePath = Path.Combine(engineDir, engineExeName);
-
-    StatusLabel.Text = $"Looking for:\n{enginePath}";
-    StatusLabel.Foreground = Avalonia.Media.Brushes.Gray;
-
-    if (!File.Exists(enginePath))
+    private static void LaunchEngine(string path)
     {
-        StatusLabel.Text = $"Not found:\n{enginePath}";
-        StatusLabel.Foreground = Avalonia.Media.Brushes.Red;
-        return;
-    }
+        string launcherDir = Path.GetDirectoryName(Environment.ProcessPath)!;
 
-    try
-    {
-        var startInfo = new ProcessStartInfo
+        string solutionRoot = Path.GetFullPath(Path.Combine(launcherDir, "../../../../"));
+        string engineDir = Path.Combine(solutionRoot, "cypher-engine");
+        string engineExeName = OperatingSystem.IsWindows() ? "Cypher.exe" : "Cypher";
+        string enginePath = Path.Combine(engineDir, engineExeName);
+        /*
+            StatusLabel.Text = sender;
+            StatusLabel.Foreground = Avalonia.Media.Brushes.Gray;
+
+            if (!File.Exists(enginePath))
+            {
+                StatusLabel.Text = $"Not found:\n{enginePath}";
+                StatusLabel.Foreground = Avalonia.Media.Brushes.Red;
+                return;
+            }
+        */
+        try
         {
-            FileName = enginePath,
-            WorkingDirectory = engineDir, 
-            UseShellExecute = true
-        };
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = enginePath,
+                WorkingDirectory = engineDir,
+                UseShellExecute = true
+            };
 
-        Process? engineProcess = Process.Start(startInfo);
+            startInfo.ArgumentList.Add(path);
+
+            Process? engineProcess = Process.Start(startInfo);
+        }
+        catch (Exception ex)
+        {
+            /*
+            StatusLabel.Text = $"Launch failed:\n{ex.Message}";
+            StatusLabel.Foreground = Avalonia.Media.Brushes.Red;
+            */
+        }
     }
-    catch (Exception ex)
+    private void OpenProject(object? sender, RoutedEventArgs e)
     {
-        StatusLabel.Text = $"Launch failed:\n{ex.Message}";
-        StatusLabel.Foreground = Avalonia.Media.Brushes.Red;
+
+        if (sender is Button button && button.Tag is string path)
+        {
+            LaunchEngine(path);
+        }
+
     }
-}
 }
